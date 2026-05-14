@@ -815,7 +815,7 @@
           <div class="card-top">
             <div>
               <div class="card-name">DXY (Índice Dólar)</div>
-              <div class="card-source">FRED · DTWEXBGS</div>
+              <div class="card-source">Yahoo · DX-Y.NYB</div>
             </div>
             <div class="status-dot dot-loading" id="dot-dxy"></div>
           </div>
@@ -1321,8 +1321,11 @@ function setCard(key, value, unit) {
   } else if (key === 'coppergold') {
     // Higher ratio = more copper vs gold = green (growth)
     // Lower = gold outperforming = inflationary fear = red
-    if (v < 0.0002) status = 'red';
-    else if (v < 0.00025) status = 'yellow';
+    // Ratio = copper(USD/lb) / gold(USD/oz), typical range 0.10-0.25
+    // High ratio = copper outperforms gold = growth signal (green)
+    // Low ratio = gold outperforms copper = inflation fear / recession (red)
+    if (v < 0.13) status = 'red';
+    else if (v < 0.17) status = 'yellow';
     else status = 'green';
     displayVal = parseFloat(value).toFixed(5);
   } else if (key === 'yield') {
@@ -1457,29 +1460,27 @@ async function loadFREDData() {
   await tryCard('breakevens', 'T5YIFR',    2,  'direct', '%'); await delay(300);
   await tryCard('fedfunds',   'FEDFUNDS',  2,  'direct', '%'); await delay(300);
   await tryCard('tips',       'DFII10',    2,  'direct', '%'); await delay(300);
-  await tryCard('dxy',        'DTWEXBGS',  2,  'direct', ''); await delay(300);
+  // DXY via Yahoo Finance (real DXY, not FRED broad index)
+  try {
+    const dxyVal = await fetchYahoo('DX-Y.NYB');
+    setCard('dxy', dxyVal.toFixed(2), '');
+  } catch(e) {
+    console.warn('DXY Yahoo failed, trying FRED:', e.message);
+    await tryCard('dxy', 'DTWEXBGS', 2, 'direct', '');
+  }
+  await delay(300);
   await tryCard('yield',      'T10Y2Y',    2,  'direct', '%'); await delay(300);
  
-  // Copper/Gold Ratio — use PPIACO (copper proxy) and GOLDAMGBD228NLBM
-  // Copper: PCOPPUSDM (monthly), Gold: use WPU10210501 as fallback
+  // Copper/Gold Ratio via Yahoo Finance
+  // HG=F = copper in USD/lb | GC=F = gold in USD/troy oz
+  // Ratio = copper(USD/lb) / gold(USD/oz) → typical range 0.10–0.25
   try {
-    const copperObs = await fetchSeries('PCOPPUSDM', 2);
-    await delay(400);
-    let goldVal = null;
-    for (const goldId of ['WPU10210501', 'PPIACO', 'DCOILWTICO']) {
-      try {
-        const goldObs = await fetchSeries(goldId, 2);
-        goldVal = parseFloat(goldObs[0].value);
-        break;
-      } catch(e) { await delay(300); continue; }
-    }
-    const copperVal = parseFloat(copperObs[0].value);
-    if (goldVal) {
-      const ratio = (copperVal / goldVal).toFixed(5);
-      setCard('coppergold', ratio, '');
-    } else {
-      throw new Error('No gold series worked');
-    }
+    const [goldPrice, copperPrice] = await Promise.all([
+      fetchYahoo('GC=F'),
+      fetchYahoo('HG=F'),
+    ]);
+    const ratio = (copperPrice / goldPrice).toFixed(5);
+    setCard('coppergold', ratio, '');
   } catch(e) {
     console.warn('Copper/Gold ratio failed:', e.message);
     document.getElementById('val-coppergold').innerHTML = '<span class="value-yellow">N/D</span>';
