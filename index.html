@@ -1397,53 +1397,50 @@ async function loadFREDData() {
   const now = new Date().toLocaleString('es-ES');
   document.getElementById('last-update').textContent = 'Actualizado: ' + now;
  
-  try {
-    // PCE Core YoY
-    const pceObs = await fetchSeries('PCEPILFE', 13);
-    const pceYoY = calcYoY(pceObs);
-    if (pceYoY) setCard('pce', pceYoY, '%');
- 
-    // CPI YoY
-    const cpiObs = await fetchSeries('CPIAUCSL', 13);
-    const cpiYoY = calcYoY(cpiObs);
-    if (cpiYoY) setCard('cpi', cpiYoY, '%');
- 
-    // Breakevens 5Y5Y
-    const breakObs = await fetchSeries('T5YIFR', 2);
-    setCard('breakevens', getLatest(breakObs), '%');
- 
-    // Fed Funds
-    const fedObs = await fetchSeries('FEDFUNDS', 2);
-    setCard('fedfunds', getLatest(fedObs), '%');
- 
-    // TIPS 10Y Real Rate
-    const tipsObs = await fetchSeries('DFII10', 2);
-    setCard('tips', getLatest(tipsObs), '%');
- 
-    // DXY (Broad Trade Weighted Index)
-    const dxyObs = await fetchSeries('DTWEXBGS', 2);
-    setCard('dxy', getLatest(dxyObs), '');
- 
-    // Yield Curve
-    const yieldObs = await fetchSeries('T10Y2Y', 2);
-    setCard('yield', getLatest(yieldObs), '%');
- 
-    // Copper/Gold Ratio
+  // Helper: fetch each indicator independently
+  async function tryCard(key, seriesId, limit, transform, unit) {
     try {
-      const copperObs = await fetchSeries('PCOPPUSDM', 2);
-      const goldObs = await fetchSeries('GOLDAMGBD228NLBM', 2);
-      const copperVal = parseFloat(copperObs[0].value);
-      const goldVal = parseFloat(goldObs[0].value);
-      const ratio = (copperVal / goldVal).toFixed(5);
-      setCard('coppergold', ratio, '');
+      const obs = await fetchSeries(seriesId, limit);
+      if (transform === 'yoy') {
+        const val = calcYoY(obs);
+        if (val) setCard(key, val, unit);
+      } else {
+        setCard(key, getLatest(obs), unit);
+      }
     } catch(e) {
-      document.getElementById('val-coppergold').innerHTML = '<span class="value-yellow">N/D</span>';
-      document.getElementById('dot-coppergold').className = 'status-dot dot-yellow';
+      console.warn('Failed ' + key + ':', e.message);
+      const valEl = document.getElementById('val-' + key);
+      const dotEl = document.getElementById('dot-' + key);
+      if (valEl) valEl.innerHTML = '<span class="value-yellow">N/D</span>';
+      if (dotEl) dotEl.className = 'status-dot dot-yellow';
     }
+  }
  
-  } catch(err) {
-    console.error('FRED error:', err);
-    document.getElementById('last-update').textContent = 'Error al cargar FRED — ' + err.message;
+  // Run all fetches in parallel
+  await Promise.allSettled([
+    tryCard('pce',        'PCEPILFE',   13, 'yoy',    '%'),
+    tryCard('cpi',        'CPIAUCSL',   13, 'yoy',    '%'),
+    tryCard('breakevens', 'T5YIFR',      2, 'direct', '%'),
+    tryCard('fedfunds',   'FEDFUNDS',    2, 'direct', '%'),
+    tryCard('tips',       'DFII10',      2, 'direct', '%'),
+    tryCard('dxy',        'DTWEXBGS',    2, 'direct', ''),
+    tryCard('yield',      'T10Y2Y',      2, 'direct', '%'),
+  ]);
+ 
+  // Copper/Gold Ratio separately
+  try {
+    const [copperObs, goldObs] = await Promise.all([
+      fetchSeries('PCOPPUSDM', 2),
+      fetchSeries('GOLDAMGBD228NLBM', 3),
+    ]);
+    const copperVal = parseFloat(copperObs[0].value);
+    const goldVal = parseFloat(goldObs[0].value);
+    const ratio = (copperVal / goldVal).toFixed(5);
+    setCard('coppergold', ratio, '');
+  } catch(e) {
+    console.warn('Copper/Gold ratio failed:', e.message);
+    document.getElementById('val-coppergold').innerHTML = '<span class="value-yellow">N/D</span>';
+    document.getElementById('dot-coppergold').className = 'status-dot dot-yellow';
   }
  
   // Restore manual values
