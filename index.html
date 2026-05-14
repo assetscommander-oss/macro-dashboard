@@ -1873,9 +1873,9 @@ async function loadFREDData() {
   // Sequential with small delay to avoid proxy rate limiting
   await tryCard('pce',        'PCEPILFE',  72, 'yoy',    '%'); await delay(300);
   await tryCard('cpi',        'CPIAUCSL',  72, 'yoy',    '%'); await delay(300);
-  await tryCard('breakevens', 'T5YIFR',    2,  'direct', '%'); await delay(300);
-  await tryCard('fedfunds',   'FEDFUNDS',  2,  'direct', '%'); await delay(300);
-  await tryCard('tips',       'DFII10',    2,  'direct', '%'); await delay(300);
+  await tryCard('breakevens', 'T5YIFR',    26,  'direct', '%'); await delay(300);
+  await tryCard('fedfunds',   'FEDFUNDS',  26,  'direct', '%'); await delay(300);
+  await tryCard('tips',       'DFII10',    26,  'direct', '%'); await delay(300);
   // DXY via Yahoo Finance (real DXY, not FRED broad index)
   try {
     const dxyVal = await fetchYahoo('DX-Y.NYB');
