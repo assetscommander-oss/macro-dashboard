@@ -139,7 +139,7 @@
  
   .last-update {
     font-size: 10px;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: 1px;
   }
  
@@ -175,12 +175,12 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--text2);
+    color: var(--text);
   }
  
   .layer-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1px;
     background: var(--border);
   }
@@ -212,7 +212,7 @@
  
   .card-source {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: 1px;
     text-transform: uppercase;
   }
@@ -269,7 +269,7 @@
  
   .card-temporal {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     line-height: 1.4;
     border-top: 1px solid var(--border);
     padding-top: 8px;
@@ -330,7 +330,7 @@
     font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--text3);
+    color: var(--text2);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -443,7 +443,7 @@
  
   .tv-widget-label {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: 1.5px;
     text-transform: uppercase;
     padding: 8px 10px 0;
@@ -490,7 +490,7 @@
  
   .fund-col-subtitle {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: 0.5px;
     margin-left: auto;
   }
@@ -523,12 +523,12 @@
  
   .fund-exposure {
     font-size: 10px;
-    color: var(--text2);
+    color: var(--text);
   }
  
   .fund-gestora {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     padding: 1px 5px;
     border: 1px solid var(--border2);
     border-radius: 2px;
@@ -589,7 +589,7 @@
  
   .footer-note {
     font-size: 9px;
-    color: var(--text3);
+    color: var(--text2);
     letter-spacing: 1px;
     line-height: 1.6;
   }
@@ -617,6 +617,49 @@
     opacity: 0.5;
     pointer-events: none;
   }
+ 
+ 
+  /* HISTORY CHART */
+  .history-table {
+    width: 100%;
+    margin-top: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+ 
+  .history-table-title {
+    font-size: 9px;
+    color: var(--text2);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+ 
+  .history-chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 90px;
+  }
+ 
+  .history-chart-wrap canvas {
+    width: 100% !important;
+    height: 90px !important;
+  }
+ 
+  /* CONSECUTIVE TREND BADGE */
+  .trend-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 9px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+  .trend-confirmed { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+  .trend-partial { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
+  .trend-no { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
  
   /* SPINNER */
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -646,6 +689,7 @@
  
   .error-msg { font-size: 10px; color: var(--red); margin-top: 4px; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -699,6 +743,8 @@
             <span class="threshold t-red">Rojo &gt;3%</span>
           </div>
           <div class="card-temporal">3 meses consecutivos al alza para confirmar tendencia</div>
+          <div id="history-pce" class="history-table" style="display:none;"></div>
+          <div id="trend-pce"></div>
         </div>
  
         <div class="indicator-card" id="card-cpi">
@@ -716,6 +762,8 @@
             <span class="threshold t-red">Rojo &gt;4%</span>
           </div>
           <div class="card-temporal">3 meses consecutivos al alza con tendencia alcista</div>
+          <div id="history-cpi" class="history-table" style="display:none;"></div>
+          <div id="trend-cpi"></div>
         </div>
  
         <div class="indicator-card" id="card-breakevens">
@@ -733,6 +781,8 @@
             <span class="threshold t-red">Rojo &gt;2.8%</span>
           </div>
           <div class="card-temporal">6 semanas por encima del umbral para confirmar</div>
+          <div id="history-breakevens" class="history-table" style="display:none;"></div>
+          <div id="trend-breakevens"></div>
         </div>
       </div>
     </div>
@@ -759,6 +809,8 @@
             <span class="threshold t-red">Rojo bajando c/inflación &gt;3%</span>
           </div>
           <div class="card-temporal">2 reuniones FOMC consecutivas bajando con inflación alta</div>
+          <div id="history-fedfunds" class="history-table" style="display:none;"></div>
+          <div id="trend-fedfunds"></div>
         </div>
  
         <div class="indicator-card" id="card-dotplot">
@@ -800,6 +852,8 @@
             <span class="threshold t-red">Rojo &lt;0% o caída &gt;50bps/2m</span>
           </div>
           <div class="card-temporal">4 semanas por debajo de 0% para confirmar</div>
+          <div id="history-tips" class="history-table" style="display:none;"></div>
+          <div id="trend-tips"></div>
         </div>
       </div>
     </div>
@@ -893,6 +947,8 @@
             <span class="threshold t-red">Rojo vuelta a normal post-inversión</span>
           </div>
           <div class="card-temporal">3 semanas en positivo tras haber estado invertida</div>
+          <div id="history-yield" class="history-table" style="display:none;"></div>
+          <div id="trend-yield"></div>
         </div>
  
         <div class="indicator-card" id="card-ism">
@@ -1278,6 +1334,359 @@ function calcYoY(obs) {
   return ((latestVal / yearAgoVal - 1) * 100).toFixed(2);
 }
  
+ 
+// Store raw observations for history rendering
+let rawObs = {};
+ 
+function getMonthLabel(dateStr) {
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' });
+}
+ 
+function getStatusClass(val, key) {
+  const v = parseFloat(val);
+  if (key === 'pce') {
+    if (v > 3) return 'h-red'; if (v >= 2.5) return 'h-yellow'; return 'h-green';
+  } else if (key === 'cpi') {
+    if (v > 4) return 'h-red'; if (v >= 3) return 'h-yellow'; return 'h-green';
+  } else if (key === 'breakevens') {
+    if (v > 2.8) return 'h-red'; if (v >= 2.5) return 'h-yellow'; return 'h-green';
+  } else if (key === 'fedfunds') {
+    if (v < 3) return 'h-red'; if (v < 3.5) return 'h-yellow'; return 'h-green';
+  } else if (key === 'tips') {
+    if (v < 0) return 'h-red'; if (v < 0.5) return 'h-yellow'; return 'h-green';
+  } else if (key === 'dxy') {
+    if (v < 100) return 'h-red'; if (v < 103) return 'h-yellow'; return 'h-green';
+  } else if (key === 'yield') {
+    if (v > 0.2) return 'h-red'; if (v > -0.2) return 'h-yellow'; return 'h-green';
+  }
+  return 'h-green';
+}
+ 
+// Track chart instances to destroy before re-render
+const historyCharts = {};
+ 
+function renderDirectHistory(key, obs) {
+  const container = document.getElementById('history-' + key);
+  const trendEl = document.getElementById('trend-' + key);
+  if (!container) return;
+ 
+  const valid = obs.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+  if (valid.length === 0) return;
+ 
+  // For direct series, just show the last 24 values chronologically
+  const display = valid.slice(0, 24).reverse();
+  const labels = display.map(r => getMonthLabel(r.date));
+  const values = display.map(r => parseFloat(r.value));
+ 
+  const pointColors = values.map(v => {
+    const cls = getStatusClass(v, key);
+    return cls === 'h-red' ? '#ff5252' : cls === 'h-yellow' ? '#ffd740' : '#00e676';
+  });
+  const segColors = values.map(v => {
+    const cls = getStatusClass(v, key);
+    return cls === 'h-red' ? 'rgba(255,82,82,0.8)' : cls === 'h-yellow' ? 'rgba(255,215,64,0.8)' : 'rgba(0,230,118,0.8)';
+  });
+ 
+  // Threshold lines per key
+  const thresholdLines = {
+    breakevens: [{ val: 2.5, color: 'rgba(0,230,118,0.4)' }, { val: 2.8, color: 'rgba(255,82,82,0.4)' }],
+    fedfunds:   [{ val: 3.5, color: 'rgba(255,215,64,0.4)' }, { val: 3.0, color: 'rgba(255,82,82,0.4)' }],
+    tips:       [{ val: 0.5, color: 'rgba(255,215,64,0.4)' }, { val: 0.0, color: 'rgba(255,82,82,0.4)' }],
+    dxy:        [{ val: 103, color: 'rgba(0,230,118,0.4)' }, { val: 100, color: 'rgba(255,82,82,0.4)' }],
+    yield:      [{ val: 0.2, color: 'rgba(255,82,82,0.4)' }, { val: -0.2, color: 'rgba(255,215,64,0.4)' }],
+  };
+ 
+  const annotations = (thresholdLines[key] || []).map(t => ({
+    type: 'line', yMin: t.val, yMax: t.val,
+    borderColor: t.color, borderWidth: 1, borderDash: [4, 3]
+  }));
+ 
+  // Zone background
+  const zoneColors = {
+    breakevens: { green: 2.5, yellow: 2.8 },
+    fedfunds:   { green: 3.5, yellow: 3.0, inverted: true },
+    tips:       { green: 0.5, yellow: 0.0, inverted: true },
+    dxy:        { green: 103, yellow: 100, inverted: true },
+    yield:      { green: -0.2, yellow: 0.2 },
+  };
+  const zc = zoneColors[key] || { green: 0, yellow: 0 };
+ 
+  const zoneBgDirect = {
+    id: 'zoneBgDirect',
+    beforeDraw(chart) {
+      const { ctx: c, chartArea: { left, right, top, bottom }, scales: { y } } = chart;
+      const safeY = v => Math.max(top, Math.min(bottom, y.getPixelForValue(v)));
+      if (zc.inverted) {
+        // red below yellow threshold, yellow between, green above green threshold
+        c.fillStyle = 'rgba(0,230,118,0.06)';
+        c.fillRect(left, top, right-left, safeY(zc.green)-top);
+        c.fillStyle = 'rgba(255,215,64,0.06)';
+        c.fillRect(left, safeY(zc.green), right-left, safeY(zc.yellow)-safeY(zc.green));
+        c.fillStyle = 'rgba(255,82,82,0.06)';
+        c.fillRect(left, safeY(zc.yellow), right-left, bottom-safeY(zc.yellow));
+      } else {
+        c.fillStyle = 'rgba(255,82,82,0.06)';
+        c.fillRect(left, top, right-left, safeY(zc.yellow)-top);
+        c.fillStyle = 'rgba(255,215,64,0.06)';
+        c.fillRect(left, safeY(zc.yellow), right-left, safeY(zc.green)-safeY(zc.yellow));
+        c.fillStyle = 'rgba(0,230,118,0.06)';
+        c.fillRect(left, safeY(zc.green), right-left, bottom-safeY(zc.green));
+      }
+    }
+  };
+ 
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="history-table-title">Evolución — últimos 24 meses</div>
+    <div class="history-chart-wrap">
+      <canvas id="canvas-${key}"></canvas>
+    </div>
+  `;
+ 
+  if (historyCharts[key]) historyCharts[key].destroy();
+  const ctx2 = document.getElementById('canvas-' + key).getContext('2d');
+  const minV = Math.min(...values) - Math.abs(Math.min(...values) * 0.05) - 0.1;
+  const maxV = Math.max(...values) + Math.abs(Math.max(...values) * 0.05) + 0.1;
+ 
+  historyCharts[key] = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors,
+        tension: 0.3,
+        fill: false,
+        segment: { borderColor: ctx => segColors[ctx.p0DataIndex] || '#00e5ff' }
+      }]
+    },
+    plugins: [zoneBgDirect],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1,
+          titleColor: '#8fa3bc', bodyColor: '#e8f0f8',
+          titleFont: { family: 'Space Mono', size: 9 },
+          bodyFont: { family: 'Space Mono', size: 10 },
+          callbacks: { label: ctx => ctx.parsed.y.toFixed(2) }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#8fa3bc', font: { family: 'Space Mono', size: 7 }, maxRotation: 0, maxTicksLimit: 8 },
+          grid: { color: 'rgba(30,45,66,0.5)' }
+        },
+        y: {
+          min: minV, max: maxV,
+          ticks: { color: '#8fa3bc', font: { family: 'Space Mono', size: 8 }, callback: v => v.toFixed(1) },
+          grid: { color: 'rgba(30,45,66,0.5)' }
+        }
+      }
+    }
+  });
+ 
+  // Trend badge for direct indicators
+  if (trendEl && valid.length >= 2) {
+    const latest = parseFloat(valid[0].value);
+    const prev = parseFloat(valid[1].value);
+    const prev2 = valid[2] ? parseFloat(valid[2].value) : null;
+    const rising3 = prev2 !== null && latest > prev && prev > prev2;
+    const rising2 = latest > prev;
+    // For inverted indicators (lower = worse), flip the rising logic
+    const isInverted = ['fedfunds','tips','dxy'].includes(key);
+    const goingBad3 = isInverted ? (prev2 !== null && latest < prev && prev < prev2) : rising3;
+    const goingBad2 = isInverted ? latest < prev : rising2;
+    if (goingBad3) {
+      trendEl.innerHTML = '<span class="trend-badge trend-confirmed">🔴 Tendencia desfavorable confirmada (3m)</span>';
+    } else if (goingBad2) {
+      trendEl.innerHTML = '<span class="trend-badge trend-partial">🟡 2 meses en dirección desfavorable</span>';
+    } else {
+      trendEl.innerHTML = '<span class="trend-badge trend-no">🟢 Sin tendencia desfavorable sostenida</span>';
+    }
+  }
+}
+ 
+ 
+ 
+function renderHistory(key, obs) {
+  const container = document.getElementById('history-' + key);
+  const trendEl = document.getElementById('trend-' + key);
+  if (!container) return;
+ 
+  const valid = obs.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+ 
+  // Calculate YoY for each available month
+  const results = [];
+  for (let i = 0; i < Math.min(60, valid.length - 12); i++) {
+    const current = parseFloat(valid[i].value);
+    const yearAgo = parseFloat(valid[i + 12].value);
+    if (!yearAgo) continue;
+    results.push({ date: valid[i].date, yoy: parseFloat(((current / yearAgo - 1) * 100).toFixed(2)) });
+  }
+  if (results.length === 0) return;
+ 
+  // Chronological order for chart
+  const display = results.slice(0, 24).reverse();
+  const labels = display.map(r => getMonthLabel(r.date));
+  const values = display.map(r => r.yoy);
+ 
+  // Thresholds per indicator
+  const thresholds = {
+    pce: { green: 2.5, yellow: 3 },
+    cpi: { green: 3, yellow: 4 }
+  };
+  const t = thresholds[key] || { green: 2.5, yellow: 3 };
+ 
+  // Point colors based on value
+  const pointColors = values.map(v => {
+    if (v > t.yellow) return '#ff5252';
+    if (v >= t.green) return '#ffd740';
+    return '#00e676';
+  });
+ 
+  // Line segment colors (gradient by value)
+  const segmentColors = values.map(v => {
+    if (v > t.yellow) return 'rgba(255,82,82,0.8)';
+    if (v >= t.green) return 'rgba(255,215,64,0.8)';
+    return 'rgba(0,230,118,0.8)';
+  });
+ 
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="history-table-title">Evolución YoY — últimos 24 meses</div>
+    <div class="history-chart-wrap">
+      <canvas id="canvas-${key}"></canvas>
+    </div>
+  `;
+ 
+  // Destroy previous chart instance
+  if (historyCharts[key]) { historyCharts[key].destroy(); }
+ 
+  const ctx = document.getElementById('canvas-' + key).getContext('2d');
+ 
+  // Background zone plugin
+  const zoneBg = {
+    id: 'zoneBg',
+    beforeDraw(chart) {
+      const { ctx: c, chartArea: { left, right, top, bottom }, scales: { y } } = chart;
+      const greenMax = Math.min(y.getPixelForValue(t.green), bottom);
+      const yellowMax = Math.min(y.getPixelForValue(t.yellow), bottom);
+      const topY = top;
+      // Green zone (below t.green)
+      c.fillStyle = 'rgba(0,230,118,0.06)';
+      c.fillRect(left, greenMax, right - left, bottom - greenMax);
+      // Yellow zone
+      c.fillStyle = 'rgba(255,215,64,0.06)';
+      c.fillRect(left, yellowMax, right - left, greenMax - yellowMax);
+      // Red zone (above t.yellow)
+      c.fillStyle = 'rgba(255,82,82,0.06)';
+      c.fillRect(left, topY, right - left, yellowMax - topY);
+    }
+  };
+ 
+  const minVal = Math.min(...values) - 0.3;
+  const maxVal = Math.max(...values) + 0.3;
+ 
+  historyCharts[key] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderColor: ctx => {
+          // Use segment colors array
+          return '#00e5ff';
+        },
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: pointColors,
+        pointBorderColor: pointColors,
+        tension: 0.3,
+        fill: false,
+        segment: {
+          borderColor: ctx => segmentColors[ctx.p0DataIndex] || '#00e5ff',
+        }
+      }]
+    },
+    plugins: [zoneBg],
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 600 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0d1420',
+          borderColor: '#1e2d42',
+          borderWidth: 1,
+          titleColor: '#8fa3bc',
+          bodyColor: '#e8f0f8',
+          titleFont: { family: 'Space Mono', size: 9 },
+          bodyFont: { family: 'Space Mono', size: 10 },
+          callbacks: {
+            label: ctx => ctx.parsed.y.toFixed(2) + '%'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#8fa3bc',
+            font: { family: 'Space Mono', size: 7 },
+            maxRotation: 0,
+            maxTicksLimit: 8,
+          },
+          grid: { color: 'rgba(30,45,66,0.5)' }
+        },
+        y: {
+          min: minVal,
+          max: maxVal,
+          ticks: {
+            color: '#8fa3bc',
+            font: { family: 'Space Mono', size: 8 },
+            callback: v => v.toFixed(1) + '%'
+          },
+          grid: { color: 'rgba(30,45,66,0.5)' }
+        }
+      }
+    }
+  });
+ 
+  // Trend detection
+  const isRising3 = results.length >= 3 && results[0].yoy > results[1].yoy && results[1].yoy > results[2].yoy;
+  const isRising2 = results.length >= 2 && results[0].yoy > results[1].yoy;
+ 
+  if (trendEl) {
+    if (isRising3) {
+      trendEl.innerHTML = '<span class="trend-badge trend-confirmed">🔴 3 meses consecutivos al alza — CONFIRMADO</span>';
+    } else if (isRising2) {
+      trendEl.innerHTML = '<span class="trend-badge trend-partial">🟡 2 meses al alza — pendiente confirmación</span>';
+    } else {
+      trendEl.innerHTML = '<span class="trend-badge trend-no">🟢 Sin tendencia alcista sostenida</span>';
+    }
+  }
+ 
+  // Adjust semaphore dot
+  const latestYoy = results[0].yoy;
+  const dotEl = document.getElementById('dot-' + key);
+  if (dotEl) {
+    const aboveThreshold = (key === 'pce' && latestYoy > 3) || (key === 'cpi' && latestYoy > 4);
+    if (aboveThreshold && !isRising3) {
+      dotEl.className = 'status-dot dot-yellow';
+      const valEl = document.getElementById('val-' + key);
+      if (valEl) { const s = valEl.querySelector('span'); if (s) s.className = 'value-yellow'; }
+    }
+  }
+}
+ 
 function getLatest(obs) {
   return parseFloat(obs[0].value).toFixed(2);
 }
@@ -1443,9 +1852,14 @@ async function loadFREDData() {
       const obs = await fetchSeries(seriesId, limit);
       if (transform === 'yoy') {
         const val = calcYoY(obs);
-        if (val) setCard(key, val, unit);
+        if (val) {
+          setCard(key, val, unit);
+          if (key === 'pce' || key === 'cpi') renderHistory(key, obs);
+        }
       } else {
         setCard(key, getLatest(obs), unit);
+        const directKeys = ['breakevens','fedfunds','tips','dxy','yield'];
+        if (directKeys.includes(key)) renderDirectHistory(key, obs);
       }
     } catch(e) {
       console.warn('Failed ' + key + ':', e.message);
@@ -1457,8 +1871,8 @@ async function loadFREDData() {
   }
  
   // Sequential with small delay to avoid proxy rate limiting
-  await tryCard('pce',        'PCEPILFE',  13, 'yoy',    '%'); await delay(300);
-  await tryCard('cpi',        'CPIAUCSL',  13, 'yoy',    '%'); await delay(300);
+  await tryCard('pce',        'PCEPILFE',  72, 'yoy',    '%'); await delay(300);
+  await tryCard('cpi',        'CPIAUCSL',  72, 'yoy',    '%'); await delay(300);
   await tryCard('breakevens', 'T5YIFR',    2,  'direct', '%'); await delay(300);
   await tryCard('fedfunds',   'FEDFUNDS',  2,  'direct', '%'); await delay(300);
   await tryCard('tips',       'DFII10',    2,  'direct', '%'); await delay(300);
