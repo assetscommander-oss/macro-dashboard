@@ -1321,11 +1321,11 @@ function setCard(key, value, unit) {
   } else if (key === 'coppergold') {
     // Higher ratio = more copper vs gold = green (growth)
     // Lower = gold outperforming = inflationary fear = red
-    // Ratio = copper(USD/lb) / gold(USD/oz), typical range 0.10-0.25
-    // High ratio = copper outperforms gold = growth signal (green)
-    // Low ratio = gold outperforms copper = inflation fear / recession (red)
+    // Ratio = copper(cents/lb) / gold(USD/oz), typical range 0.10-0.25
+    // High ratio = copper outperforms gold = growth (green)
+    // Low ratio = gold outperforms copper = inflation fear (red)
     if (v < 0.13) status = 'red';
-    else if (v < 0.17) status = 'yellow';
+    else if (v < 0.18) status = 'yellow';
     else status = 'green';
     displayVal = parseFloat(value).toFixed(5);
   } else if (key === 'yield') {
@@ -1409,19 +1409,21 @@ function updateVerdict() {
  
  
 async function fetchYahoo(symbol) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+  // Use symbol directly in URL path - corsproxy handles the encoding
+  const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
   const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`,
   ];
   for (const proxyUrl of proxies) {
     try {
       const res = await fetch(proxyUrl);
-      if (!res.ok) continue;
+      if (!res.ok) { console.warn('Yahoo proxy not ok:', proxyUrl, res.status); continue; }
       const data = await res.json();
       const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if (price) return price;
-    } catch(e) { continue; }
+      if (price) { console.log('Yahoo OK:', symbol, price); return price; }
+      console.warn('Yahoo no price in response:', symbol, JSON.stringify(data).slice(0, 200));
+    } catch(e) { console.warn('Yahoo fetch error:', symbol, e.message); continue; }
   }
   throw new Error(`Yahoo fetch failed for ${symbol}`);
 }
@@ -1479,7 +1481,9 @@ async function loadFREDData() {
       fetchYahoo('GC=F'),
       fetchYahoo('HG=F'),
     ]);
-    const ratio = (copperPrice / goldPrice).toFixed(5);
+    // Multiply copper x100 (USD/lb → cents/lb) for standard Copper/Gold ratio
+    // Typical range: 0.10 (bearish) to 0.25 (bullish growth)
+    const ratio = ((copperPrice * 100) / goldPrice).toFixed(4);
     setCard('coppergold', ratio, '');
   } catch(e) {
     console.warn('Copper/Gold ratio failed:', e.message);
