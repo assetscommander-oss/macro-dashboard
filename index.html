@@ -1418,8 +1418,8 @@ async function loadFREDData() {
  
   // Run all fetches in parallel
   await Promise.allSettled([
-    tryCard('pce',        'PCEPILFE',   13, 'yoy',    '%'),
-    tryCard('cpi',        'CPIAUCSL',   13, 'yoy',    '%'),
+    tryCard('pce',        'PCEPILFE_PC1', 2, 'direct', '%'),
+    tryCard('cpi',        'CPIAUCSL_PC1', 2, 'direct', '%'),
     tryCard('breakevens', 'T5YIFR',      2, 'direct', '%'),
     tryCard('fedfunds',   'FEDFUNDS',    2, 'direct', '%'),
     tryCard('tips',       'DFII10',      2, 'direct', '%'),
@@ -1431,7 +1431,7 @@ async function loadFREDData() {
   try {
     const [copperObs, goldObs] = await Promise.all([
       fetchSeries('PCOPPUSDM', 2),
-      fetchSeries('GOLDAMGBD228NLBM', 3),
+      fetchSeries('GOLDPMGBD228NLBM', 2),
     ]);
     const copperVal = parseFloat(copperObs[0].value);
     const goldVal = parseFloat(goldObs[0].value);
