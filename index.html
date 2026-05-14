@@ -1257,10 +1257,25 @@ async function fetchSeries(seriesId, limit = 13) {
 }
  
 function calcYoY(obs) {
-  if (obs.length < 13) return null;
-  const latest = parseFloat(obs[0].value);
-  const yearAgo = parseFloat(obs[12].value);
-  return ((latest / yearAgo - 1) * 100).toFixed(2);
+  // Filter out missing values (dots)
+  const valid = obs.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+  if (valid.length < 2) return null;
+  // Find latest and the observation closest to 12 months ago
+  const latest = valid[0];
+  const latestDate = new Date(latest.date);
+  const targetDate = new Date(latestDate);
+  targetDate.setFullYear(targetDate.getFullYear() - 1);
+  // Find closest observation to target date
+  let closest = valid[1];
+  let minDiff = Math.abs(new Date(valid[1].date) - targetDate);
+  for (let i = 2; i < valid.length; i++) {
+    const diff = Math.abs(new Date(valid[i].date) - targetDate);
+    if (diff < minDiff) { minDiff = diff; closest = valid[i]; }
+  }
+  const latestVal = parseFloat(latest.value);
+  const yearAgoVal = parseFloat(closest.value);
+  if (!yearAgoVal) return null;
+  return ((latestVal / yearAgoVal - 1) * 100).toFixed(2);
 }
  
 function getLatest(obs) {
@@ -1389,6 +1404,25 @@ function updateVerdict() {
   }
 }
  
+ 
+async function fetchYahoo(symbol) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=1d`;
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  ];
+  for (const proxyUrl of proxies) {
+    try {
+      const res = await fetch(proxyUrl);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if (price) return price;
+    } catch(e) { continue; }
+  }
+  throw new Error(`Yahoo fetch failed for ${symbol}`);
+}
+ 
 async function loadFREDData() {
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('loading');
@@ -1432,7 +1466,7 @@ async function loadFREDData() {
     const copperObs = await fetchSeries('PCOPPUSDM', 2);
     await delay(400);
     let goldVal = null;
-    for (const goldId of ['GOLDAMGBD228NLBM', 'GOLDPMGBD228NLBM', 'DCOILWTICO']) {
+    for (const goldId of ['WPU10210501', 'PPIACO', 'DCOILWTICO']) {
       try {
         const goldObs = await fetchSeries(goldId, 2);
         goldVal = parseFloat(goldObs[0].value);
