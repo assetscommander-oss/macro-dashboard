@@ -6,163 +6,129 @@
 <title>Macro Dashboard — Ruben</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 <style>
   :root {
-    --bg: #080c12;
-    --bg2: #0d1420;
-    --bg3: #111927;
-    --border: #1e2d42;
-    --border2: #243347;
-    --text: #e8f0f8;
-    --text2: #aebfd4;
-    --text3: #6b83a3;
-    --green: #00e676;
-    --green-dim: rgba(0,230,118,0.12);
-    --green-border: rgba(0,230,118,0.3);
-    --yellow: #ffd740;
-    --yellow-dim: rgba(255,215,64,0.1);
-    --yellow-border: rgba(255,215,64,0.3);
-    --red: #ff5252;
-    --red-dim: rgba(255,82,82,0.12);
-    --red-border: rgba(255,82,82,0.3);
-    --blue: #40c4ff;
-    --blue-dim: rgba(64,196,255,0.1);
-    --blue-border: rgba(64,196,255,0.3);
-    --accent: #00e5ff;
-    --mono: 'Space Mono', monospace;
-    --sans: 'Syne', sans-serif;
+    --bg:#080c12; --bg2:#0d1420; --bg3:#111927;
+    --border:#1e2d42; --border2:#243347;
+    --text:#e8f0f8; --text2:#aebfd4; --text3:#6b83a3;
+    --green:#00e676; --green-dim:rgba(0,230,118,.12); --green-border:rgba(0,230,118,.3);
+    --yellow:#ffd740; --yellow-dim:rgba(255,215,64,.1); --yellow-border:rgba(255,215,64,.3);
+    --red:#ff5252; --red-dim:rgba(255,82,82,.12); --red-border:rgba(255,82,82,.3);
+    --blue:#40c4ff; --blue-dim:rgba(64,196,255,.1); --blue-border:rgba(64,196,255,.3);
+    --accent:#00e5ff;
+    --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: var(--mono); min-height: 100vh; overflow-x: hidden; }
-  body::before {
-    content: ''; position: fixed; inset: 0;
-    background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px; pointer-events: none; z-index: 0;
-  }
-  .container { position: relative; z-index: 1; max-width: 1700px; margin: 0 auto; padding: 24px; }
- 
-  /* HEADER */
-  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
-  .header-left h1 { font-family: var(--sans); font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-  .header-left h1 span { color: var(--accent); }
-  .header-left .subtitle { font-size: 11px; color: var(--text2); margin-top: 4px; letter-spacing: 2px; text-transform: uppercase; }
-  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-  .signal-box { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 4px; border: 1px solid var(--border2); background: var(--bg2); }
-  .signal-count { font-family: var(--sans); font-size: 36px; font-weight: 800; line-height: 1; }
-  .signal-label { font-size: 10px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; line-height: 1.4; }
-  .signal-verdict { font-family: var(--sans); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 14px; border-radius: 3px; }
-  .verdict-green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-  .verdict-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
-  .verdict-red { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
-  .verdict-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue-border); }
-  .last-update { font-size: 10px; color: var(--text2); letter-spacing: 1px; }
- 
-  /* RECOMMENDATION PANEL */
-  .reco-panel { border: 1px solid var(--border2); border-radius: 6px; background: var(--bg2); padding: 18px 22px; margin-bottom: 28px; }
-  .reco-title { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); margin-bottom: 10px; }
-  .reco-verdict { font-family: var(--sans); font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-  .reco-detail { font-size: 11px; color: var(--text2); line-height: 1.7; }
-  .reco-alloc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .alloc-chip { font-size: 10px; padding: 5px 12px; border-radius: 3px; border: 1px solid var(--border2); background: var(--bg3); color: var(--text); letter-spacing: 0.5px; }
-  .alloc-chip b { color: var(--accent); }
- 
-  /* LAYERS */
-  .layers { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
-  .layer { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg2); animation: fadeUp 0.4s ease both; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+  .container{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:24px}
+
+  .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:16px}
+  .header-left h1{font-family:var(--sans);font-size:28px;font-weight:800;letter-spacing:-.5px}
+  .header-left h1 span{color:var(--accent)}
+  .header-left .subtitle{font-size:11px;color:var(--text2);margin-top:4px;letter-spacing:2px;text-transform:uppercase}
+  .header-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .signal-box{display:flex;align-items:center;gap:12px;padding:12px 20px;border-radius:4px;border:1px solid var(--border2);background:var(--bg2)}
+  .signal-count{font-family:var(--sans);font-size:36px;font-weight:800;line-height:1}
+  .signal-label{font-size:10px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;line-height:1.4}
+  .last-update{font-size:10px;color:var(--text2);letter-spacing:1px}
+
+  .reco-panel{border:1px solid var(--border2);border-radius:6px;background:var(--bg2);padding:18px 22px;margin-bottom:28px}
+  .reco-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
+  .reco-verdict{font-family:var(--sans);font-size:20px;font-weight:800;margin-bottom:8px}
+  .reco-detail{font-size:11px;color:var(--text2);line-height:1.7}
+  .reco-alloc{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .alloc-chip{font-size:10px;padding:5px 12px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);letter-spacing:.5px}
+  .alloc-chip b{color:var(--accent)}
+
+  .layers{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
+  .layer{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2);animation:fadeUp .4s ease both}
   .layer:nth-child(1){animation-delay:.05s}.layer:nth-child(2){animation-delay:.1s}.layer:nth-child(3){animation-delay:.15s}.layer:nth-child(4){animation-delay:.2s}
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .layer-header { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--bg3); border-bottom: 1px solid var(--border); }
-  .layer-icon { font-size: 14px; }
-  .layer-title { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text); }
-  .layer-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1px; background: var(--border); }
- 
-  /* CARD */
-  .indicator-card { background: var(--bg2); padding: 16px 18px; transition: background .2s; }
-  .indicator-card:hover { background: var(--bg3); }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .card-name { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--text); }
-  .card-source { font-size: 9px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; }
-  .card-source a { color: var(--accent); text-decoration: none; }
-  .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; box-shadow: 0 0 8px currentColor; }
-  .dot-green { background: var(--green); color: var(--green); }
-  .dot-yellow { background: var(--yellow); color: var(--yellow); }
-  .dot-red { background: var(--red); color: var(--red); }
-  .dot-loading { background: var(--text3); color: var(--text3); animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-  .card-value { font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-  .value-green { color: var(--green); } .value-yellow { color: var(--yellow); } .value-red { color: var(--red); }
-  .value-loading { color: var(--text3); font-size: 14px; padding-top: 6px; }
-  .card-thresholds { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-  .threshold { font-size: 9px; padding: 2px 6px; border-radius: 2px; letter-spacing: .5px; }
-  .t-green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-  .t-yellow { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
-  .t-red { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
-  .card-temporal { font-size: 9px; color: var(--text2); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 4px; }
-  .trend-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; padding: 3px 8px; border-radius: 3px; margin-top: 8px; letter-spacing: .5px; }
-  .trend-confirmed { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
-  .trend-partial { background: var(--yellow-dim); color: var(--yellow); border: 1px solid var(--yellow-border); }
-  .trend-no { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
-  .manual-badge { font-size: 8px; padding: 2px 5px; border-radius: 2px; background: rgba(255,215,64,0.1); color: var(--yellow); border: 1px solid rgba(255,215,64,0.2); letter-spacing: 1px; text-transform: uppercase; }
-  .manual-input-row { display: flex; gap: 6px; margin-top: 8px; }
-  .manual-input { flex: 1; background: var(--bg); border: 1px solid var(--border2); color: var(--text); font-family: var(--mono); font-size: 12px; padding: 5px 8px; border-radius: 3px; outline: none; }
-  .manual-input:focus { border-color: var(--accent); }
-  .manual-btn { background: var(--bg3); border: 1px solid var(--border2); color: var(--accent); font-family: var(--mono); font-size: 10px; padding: 5px 10px; border-radius: 3px; cursor: pointer; letter-spacing: 1px; }
-  .manual-btn:hover { background: rgba(0,229,255,.1); border-color: var(--accent); }
- 
-  /* SECTION TITLE */
-  .section-title { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text2); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
- 
-  /* COMBINED CHART */
-  .combined-section { border: 1px solid var(--border); border-radius: 6px; background: var(--bg2); margin-bottom: 28px; overflow: hidden; }
-  .combined-controls { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: var(--bg3); }
-  .ctrl-label { font-size: 9px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; margin-right: 4px; }
-  .ind-toggle { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; transition: all .15s; letter-spacing: .5px; }
-  .ind-toggle.active { color: var(--ind-color); border-color: var(--ind-color); background: color-mix(in srgb, var(--ind-color) 12%, transparent); }
-  .combined-wrap { padding: 18px; height: 460px; position: relative; }
-  .combined-wrap canvas { width: 100% !important; height: 100% !important; }
-  .ctrl-divider { width: 1px; height: 18px; background: var(--border2); margin: 0 6px; }
-  .ctrl-btn-all { font-family: var(--mono); font-size: 9px; padding: 4px 8px; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; letter-spacing: .5px; }
-  .ctrl-btn-all:hover { color: var(--accent); border-color: var(--accent); }
- 
-  /* TV GRID */
-  .tv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 28px; border: 1px solid var(--border); }
-  .tv-widget-cell { background: var(--bg2); height: 185px; overflow: hidden; }
-  .tv-widget-cell.hidden { display: none; }
-  .tv-widget-label { font-size: 9px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 10px 0; }
-  .tv-controls { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; align-items: center; }
-  .toggle-btn { font-family: var(--mono); font-size: 10px; padding: 4px 10px; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; transition: all .15s; }
-  .toggle-btn.active { color: var(--text); border-color: var(--accent); background: rgba(0,229,255,.08); }
- 
-  /* FUNDS */
-  .funds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 28px; }
-  .fund-column { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: var(--bg2); }
-  .fund-col-header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg3); display: flex; align-items: center; gap: 10px; }
-  .fund-col-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 6px currentColor; }
-  .fund-col-title { font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
-  .fund-col-subtitle { font-size: 9px; color: var(--text2); margin-left: auto; }
-  .fund-item { padding: 10px 16px; border-bottom: 1px solid var(--border); }
-  .fund-item:last-child { border-bottom: none; }
-  .fund-item:hover { background: var(--bg3); }
-  .fund-name { font-family: var(--sans); font-size: 12px; font-weight: 600; margin-bottom: 3px; }
-  .fund-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .fund-exposure { font-size: 10px; color: var(--text2); }
-  .fund-gestora { font-size: 9px; color: var(--text2); padding: 1px 5px; border: 1px solid var(--border2); border-radius: 2px; }
-  .fund-tag { font-size: 8px; padding: 1px 5px; border-radius: 2px; background: rgba(0,229,255,.08); color: var(--accent); border: 1px solid rgba(0,229,255,.2); text-transform: uppercase; }
- 
-  /* FOOTER */
-  .footer { border-top: 1px solid var(--border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-  .footer-note { font-size: 9px; color: var(--text2); letter-spacing: 1px; line-height: 1.6; }
-  .refresh-btn { font-family: var(--mono); font-size: 10px; padding: 8px 16px; background: transparent; border: 1px solid var(--border2); color: var(--accent); border-radius: 3px; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
-  .refresh-btn:hover { background: rgba(0,229,255,.08); border-color: var(--accent); }
-  .refresh-btn.loading { opacity: .5; pointer-events: none; }
-  .spinner { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--text3); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; vertical-align: middle; margin-right: 4px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .layer-header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border)}
+  .layer-icon{font-size:14px}
+  .layer-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text)}
+  .layer-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:1px;background:var(--border)}
+
+  .indicator-card{background:var(--bg2);padding:16px 18px;transition:background .2s}
+  .indicator-card:hover{background:var(--bg3)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .card-name{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--text)}
+  .card-source{font-size:9px;color:var(--text2);letter-spacing:1px;text-transform:uppercase}
+  .card-source a{color:var(--accent);text-decoration:none}
+  .status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px;box-shadow:0 0 8px currentColor}
+  .dot-green{background:var(--green);color:var(--green)}
+  .dot-yellow{background:var(--yellow);color:var(--yellow)}
+  .dot-red{background:var(--red);color:var(--red)}
+  .dot-loading{background:var(--text3);color:var(--text3);animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .card-value{font-size:26px;font-weight:700;line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+  .value-green{color:var(--green)}.value-yellow{color:var(--yellow)}.value-red{color:var(--red)}
+  .value-loading{color:var(--text3);font-size:14px;padding-top:6px}
+  .card-thresholds{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .threshold{font-size:9px;padding:2px 6px;border-radius:2px;letter-spacing:.5px}
+  .t-green{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+  .t-yellow{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-border)}
+  .t-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+  .card-temporal{font-size:9px;color:var(--text2);line-height:1.5;border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+  .trend-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 8px;border-radius:3px;margin-top:8px;letter-spacing:.5px}
+  .trend-confirmed{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
+  .trend-partial{background:var(--yellow-dim);color:var(--yellow);border:1px solid var(--yellow-border)}
+  .trend-no{background:var(--green-dim);color:var(--green);border:1px solid var(--green-border)}
+  .manual-badge{font-size:8px;padding:2px 5px;border-radius:2px;background:rgba(255,215,64,.1);color:var(--yellow);border:1px solid rgba(255,215,64,.2);letter-spacing:1px;text-transform:uppercase}
+  .manual-input-row{display:flex;gap:6px;margin-top:8px}
+  .manual-input{flex:1;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:12px;padding:5px 8px;border-radius:3px;outline:none}
+  .manual-input:focus{border-color:var(--accent)}
+  .manual-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--accent);font-family:var(--mono);font-size:10px;padding:5px 10px;border-radius:3px;cursor:pointer;letter-spacing:1px}
+  .manual-btn:hover{background:rgba(0,229,255,.1);border-color:var(--accent)}
+
+  .section-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  .chart-section{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .chart-controls{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--bg3)}
+  .ctrl-label{font-size:9px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin-right:4px}
+  .ctrl-divider{width:1px;height:18px;background:var(--border2);margin:0 6px}
+  .ind-toggle{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s;letter-spacing:.5px}
+  .ind-toggle.active{color:var(--ind-color);border-color:var(--ind-color);background:color-mix(in srgb,var(--ind-color) 12%,transparent)}
+  .range-btn,.freq-btn{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;letter-spacing:.5px;transition:all .15s}
+  .range-btn.active,.freq-btn.active{color:var(--accent);border-color:var(--accent);background:rgba(0,229,255,.08)}
+  .ctrl-btn-all{font-family:var(--mono);font-size:9px;padding:4px 8px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;letter-spacing:.5px}
+  .ctrl-btn-all:hover{color:var(--accent);border-color:var(--accent)}
+  .chart-wrap{padding:18px;height:480px;position:relative}
+  .chart-wrap canvas{width:100%!important;height:100%!important}
+  .chart-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,18,.7);z-index:5;font-size:12px;color:var(--text2);gap:8px}
+  .chart-loading.hidden{display:none}
+  .chart-note{font-size:9px;color:var(--text3);padding:0 18px 14px;letter-spacing:.5px}
+
+  .funds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:28px}
+  .fund-column{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2)}
+  .fund-col-header{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:10px}
+  .fund-col-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 6px currentColor}
+  .fund-col-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+  .fund-col-subtitle{font-size:9px;color:var(--text2);margin-left:auto}
+  .fund-item{padding:10px 16px;border-bottom:1px solid var(--border)}
+  .fund-item:last-child{border-bottom:none}
+  .fund-item:hover{background:var(--bg3)}
+  .fund-name{font-family:var(--sans);font-size:12px;font-weight:600;margin-bottom:3px}
+  .fund-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .fund-exposure{font-size:10px;color:var(--text2)}
+  .fund-gestora{font-size:9px;color:var(--text2);padding:1px 5px;border:1px solid var(--border2);border-radius:2px}
+  .fund-tag{font-size:8px;padding:1px 5px;border-radius:2px;background:rgba(0,229,255,.08);color:var(--accent);border:1px solid rgba(0,229,255,.2);text-transform:uppercase}
+
+  .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
+  .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+  .refresh-btn:hover{background:rgba(0,229,255,.08);border-color:var(--accent)}
+  .refresh-btn.loading{opacity:.5;pointer-events:none}
+  .spinner{display:inline-block;width:10px;height:10px;border:1px solid var(--text3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:4px}
+  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div class="container">
- 
+
   <!-- HEADER -->
   <div class="header">
     <div class="header-left">
@@ -171,261 +137,183 @@
     </div>
     <div class="header-right">
       <div class="signal-box">
-        <div>
-          <div class="signal-count" id="red-count" style="color: var(--text3);">—</div>
-          <div class="signal-label">SEÑALES<br>EN ROJO</div>
-        </div>
+        <div><div class="signal-count" id="red-count" style="color:var(--text3);">—</div><div class="signal-label">SEÑALES<br>EN ROJO</div></div>
         <div style="width:1px;height:40px;background:var(--border);"></div>
-        <div>
-          <div class="signal-count" style="color:var(--text3);">11</div>
-          <div class="signal-label">TOTAL<br>INDICADORES</div>
-        </div>
+        <div><div class="signal-count" style="color:var(--text3);">11</div><div class="signal-label">TOTAL<br>INDICADORES</div></div>
       </div>
       <div class="last-update" id="last-update">Actualizando...</div>
     </div>
   </div>
- 
-  <!-- RECOMMENDATION PANEL -->
+
+  <!-- RECOMMENDATION -->
   <div class="reco-panel">
     <div class="reco-title">📍 Posicionamiento recomendado</div>
     <div class="reco-verdict" id="reco-verdict" style="color:var(--text3);">Calculando...</div>
-    <div class="reco-detail" id="reco-detail">Cargando indicadores para determinar el escenario macro actual...</div>
+    <div class="reco-detail" id="reco-detail">Cargando indicadores...</div>
     <div class="reco-alloc" id="reco-alloc"></div>
   </div>
- 
+
   <!-- SEMÁFORO -->
   <div class="section-title">Semáforo de indicadores</div>
   <div class="layers">
- 
-    <!-- CAPA 1 -->
     <div class="layer">
       <div class="layer-header"><span class="layer-icon">🔥</span><span class="layer-title">Capa 1 — Inflación Real</span></div>
       <div class="layer-cards">
-        <div class="indicator-card" id="card-pce">
-          <div class="card-top">
-            <div><div class="card-name">PCE Core</div><div class="card-source">FRED · PCEPILFE</div></div>
-            <div class="status-dot dot-loading" id="dot-pce"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">PCE Core</div><div class="card-source">FRED · PCEPILFE</div></div><div class="status-dot dot-loading" id="dot-pce"></div></div>
           <div class="card-value value-loading" id="val-pce"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–3%</span><span class="threshold t-red">Rojo &gt;3%</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–3%</span><span class="threshold t-red">Rojo &gt;3%</span></div>
           <div class="card-temporal">Rojo requiere &gt;3% Y 3 meses consecutivos al alza</div>
           <div id="trend-pce"></div>
         </div>
-        <div class="indicator-card" id="card-cpi">
-          <div class="card-top">
-            <div><div class="card-name">CPI General</div><div class="card-source">FRED · CPIAUCSL</div></div>
-            <div class="status-dot dot-loading" id="dot-cpi"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">CPI General</div><div class="card-source">FRED · CPIAUCSL</div></div><div class="status-dot dot-loading" id="dot-cpi"></div></div>
           <div class="card-value value-loading" id="val-cpi"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &lt;3%</span><span class="threshold t-yellow">Amarillo 3–4%</span><span class="threshold t-red">Rojo &gt;4%</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;3%</span><span class="threshold t-yellow">Amarillo 3–4%</span><span class="threshold t-red">Rojo &gt;4%</span></div>
           <div class="card-temporal">Rojo requiere &gt;4% Y 3 meses consecutivos al alza</div>
           <div id="trend-cpi"></div>
         </div>
-        <div class="indicator-card" id="card-breakevens">
-          <div class="card-top">
-            <div><div class="card-name">Breakevens 5Y5Y</div><div class="card-source">FRED · T5YIFR</div></div>
-            <div class="status-dot dot-loading" id="dot-breakevens"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Breakevens 5Y5Y</div><div class="card-source">FRED · T5YIFR</div></div><div class="status-dot dot-loading" id="dot-breakevens"></div></div>
           <div class="card-value value-loading" id="val-breakevens"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–2.8%</span><span class="threshold t-red">Rojo &gt;2.8%</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–2.8%</span><span class="threshold t-red">Rojo &gt;2.8%</span></div>
           <div class="card-temporal">Expectativas de inflación del mercado de bonos a 5 años vista</div>
         </div>
       </div>
     </div>
- 
-    <!-- CAPA 2 -->
     <div class="layer">
       <div class="layer-header"><span class="layer-icon">🏦</span><span class="layer-title">Capa 2 — Política Monetaria</span></div>
       <div class="layer-cards">
-        <div class="indicator-card" id="card-fedfunds">
-          <div class="card-top">
-            <div><div class="card-name">Fed Funds Rate</div><div class="card-source">FRED · FEDFUNDS</div></div>
-            <div class="status-dot dot-loading" id="dot-fedfunds"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Fed Funds Rate</div><div class="card-source">FRED · FEDFUNDS</div></div><div class="status-dot dot-loading" id="dot-fedfunds"></div></div>
           <div class="card-value value-loading" id="val-fedfunds"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde estable/subiendo</span><span class="threshold t-yellow">Amarillo bajando, inflación ok</span><span class="threshold t-red">Rojo bajando + inflación &gt;3%</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde estable/subiendo</span><span class="threshold t-yellow">Amarillo bajando, inflación ok</span><span class="threshold t-red">Rojo bajando + inflación &gt;3%</span></div>
           <div class="card-temporal">Rojo = la Fed estimula con inflación alta (tu tesis Warsh)</div>
         </div>
-        <div class="indicator-card" id="card-dotplot">
-          <div class="card-top">
-            <div><div class="card-name">Fed Dot Plot</div><div class="card-source"><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank">Fed.gov ↗</a> · Trimestral</div></div>
-            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-dotplot"></div></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Fed Dot Plot</div><div class="card-source"><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank">Fed.gov ↗</a> · Trimestral</div></div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-dotplot"></div></div></div>
           <div class="card-value value-loading" id="val-dotplot">—</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde estable/al alza</span><span class="threshold t-yellow">Amarillo -50/-75bps</span><span class="threshold t-red">Rojo &gt;100bps bajadas + inflación alta</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde estable/al alza</span><span class="threshold t-yellow">Amarillo -50/-75bps</span><span class="threshold t-red">Rojo ≤-100bps + inflación alta</span></div>
           <div class="card-temporal">Introduce bps proyectados (ej: -75). Se publica con cada SEP trimestral</div>
-          <div class="manual-input-row">
-            <input class="manual-input" id="input-dotplot" type="text" placeholder="ej: -75">
-            <button class="manual-btn" onclick="setManual('dotplot')">OK</button>
-          </div>
+          <div class="manual-input-row"><input class="manual-input" id="input-dotplot" type="text" placeholder="ej: -75"><button class="manual-btn" onclick="setManual('dotplot')">OK</button></div>
         </div>
-        <div class="indicator-card" id="card-tips">
-          <div class="card-top">
-            <div><div class="card-name">Tipos Reales TIPS 10Y</div><div class="card-source">FRED · DFII10</div></div>
-            <div class="status-dot dot-loading" id="dot-tips"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Tipos Reales TIPS 10Y</div><div class="card-source">FRED · DFII10</div></div><div class="status-dot dot-loading" id="dot-tips"></div></div>
           <div class="card-value value-loading" id="val-tips"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &gt;0.5%</span><span class="threshold t-yellow">Amarillo 0–0.5%</span><span class="threshold t-red">Rojo &lt;0%</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;0.5%</span><span class="threshold t-yellow">Amarillo 0–0.5%</span><span class="threshold t-red">Rojo &lt;0%</span></div>
           <div class="card-temporal">Tipos reales negativos = entorno óptimo para oro y commodities</div>
         </div>
       </div>
     </div>
- 
-    <!-- CAPA 3 -->
     <div class="layer">
       <div class="layer-header"><span class="layer-icon">⛏️</span><span class="layer-title">Capa 3 — Commodities</span></div>
       <div class="layer-cards">
-        <div class="indicator-card" id="card-dxy">
-          <div class="card-top">
-            <div><div class="card-name">DXY (Índice Dólar)</div><div class="card-source">Yahoo · DX-Y.NYB</div></div>
-            <div class="status-dot dot-loading" id="dot-dxy"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">DXY (Índice Dólar)</div><div class="card-source">Yahoo · DX-Y.NYB</div></div><div class="status-dot dot-loading" id="dot-dxy"></div></div>
           <div class="card-value value-loading" id="val-dxy"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &gt;103</span><span class="threshold t-yellow">Amarillo 100–103</span><span class="threshold t-red">Rojo &lt;100</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;103</span><span class="threshold t-yellow">Amarillo 100–103</span><span class="threshold t-red">Rojo &lt;100</span></div>
           <div class="card-temporal">Dólar débil = viento de cola para commodities (correlación inversa)</div>
         </div>
-        <div class="indicator-card" id="card-coppergold">
-          <div class="card-top">
-            <div><div class="card-name">Copper/Gold Ratio</div><div class="card-source">Yahoo · HG=F / GC=F</div></div>
-            <div class="status-dot dot-loading" id="dot-coppergold"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Copper/Gold Ratio</div><div class="card-source">Yahoo · HG=F / GC=F</div></div><div class="status-dot dot-loading" id="dot-coppergold"></div></div>
           <div class="card-value value-loading" id="val-coppergold"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &gt;0.18</span><span class="threshold t-yellow">Amarillo 0.13–0.18</span><span class="threshold t-red">Rojo &lt;0.13</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;0.18</span><span class="threshold t-yellow">Amarillo 0.13–0.18</span><span class="threshold t-red">Rojo &lt;0.13</span></div>
           <div class="card-temporal">Ratio bajo = oro supera al cobre = miedo inflacionario/recesivo</div>
         </div>
-        <div class="indicator-card" id="card-crb">
-          <div class="card-top">
-            <div><div class="card-name">Commodity Index</div><div class="card-source">Yahoo · DBC (proxy CRB)</div></div>
-            <div class="status-dot dot-loading" id="dot-crb"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Commodity Index</div><div class="card-source">Yahoo · DBC (proxy CRB)</div></div><div class="status-dot dot-loading" id="dot-crb"></div></div>
           <div class="card-value value-loading" id="val-crb"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &lt;máx 6m</span><span class="threshold t-yellow">Amarillo cerca máx 6m</span><span class="threshold t-red">Rojo ruptura máx 12m</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;máx 6m</span><span class="threshold t-yellow">Amarillo cerca máx 6m</span><span class="threshold t-red">Rojo ruptura máx 12m</span></div>
           <div class="card-temporal">Invesco DB Commodity ETF como proxy automatizado del índice CRB</div>
         </div>
       </div>
     </div>
- 
-    <!-- CAPA 4 -->
     <div class="layer">
       <div class="layer-header"><span class="layer-icon">📈</span><span class="layer-title">Capa 4 — Renta Variable / Ciclo</span></div>
       <div class="layer-cards">
-        <div class="indicator-card" id="card-yield">
-          <div class="card-top">
-            <div><div class="card-name">Yield Curve 2Y–10Y</div><div class="card-source">FRED · T10Y2Y (mensual)</div></div>
-            <div class="status-dot dot-loading" id="dot-yield"></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Yield Curve 2Y–10Y</div><div class="card-source">FRED · T10Y2Y (mensual)</div></div><div class="status-dot dot-loading" id="dot-yield"></div></div>
           <div class="card-value value-loading" id="val-yield"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde invertida (&lt;-0.2%)</span><span class="threshold t-yellow">Amarillo -0.2 a +0.2%</span><span class="threshold t-red">Rojo &gt;+0.2% post-inversión</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde invertida (&lt;-0.2%)</span><span class="threshold t-yellow">Amarillo -0.2 a +0.2%</span><span class="threshold t-red">Rojo &gt;+0.2% post-inversión</span></div>
           <div class="card-temporal">El re-empinamiento tras inversión históricamente precede el daño real en RV</div>
         </div>
-        <div class="indicator-card" id="card-ism">
-          <div class="card-top">
-            <div><div class="card-name">ISM PMI Manufacturing</div><div class="card-source"><a href="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/" target="_blank">ISM ↗</a> · Mensual (día 1)</div></div>
-            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-ism"></div></div>
-          </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">ISM PMI Manufacturing</div><div class="card-source"><a href="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/" target="_blank">ISM ↗</a> · Mensual (día 1)</div></div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-ism"></div></div></div>
           <div class="card-value value-loading" id="val-ism">—</div>
-          <div class="card-thresholds">
-            <span class="threshold t-green">Verde &gt;52</span><span class="threshold t-yellow">Amarillo 49–52</span><span class="threshold t-red">Rojo &lt;48</span>
-          </div>
+          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;52</span><span class="threshold t-yellow">Amarillo 49–52</span><span class="threshold t-red">Rojo &lt;48</span></div>
           <div class="card-temporal">Sale el día 1 de cada mes. &lt;48 + inflación alta = estanflación confirmada</div>
-          <div class="manual-input-row">
-            <input class="manual-input" id="input-ism" type="number" placeholder="ej: 49.2" step="0.1">
-            <button class="manual-btn" onclick="setManual('ism')">OK</button>
-          </div>
+          <div class="manual-input-row"><input class="manual-input" id="input-ism" type="number" placeholder="ej: 49.2" step="0.1"><button class="manual-btn" onclick="setManual('ism')">OK</button></div>
         </div>
       </div>
     </div>
   </div>
- 
-  <!-- COMBINED CHART -->
-  <div class="section-title">Gráfica combinada de indicadores · 24 meses</div>
-  <div class="combined-section">
-    <div class="combined-controls" id="combined-controls">
+
+  <!-- COMBINED INDICATORS CHART -->
+  <div class="section-title">Gráfica combinada de indicadores</div>
+  <div class="chart-section">
+    <div class="chart-controls" id="ind-toggles">
       <span class="ctrl-label">Indicadores:</span>
-      <!-- toggles injected by JS -->
-      <span class="ctrl-divider"></span>
-      <button class="ctrl-btn-all" onclick="setAllDatasets(true)">Todos</button>
-      <button class="ctrl-btn-all" onclick="setAllDatasets(false)">Ninguno</button>
+      <span class="ctrl-divider" id="ind-toggle-end"></span>
+      <button class="ctrl-btn-all" onclick="setAll('ind', true)">Todos</button>
+      <button class="ctrl-btn-all" onclick="setAll('ind', false)">Ninguno</button>
     </div>
-    <div class="combined-wrap"><canvas id="combined-canvas"></canvas></div>
+    <div class="chart-controls">
+      <span class="ctrl-label">Histórico:</span>
+      <button class="range-btn" data-chart="ind" data-years="1" onclick="setRange('ind',this)">1A</button>
+      <button class="range-btn active" data-chart="ind" data-years="2" onclick="setRange('ind',this)">2A</button>
+      <button class="range-btn" data-chart="ind" data-years="5" onclick="setRange('ind',this)">5A</button>
+      <button class="range-btn" data-chart="ind" data-years="10" onclick="setRange('ind',this)">10A</button>
+      <button class="range-btn" data-chart="ind" data-years="25" onclick="setRange('ind',this)">25A</button>
+      <button class="range-btn" data-chart="ind" data-years="50" onclick="setRange('ind',this)">50A</button>
+      <button class="range-btn" data-chart="ind" data-years="70" onclick="setRange('ind',this)">MAX</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Vista:</span>
+      <button class="freq-btn" data-chart="ind" data-freq="d" onclick="setFreq('ind',this)">Diaria</button>
+      <button class="freq-btn" data-chart="ind" data-freq="w" onclick="setFreq('ind',this)">Semanal</button>
+      <button class="freq-btn active" data-chart="ind" data-freq="m" onclick="setFreq('ind',this)">Mensual</button>
+      <button class="freq-btn" data-chart="ind" data-freq="a" onclick="setFreq('ind',this)">Anual</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-loading hidden" id="ind-loading"><span class="spinner"></span> Cargando datos...</div>
+      <canvas id="ind-canvas"></canvas>
+    </div>
+    <div class="chart-note">Series mensuales por naturaleza (PCE, CPI, Fed Funds) se muestran mensuales aunque la vista sea diaria/semanal. En rangos largos la granularidad fina se agrega automáticamente para mantener el rendimiento.</div>
   </div>
- 
-  <!-- TV WIDGETS -->
-  <div class="section-title">Activos en tiempo real</div>
-  <div class="tv-controls">
-    <span class="ctrl-label">Mostrar:</span>
-    <button class="toggle-btn active" onclick="toggleWidget('sp500', this)">S&P 500</button>
-    <button class="toggle-btn active" onclick="toggleWidget('nasdaq', this)">Nasdaq 100</button>
-    <button class="toggle-btn active" onclick="toggleWidget('btc', this)">BTC</button>
-    <button class="toggle-btn active" onclick="toggleWidget('gold', this)">Oro</button>
-    <button class="toggle-btn active" onclick="toggleWidget('silver', this)">Plata</button>
-    <button class="toggle-btn active" onclick="toggleWidget('copper', this)">Cobre</button>
-    <button class="toggle-btn active" onclick="toggleWidget('oil', this)">Petróleo</button>
-    <button class="toggle-btn active" onclick="toggleWidget('em', this)">MSCI EM</button>
+
+  <!-- COMBINED ASSETS CHART -->
+  <div class="section-title">Activos · Rendimiento comparado</div>
+  <div class="chart-section">
+    <div class="chart-controls" id="asset-toggles">
+      <span class="ctrl-label">Activos:</span>
+      <span class="ctrl-divider" id="asset-toggle-end"></span>
+      <button class="ctrl-btn-all" onclick="setAll('asset', true)">Todos</button>
+      <button class="ctrl-btn-all" onclick="setAll('asset', false)">Ninguno</button>
+    </div>
+    <div class="chart-controls">
+      <span class="ctrl-label">Histórico:</span>
+      <button class="range-btn" data-chart="asset" data-years="1" onclick="setRange('asset',this)">1A</button>
+      <button class="range-btn active" data-chart="asset" data-years="2" onclick="setRange('asset',this)">2A</button>
+      <button class="range-btn" data-chart="asset" data-years="5" onclick="setRange('asset',this)">5A</button>
+      <button class="range-btn" data-chart="asset" data-years="10" onclick="setRange('asset',this)">10A</button>
+      <button class="range-btn" data-chart="asset" data-years="25" onclick="setRange('asset',this)">25A</button>
+      <button class="range-btn" data-chart="asset" data-years="50" onclick="setRange('asset',this)">50A</button>
+      <button class="range-btn" data-chart="asset" data-years="70" onclick="setRange('asset',this)">MAX</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Vista:</span>
+      <button class="freq-btn" data-chart="asset" data-freq="d" onclick="setFreq('asset',this)">Diaria</button>
+      <button class="freq-btn" data-chart="asset" data-freq="w" onclick="setFreq('asset',this)">Semanal</button>
+      <button class="freq-btn active" data-chart="asset" data-freq="m" onclick="setFreq('asset',this)">Mensual</button>
+      <button class="freq-btn" data-chart="asset" data-freq="a" onclick="setFreq('asset',this)">Anual</button>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-loading hidden" id="asset-loading"><span class="spinner"></span> Cargando datos...</div>
+      <canvas id="asset-canvas"></canvas>
+    </div>
+    <div class="chart-note">Precios normalizados a base 100 al inicio del periodo seleccionado para comparar rendimiento relativo. El tooltip muestra también el precio real. Histórico limitado por activo (BTC desde 2014, DBC desde 2006...).</div>
   </div>
-  <div class="tv-grid" id="tv-grid">
-    <div class="tv-widget-cell" id="widget-sp500"><div class="tv-widget-label">S&P 500</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"SP:SPX","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-nasdaq"><div class="tv-widget-label">Nasdaq 100</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"NASDAQ:QQQ","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-btc"><div class="tv-widget-label">Bitcoin</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"BITSTAMP:BTCUSD","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-gold"><div class="tv-widget-label">Oro</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"TVC:GOLD","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-silver"><div class="tv-widget-label">Plata</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"TVC:SILVER","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-copper"><div class="tv-widget-label">Cobre</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"COMEX:HG1!","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-oil"><div class="tv-widget-label">Petróleo WTI</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"TVC:USOIL","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-    <div class="tv-widget-cell" id="widget-em"><div class="tv-widget-label">MSCI Emergentes</div>
-      <div class="tradingview-widget-container" style="height:155px;"><div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-      {"symbol":"AMEX:EEM","width":"100%","height":"155","locale":"es","dateRange":"12M","colorTheme":"dark","isTransparent":true,"autosize":true}
-      </script></div></div>
-  </div>
- 
+
   <!-- FUNDS -->
   <div class="section-title">Fondos traspasables en MyInvestor por escenario</div>
   <div class="funds-grid">
@@ -459,40 +347,47 @@
       <div class="fund-item"><div class="fund-name">Dunas Valor Prudente</div><div class="fund-meta"><span class="fund-exposure">Retorno absoluto conservador</span><span class="fund-gestora">Dunas Capital</span><span class="fund-tag">Traspaso ✓</span></div></div>
     </div>
   </div>
- 
+
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-note">
-      FRED API (frecuencia mensual) · Yahoo Finance (DXY, oro, cobre, DBC) · TradingView widgets<br>
-      Manuales: ISM PMI (mensual, día 1) · Fed Dot Plot (trimestral) · Regla: ≥4/11 rojos con ≥2/3 inflación → commodities · PMI&lt;48 + inflación verde → RF/cash
+      FRED API · Yahoo Finance · Manuales: ISM PMI (mensual) · Fed Dot Plot (trimestral)<br>
+      Regla: ≥4/11 rojos con ≥2/3 inflación → commodities · PMI&lt;48 + inflación verde → RF/cash
     </div>
-    <button class="refresh-btn" id="refresh-btn" onclick="loadAll()">↻ Actualizar datos</button>
+    <button class="refresh-btn" id="refresh-btn" onclick="loadCards()">↻ Actualizar datos</button>
   </div>
- 
+
 </div>
- 
+
 <script>
 const FRED_KEY = '528979df61525633fd879dcbfa710136';
 const FRED_BASE = 'https://api.stlouisfed.org/fred/series/observations';
- 
-// ─── GLOBAL DATA STORE ───────────────────────────────────────────────────────
-// seriesStore[key] = [{ym:'2026-04', val: 3.2}, ...] chronological ascending
-const seriesStore = {};
-let combinedChart = null;
 let manualValues = { dotplot: null, ism: null };
- 
+
 // ─── UTILS ───────────────────────────────────────────────────────────────────
 const delay = ms => new Promise(r => setTimeout(r, ms));
-const ymKey = d => { const dt = new Date(d); return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0'); };
-const ymLabel = ym => { const [y,m] = ym.split('-'); const months=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return months[parseInt(m)-1] + ' ' + y.slice(2); };
- 
+const FREQ_RANK = { d: 0, w: 1, m: 2, a: 3 };
+
+function startDateFor(years) {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - years);
+  return d.toISOString().slice(0, 10);
+}
+
+// Auto-coarsen granularity on long ranges to keep payloads sane
+function coarsen(freq, years) {
+  if (freq === 'd' && years > 10) return 'w';
+  if (freq === 'w' && years > 25) return 'm';
+  return freq;
+}
+
 function loadManualFromStorage() {
   try { const s = localStorage.getItem('macro_manual'); if (s) manualValues = { ...manualValues, ...JSON.parse(s) }; } catch(e) {}
 }
 function saveManualToStorage() {
   try { localStorage.setItem('macro_manual', JSON.stringify(manualValues)); } catch(e) {}
 }
- 
+
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
 async function proxyFetch(targetUrl) {
   const proxies = [
@@ -506,38 +401,291 @@ async function proxyFetch(targetUrl) {
       return await res.json();
     } catch(e) { continue; }
   }
-  throw new Error('All proxies failed for ' + targetUrl.slice(0, 60));
+  throw new Error('Proxies failed: ' + targetUrl.slice(0, 60));
 }
- 
-// FRED with monthly frequency aggregation for daily series
-async function fetchFRED(seriesId, limit, freq) {
-  let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=${limit}`;
-  if (freq) url += `&frequency=${freq}&aggregation_method=avg`;
+
+// FRED range fetch → ascending [{x: ms, y: val}]
+// nativeFreq: the series' own frequency. Requested finer than native → native used.
+async function fredRange(seriesId, years, reqFreq, nativeFreq) {
+  const freq = coarsen(reqFreq, years);
+  let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=${startDateFor(years)}`;
+  if (FREQ_RANK[freq] > FREQ_RANK[nativeFreq]) url += `&frequency=${freq}&aggregation_method=avg`;
   const data = await proxyFetch(url);
-  if (!data.observations) throw new Error('No observations for ' + seriesId);
-  return data.observations.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+  if (!data.observations) throw new Error('No obs ' + seriesId);
+  return data.observations
+    .filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)))
+    .map(o => ({ x: new Date(o.date).getTime(), y: parseFloat(o.value) }));
 }
- 
-// Yahoo monthly history: returns array [{ym, val}] ascending
-async function fetchYahooHistory(symbol, range = '2y') {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1mo&range=${range}`;
+
+// Yahoo range fetch → ascending [{x: ms, y: val}]
+async function yahooRange(symbol, years, reqFreq) {
+  const freq = coarsen(reqFreq, years);
+  const interval = freq === 'd' ? '1d' : freq === 'w' ? '1wk' : '1mo'; // 'a' aggregated below
+  const range = years <= 1 ? '1y' : years <= 2 ? '2y' : years <= 5 ? '5y' : years <= 10 ? '10y' : 'max';
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=${interval}&range=${range}`;
   const data = await proxyFetch(url);
   const result = data?.chart?.result?.[0];
-  if (!result) throw new Error('Yahoo no result for ' + symbol);
+  if (!result) throw new Error('Yahoo no result ' + symbol);
   const ts = result.timestamp || [];
   const closes = result.indicators?.quote?.[0]?.close || [];
-  const out = [];
+  let out = [];
+  const startMs = new Date(startDateFor(years)).getTime();
   for (let i = 0; i < ts.length; i++) {
     if (closes[i] == null) continue;
-    out.push({ ym: ymKey(ts[i] * 1000), val: closes[i] });
+    const ms = ts[i] * 1000;
+    if (ms < startMs) continue;
+    out.push({ x: ms, y: closes[i] });
   }
-  // Use latest live price for the final month if available
+  if (freq === 'a') {
+    // Keep last point of each year
+    const byYear = {};
+    out.forEach(p => { byYear[new Date(p.x).getFullYear()] = p; });
+    out = Object.values(byYear).sort((a, b) => a.x - b.x);
+  }
+  // Live price on last point
   const live = result.meta?.regularMarketPrice;
-  if (live && out.length) out[out.length - 1].val = live;
+  if (live && out.length) out[out.length - 1] = { ...out[out.length - 1], y: live };
   return out;
 }
- 
-// ─── STATUS LOGIC ────────────────────────────────────────────────────────────
+
+// YoY transform for monthly FRED series (PCE, CPI)
+async function fredYoY(seriesId, years, reqFreq) {
+  // Always fetch monthly (native), need extra 13 months back for YoY
+  let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=${startDateFor(years + 2)}`;
+  const data = await proxyFetch(url);
+  if (!data.observations) throw new Error('No obs ' + seriesId);
+  const obs = data.observations.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+  const out = [];
+  const startMs = new Date(startDateFor(years)).getTime();
+  for (let i = 12; i < obs.length; i++) {
+    const cur = parseFloat(obs[i].value);
+    const ago = parseFloat(obs[i - 12].value);
+    if (!ago) continue;
+    const ms = new Date(obs[i].date).getTime();
+    if (ms < startMs) continue;
+    out.push({ x: ms, y: parseFloat(((cur / ago - 1) * 100).toFixed(2)) });
+  }
+  if (reqFreq === 'a') {
+    const byYear = {};
+    out.forEach(p => { byYear[new Date(p.x).getFullYear()] = p; });
+    return Object.values(byYear).sort((a, b) => a.x - b.x);
+  }
+  return out;
+}
+
+// Copper/Gold ratio history
+async function ratioRange(years, reqFreq) {
+  const [gold, copper] = await Promise.all([
+    yahooRange('GC=F', years, reqFreq),
+    yahooRange('HG=F', years, reqFreq),
+  ]);
+  // Align by nearest timestamp (same interval → same stamps usually)
+  const goldMap = new Map(gold.map(p => [p.x, p.y]));
+  return copper
+    .filter(p => goldMap.has(p.x))
+    .map(p => ({ x: p.x, y: parseFloat(((p.y * 100) / goldMap.get(p.x)).toFixed(4)) }));
+}
+
+// ─── CHART STATE & CONFIG ────────────────────────────────────────────────────
+const chartState = {
+  ind:   { years: 2, freq: 'm', chart: null },
+  asset: { years: 2, freq: 'm', chart: null },
+};
+
+const IND_CONFIG = [
+  { key: 'pce',        label: 'PCE Core YoY',    color: '#ff6b6b', axis: 'y',  fetch: (y, f) => fredYoY('PCEPILFE', y, f) },
+  { key: 'cpi',        label: 'CPI YoY',         color: '#ffa94d', axis: 'y',  fetch: (y, f) => fredYoY('CPIAUCSL', y, f) },
+  { key: 'breakevens', label: 'Breakevens 5Y5Y', color: '#ffd43b', axis: 'y',  fetch: (y, f) => fredRange('T5YIFR', y, f, 'd') },
+  { key: 'fedfunds',   label: 'Fed Funds',       color: '#69db7c', axis: 'y',  fetch: (y, f) => fredRange('FEDFUNDS', y, f, 'm') },
+  { key: 'tips',       label: 'TIPS 10Y Real',   color: '#38d9a9', axis: 'y',  fetch: (y, f) => fredRange('DFII10', y, f, 'd') },
+  { key: 'yield',      label: 'Yield 2s10s',     color: '#4dabf7', axis: 'y',  fetch: (y, f) => fredRange('T10Y2Y', y, f, 'd') },
+  { key: 'coppergold', label: 'Copper/Gold ×10', color: '#fb923c', axis: 'y',  fetch: (y, f) => ratioRange(y, f), scale: 10 },
+  { key: 'dxy',        label: 'DXY',             color: '#e599f7', axis: 'y2', fetch: (y, f) => yahooRange('DX-Y.NYB', y, f) },
+  { key: 'crb',        label: 'CRB proxy (DBC)', color: '#a78bfa', axis: 'y2', fetch: (y, f) => yahooRange('DBC', y, f), scale: 4 },
+];
+
+const ASSET_CONFIG = [
+  { key: 'sp500',  label: 'S&P 500',    color: '#60a5fa', symbol: '^GSPC' },
+  { key: 'nasdaq', label: 'Nasdaq 100', color: '#a78bfa', symbol: '^NDX' },
+  { key: 'btc',    label: 'BTC',        color: '#f59e0b', symbol: 'BTC-USD' },
+  { key: 'gold',   label: 'Oro',        color: '#fcd34d', symbol: 'GC=F' },
+  { key: 'silver', label: 'Plata',      color: '#cbd5e1', symbol: 'SI=F' },
+  { key: 'copper', label: 'Cobre',      color: '#fb923c', symbol: 'HG=F' },
+  { key: 'oil',    label: 'Petróleo',   color: '#4ade80', symbol: 'CL=F' },
+  { key: 'em',     label: 'MSCI EM',    color: '#f472b6', symbol: 'EEM' },
+  { key: 'dxyA',   label: 'DXY',        color: '#e599f7', symbol: 'DX-Y.NYB' },
+];
+
+// Remember hidden state across reloads
+const hiddenState = { ind: {}, asset: {} };
+
+// ─── CHART BUILDERS ──────────────────────────────────────────────────────────
+function baseOptions(yTitle, y2Title) {
+  const scales = {
+    x: {
+      type: 'time',
+      time: { tooltipFormat: 'dd MMM yyyy' },
+      ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, maxRotation: 0, autoSkipPadding: 20 },
+      grid: { color: 'rgba(30,45,66,0.5)' }
+    },
+    y: {
+      position: 'left',
+      title: { display: true, text: yTitle, color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
+      ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
+      grid: { color: 'rgba(30,45,66,0.5)' }
+    }
+  };
+  if (y2Title) scales.y2 = {
+    position: 'right',
+    title: { display: true, text: y2Title, color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
+    ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
+    grid: { drawOnChartArea: false }
+  };
+  return {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'nearest', axis: 'x', intersect: false },
+    animation: { duration: 400 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1,
+        titleColor: '#aebfd4', bodyColor: '#e8f0f8',
+        titleFont: { family: 'Space Mono', size: 10 }, bodyFont: { family: 'Space Mono', size: 10 },
+      }
+    },
+    scales
+  };
+}
+
+async function loadIndChart() {
+  const st = chartState.ind;
+  const loading = document.getElementById('ind-loading');
+  loading.classList.remove('hidden');
+
+  const results = [];
+  for (const c of IND_CONFIG) {
+    try {
+      const data = await c.fetch(st.years, st.freq);
+      results.push({ config: c, data });
+    } catch(e) {
+      console.warn('ind', c.key, e.message);
+      results.push({ config: c, data: [] });
+    }
+    await delay(150);
+  }
+
+  const datasets = results.map(({ config: c, data }) => ({
+    label: c.label,
+    data: data.map(p => ({ x: p.x, y: p.y * (c.scale || 1) })),
+    borderColor: c.color, backgroundColor: c.color,
+    borderWidth: 1.8, pointRadius: 0, pointHoverRadius: 4,
+    tension: 0.2, spanGaps: true, yAxisID: c.axis,
+    hidden: !!hiddenState.ind[c.key], _key: c.key,
+  }));
+
+  if (st.chart) st.chart.destroy();
+  const ctx = document.getElementById('ind-canvas').getContext('2d');
+  const opts = baseOptions('% / ratio×10', 'DXY / DBC×4');
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}`
+  };
+  st.chart = new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+
+  buildToggles('ind', IND_CONFIG, st.chart);
+  loading.classList.add('hidden');
+}
+
+async function loadAssetChart() {
+  const st = chartState.asset;
+  const loading = document.getElementById('asset-loading');
+  loading.classList.remove('hidden');
+
+  const results = [];
+  for (const c of ASSET_CONFIG) {
+    try {
+      const data = await yahooRange(c.symbol, st.years, st.freq);
+      results.push({ config: c, data });
+    } catch(e) {
+      console.warn('asset', c.key, e.message);
+      results.push({ config: c, data: [] });
+    }
+    await delay(150);
+  }
+
+  // Normalize each to base 100 at its first visible point
+  const datasets = results.map(({ config: c, data }) => {
+    const base = data.length ? data[0].y : 1;
+    return {
+      label: c.label,
+      data: data.map(p => ({ x: p.x, y: parseFloat(((p.y / base) * 100).toFixed(2)) })),
+      _raw: data.map(p => p.y),
+      borderColor: c.color, backgroundColor: c.color,
+      borderWidth: 1.8, pointRadius: 0, pointHoverRadius: 4,
+      tension: 0.2, spanGaps: true, yAxisID: 'y',
+      hidden: !!hiddenState.asset[c.key], _key: c.key,
+    };
+  });
+
+  if (st.chart) st.chart.destroy();
+  const ctx = document.getElementById('asset-canvas').getContext('2d');
+  const opts = baseOptions('Base 100 = inicio periodo');
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => {
+      const raw = ctx.dataset._raw?.[ctx.dataIndex];
+      const rawStr = raw != null ? ` (${raw >= 1000 ? raw.toFixed(0) : raw.toFixed(2)})` : '';
+      return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}${rawStr}`;
+    }
+  };
+  st.chart = new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+
+  buildToggles('asset', ASSET_CONFIG, st.chart);
+  loading.classList.add('hidden');
+}
+
+// ─── TOGGLES & CONTROLS ──────────────────────────────────────────────────────
+function buildToggles(which, config, chart) {
+  const container = document.getElementById(which + '-toggles');
+  container.querySelectorAll('.ind-toggle').forEach(el => el.remove());
+  const anchor = document.getElementById(which + '-toggle-end');
+  config.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ind-toggle' + (hiddenState[which][c.key] ? '' : ' active');
+    btn.textContent = c.label;
+    btn.style.setProperty('--ind-color', c.color);
+    btn.onclick = () => {
+      const ds = chart.data.datasets[i];
+      ds.hidden = !ds.hidden;
+      hiddenState[which][c.key] = ds.hidden;
+      btn.classList.toggle('active', !ds.hidden);
+      chart.update();
+    };
+    container.insertBefore(btn, anchor);
+  });
+}
+
+function setAll(which, visible) {
+  const st = chartState[which];
+  if (!st.chart) return;
+  st.chart.data.datasets.forEach(ds => { ds.hidden = !visible; hiddenState[which][ds._key] = !visible; });
+  document.querySelectorAll(`#${which}-toggles .ind-toggle`).forEach(b => b.classList.toggle('active', visible));
+  st.chart.update();
+}
+
+function setRange(which, btn) {
+  chartState[which].years = parseInt(btn.dataset.years);
+  document.querySelectorAll(`.range-btn[data-chart="${which}"]`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  which === 'ind' ? loadIndChart() : loadAssetChart();
+}
+
+function setFreq(which, btn) {
+  chartState[which].freq = btn.dataset.freq;
+  document.querySelectorAll(`.freq-btn[data-chart="${which}"]`).forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  which === 'ind' ? loadIndChart() : loadAssetChart();
+}
+
+// ─── SEMÁFORO CARDS ──────────────────────────────────────────────────────────
 function statusFor(key, v) {
   switch (key) {
     case 'pce':        return v > 3 ? 'red' : v >= 2.5 ? 'yellow' : 'green';
@@ -551,7 +699,7 @@ function statusFor(key, v) {
     default: return 'green';
   }
 }
- 
+
 function setCard(key, value, unit, statusOverride) {
   const valEl = document.getElementById('val-' + key);
   const dotEl = document.getElementById('dot-' + key);
@@ -560,95 +708,102 @@ function setCard(key, value, unit, statusOverride) {
   valEl.innerHTML = `<span class="value-${status}">${value}${unit}</span>`;
   dotEl.className = `status-dot dot-${status}`;
 }
- 
+
 function setCardError(key) {
   const valEl = document.getElementById('val-' + key);
   const dotEl = document.getElementById('dot-' + key);
   if (valEl) valEl.innerHTML = '<span class="value-yellow">N/D</span>';
   if (dotEl) dotEl.className = 'status-dot dot-yellow';
 }
- 
-function setTrendBadge(key, isRising3, isRising2) {
+
+function setTrendBadge(key, r3, r2) {
   const el = document.getElementById('trend-' + key);
   if (!el) return;
-  if (isRising3) el.innerHTML = '<span class="trend-badge trend-confirmed">🔴 3 meses consecutivos al alza — CONFIRMADO</span>';
-  else if (isRising2) el.innerHTML = '<span class="trend-badge trend-partial">🟡 2 meses al alza — pendiente confirmación</span>';
+  if (r3) el.innerHTML = '<span class="trend-badge trend-confirmed">🔴 3 meses consecutivos al alza — CONFIRMADO</span>';
+  else if (r2) el.innerHTML = '<span class="trend-badge trend-partial">🟡 2 meses al alza — pendiente confirmación</span>';
   else el.innerHTML = '<span class="trend-badge trend-no">🟢 Sin tendencia alcista sostenida</span>';
 }
- 
-// ─── INDICATOR LOADERS ───────────────────────────────────────────────────────
-async function loadYoYIndicator(key, seriesId) {
+
+let cardData = {};
+
+async function loadCards() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('loading'); btn.textContent = '↻ Cargando...';
+  document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleString('es-ES');
+
+  // PCE & CPI YoY with trend confirmation
+  for (const [key, sid] of [['pce', 'PCEPILFE'], ['cpi', 'CPIAUCSL']]) {
+    try {
+      const data = await fredYoY(sid, 2, 'm');
+      cardData[key] = data;
+      const n = data.length;
+      const latest = data[n-1].y;
+      const r3 = n >= 3 && data[n-1].y > data[n-2].y && data[n-2].y > data[n-3].y;
+      const r2 = n >= 2 && data[n-1].y > data[n-2].y;
+      setTrendBadge(key, r3, r2);
+      let status = statusFor(key, latest);
+      if (status === 'red' && !r3) status = 'yellow';
+      setCard(key, latest.toFixed(2), '%', status);
+    } catch(e) { console.warn(key, e.message); setCardError(key); }
+    await delay(200);
+  }
+
+  // Direct FRED
+  for (const [key, sid, native] of [['breakevens','T5YIFR','d'], ['fedfunds','FEDFUNDS','m'], ['tips','DFII10','d'], ['yield','T10Y2Y','d']]) {
+    try {
+      const data = await fredRange(sid, 2, 'm', native);
+      cardData[key] = data;
+      setCard(key, data[data.length-1].y.toFixed(2), '%');
+    } catch(e) { console.warn(key, e.message); setCardError(key); }
+    await delay(200);
+  }
+
+  // Fed funds special: falling + PCE>3 = red
   try {
-    const obs = await fetchFRED(seriesId, 40); // 40 monthly obs → 28 YoY points
-    // obs descending; compute YoY
-    const yoy = [];
-    for (let i = 0; i < obs.length - 12; i++) {
-      const cur = parseFloat(obs[i].value);
-      const ago = parseFloat(obs[i + 12].value);
-      if (!ago) continue;
-      yoy.push({ ym: ymKey(obs[i].date), val: parseFloat(((cur / ago - 1) * 100).toFixed(2)) });
+    const fed = cardData.fedfunds, pce = cardData.pce;
+    if (fed && pce && fed.length >= 2) {
+      const latest = fed[fed.length-1].y, prev = fed[fed.length-2].y;
+      const pceLatest = pce[pce.length-1].y;
+      let status = 'green';
+      if (latest < prev && pceLatest > 3) status = 'red';
+      else if (latest < prev) status = 'yellow';
+      setCard('fedfunds', latest.toFixed(2), '%', status);
     }
-    if (!yoy.length) throw new Error('No YoY data');
-    seriesStore[key] = yoy.slice(0, 24).reverse(); // ascending, 24 months
- 
-    const latest = yoy[0].val;
-    const isRising3 = yoy.length >= 3 && yoy[0].val > yoy[1].val && yoy[1].val > yoy[2].val;
-    const isRising2 = yoy.length >= 2 && yoy[0].val > yoy[1].val;
-    setTrendBadge(key, isRising3, isRising2);
- 
-    // Red requires threshold breach AND 3 consecutive months rising
-    let status = statusFor(key, latest);
-    if (status === 'red' && !isRising3) status = 'yellow';
-    setCard(key, latest.toFixed(2), '%', status);
-  } catch(e) { console.warn(key, e.message); setCardError(key); }
-}
- 
-async function loadDirectIndicator(key, seriesId, freq) {
+  } catch(e) {}
+
+  // Yahoo cards
   try {
-    const obs = await fetchFRED(seriesId, 26, freq);
-    const latest = parseFloat(obs[0].value);
-    seriesStore[key] = obs.slice(0, 24).reverse().map(o => ({ ym: ymKey(o.date), val: parseFloat(o.value) }));
-    setCard(key, latest.toFixed(2), '%');
-  } catch(e) { console.warn(key, e.message); setCardError(key); }
-}
- 
-async function loadDXY() {
+    const dxy = await yahooRange('DX-Y.NYB', 1, 'm');
+    setCard('dxy', dxy[dxy.length-1].y.toFixed(2), '');
+  } catch(e) { setCardError('dxy'); }
+  await delay(200);
+
   try {
-    const hist = await fetchYahooHistory('DX-Y.NYB');
-    seriesStore.dxy = hist.slice(-24);
-    const latest = hist[hist.length - 1].val;
-    setCard('dxy', latest.toFixed(2), '');
-  } catch(e) { console.warn('dxy', e.message); setCardError('dxy'); }
-}
- 
-async function loadCopperGold() {
+    const ratio = await ratioRange(1, 'm');
+    setCard('coppergold', ratio[ratio.length-1].y.toFixed(4), '');
+  } catch(e) { setCardError('coppergold'); }
+  await delay(200);
+
   try {
-    const [gold, copper] = await Promise.all([fetchYahooHistory('GC=F'), fetchYahooHistory('HG=F')]);
-    const goldMap = Object.fromEntries(gold.map(g => [g.ym, g.val]));
-    const ratio = copper.filter(c => goldMap[c.ym]).map(c => ({
-      ym: c.ym, val: parseFloat(((c.val * 100) / goldMap[c.ym]).toFixed(4))
-    }));
-    seriesStore.coppergold = ratio.slice(-24);
-    const latest = ratio[ratio.length - 1].val;
-    setCard('coppergold', latest.toFixed(4), '');
-  } catch(e) { console.warn('coppergold', e.message); setCardError('coppergold'); }
-}
- 
-async function loadCRB() {
-  try {
-    const hist = await fetchYahooHistory('DBC', '2y');
-    seriesStore.crb = hist.slice(-24);
-    const latest = hist[hist.length - 1].val;
-    const max12 = Math.max(...hist.slice(-12).map(h => h.val));
-    const max6 = Math.max(...hist.slice(-6).map(h => h.val));
+    const dbc = await yahooRange('DBC', 2, 'm');
+    const latest = dbc[dbc.length-1].y;
+    const max12 = Math.max(...dbc.slice(-12).map(p => p.y));
+    const max6 = Math.max(...dbc.slice(-6).map(p => p.y));
     let status = 'green';
-    if (latest >= max12 * 0.98) status = 'red';        // breaking 12m high
-    else if (latest >= max6 * 0.97) status = 'yellow';  // near 6m high
+    if (latest >= max12 * 0.98) status = 'red';
+    else if (latest >= max6 * 0.97) status = 'yellow';
     setCard('crb', latest.toFixed(2), ' $', status);
-  } catch(e) { console.warn('crb', e.message); setCardError('crb'); }
+  } catch(e) { setCardError('crb'); }
+
+  // Manual
+  if (manualValues.ism) { document.getElementById('input-ism').value = manualValues.ism; applyManual('ism', manualValues.ism); }
+  if (manualValues.dotplot) { document.getElementById('input-dotplot').value = manualValues.dotplot; applyManual('dotplot', manualValues.dotplot); }
+
+  updateVerdict();
+  btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
 }
- 
-// ─── MANUAL INDICATORS ───────────────────────────────────────────────────────
+
+// ─── MANUAL ──────────────────────────────────────────────────────────────────
 function setManual(key) {
   const input = document.getElementById('input-' + key);
   const val = input.value.trim();
@@ -658,7 +813,7 @@ function setManual(key) {
   applyManual(key, val);
   updateVerdict();
 }
- 
+
 function applyManual(key, val) {
   if (key === 'ism') {
     const v = parseFloat(val);
@@ -667,18 +822,15 @@ function applyManual(key, val) {
   } else if (key === 'dotplot') {
     const v = parseFloat(val);
     let status = 'green';
-    if (!isNaN(v)) {
-      if (v <= -100) status = 'red';
-      else if (v <= -50) status = 'yellow';
-    }
+    if (!isNaN(v)) { if (v <= -100) status = 'red'; else if (v <= -50) status = 'yellow'; }
     const valEl = document.getElementById('val-dotplot');
     const dotEl = document.getElementById('dot-dotplot');
     if (valEl) valEl.innerHTML = `<span class="value-${status}">${v > 0 ? '+' : ''}${v} bps</span>`;
     if (dotEl) dotEl.className = `status-dot dot-${status}`;
   }
 }
- 
-// ─── VERDICT & RECOMMENDATION ────────────────────────────────────────────────
+
+// ─── VERDICT ─────────────────────────────────────────────────────────────────
 function countReds() {
   const keys = ['pce','cpi','breakevens','fedfunds','dotplot','tips','dxy','coppergold','crb','yield','ism'];
   const inflationKeys = ['pce','cpi','breakevens'];
@@ -694,7 +846,7 @@ function countReds() {
   });
   return { count, inflationReds, ismRed, inflationGreens };
 }
- 
+
 function updateVerdict() {
   const { count, inflationReds, ismRed, inflationGreens } = countReds();
   const countEl = document.getElementById('red-count');
@@ -702,207 +854,43 @@ function updateVerdict() {
   const detailEl = document.getElementById('reco-detail');
   const allocEl = document.getElementById('reco-alloc');
   countEl.textContent = count;
- 
+
   let scenario, color, detail, alloc;
- 
   if (ismRed && inflationGreens >= 2) {
-    // Deflationary recession
     scenario = '🔵 RECESIÓN DEFLACIONARIA — Rotar a RF + Cash';
     color = 'var(--blue)';
-    detail = 'PMI en contracción con inflación controlada. Este escenario favorece bonos de gobierno (los tipos bajarán agresivamente) y liquidez. Las commodities sufren en recesiones deflacionarias — NO es el escenario de tu tesis. Destino: RF gobierno larga duración + monetario.';
+    detail = 'PMI en contracción con inflación controlada. Favorece bonos de gobierno (los tipos bajarán agresivamente) y liquidez. Las commodities sufren en recesiones deflacionarias — NO es el escenario de tu tesis.';
     alloc = ['<b>50-60%</b> RF gobierno larga duración', '<b>25-35%</b> Monetario / cash', '<b>10-15%</b> Oro como cobertura'];
   } else if (count >= 4 && inflationReds >= 2) {
     scenario = '🔴 ESTANFLACIÓN — Rotar a Commodities';
     color = 'var(--red)';
-    detail = 'Tu tesis confirmada: inflación sostenida con la Fed estimulando. Las commodities históricamente superan a RV y RF en este entorno. Rota progresivamente (no de golpe) hacia metales preciosos, minería y energía.';
+    detail = 'Tu tesis confirmada: inflación sostenida con la Fed estimulando. Las commodities históricamente superan a RV y RF en este entorno. Rota progresivamente hacia metales preciosos, minería y energía.';
     alloc = ['<b>35-45%</b> Metales preciosos (oro/plata)', '<b>25-30%</b> Minería diversificada', '<b>15-20%</b> Energía', '<b>10-15%</b> Monetario táctico'];
   } else if (count >= 2) {
     scenario = '🟡 TRANSICIÓN — Reducir riesgo gradualmente';
     color = 'var(--yellow)';
-    detail = 'Señales mixtas. Mantén el core de RV pero empieza a construir posiciones defensivas y algo de exposición a commodities. Es la fase de preparación: reducir beta sin salir del mercado.';
-    alloc = ['<b>40-50%</b> RV (reducir tech de mayor beta)', '<b>20-25%</b> Mixtos defensivos (Trojan/Ruffer)', '<b>15-20%</b> Primera posición commodities', '<b>10-15%</b> Monetario'];
+    detail = 'Señales mixtas. Mantén el core de RV pero construye posiciones defensivas y primera exposición a commodities. Fase de preparación: reducir beta sin salir del mercado.';
+    alloc = ['<b>40-50%</b> RV (reducir tech de mayor beta)', '<b>20-25%</b> Mixtos defensivos', '<b>15-20%</b> Primera posición commodities', '<b>10-15%</b> Monetario'];
   } else {
     scenario = '🟢 RISK-ON — Mantener RV + Tech/IA';
     color = 'var(--green)';
-    detail = 'Entorno favorable para renta variable. La liquidez fluye y la inflación no amenaza todavía. Mantén exposición a crecimiento y tecnología — la fase de expansión de tu tesis (dinero barato → bolsa sube) sigue vigente.';
-    alloc = ['<b>60-70%</b> RV global core', '<b>20-30%</b> Tech / IA (satélite)', '<b>5-10%</b> Monetario (polvora seca)'];
+    detail = 'Entorno favorable para renta variable. La liquidez fluye y la inflación no amenaza todavía. La fase de expansión de tu tesis (dinero barato → bolsa sube) sigue vigente.';
+    alloc = ['<b>60-70%</b> RV global core', '<b>20-30%</b> Tech / IA (satélite)', '<b>5-10%</b> Monetario (pólvora seca)'];
   }
- 
+
   countEl.style.color = color;
   verdictEl.style.color = color;
   verdictEl.textContent = scenario;
   detailEl.textContent = detail;
   allocEl.innerHTML = alloc.map(a => `<span class="alloc-chip">${a}</span>`).join('');
 }
- 
-// ─── COMBINED CHART ──────────────────────────────────────────────────────────
-const CHART_CONFIG = [
-  { key: 'pce',        label: 'PCE Core YoY',     color: '#ff6b6b', axis: 'y' },
-  { key: 'cpi',        label: 'CPI YoY',          color: '#ffa94d', axis: 'y' },
-  { key: 'breakevens', label: 'Breakevens 5Y5Y',  color: '#ffd43b', axis: 'y' },
-  { key: 'fedfunds',   label: 'Fed Funds',        color: '#69db7c', axis: 'y' },
-  { key: 'tips',       label: 'TIPS 10Y Real',    color: '#38d9a9', axis: 'y' },
-  { key: 'yield',      label: 'Yield 2s10s',      color: '#4dabf7', axis: 'y' },
-  { key: 'coppergold', label: 'Copper/Gold ×10',  color: '#fb923c', axis: 'y', scale: 10 },
-  { key: 'dxy',        label: 'DXY',              color: '#e599f7', axis: 'y2' },
-  { key: 'crb',        label: 'CRB proxy (DBC)',  color: '#a78bfa', axis: 'y2', scale: 4 },
-];
- 
-function buildCombinedChart() {
-  // Union of months across all loaded series
-  const allMonths = new Set();
-  CHART_CONFIG.forEach(c => (seriesStore[c.key] || []).forEach(p => allMonths.add(p.ym)));
-  const months = [...allMonths].sort().slice(-24);
-  if (!months.length) return;
- 
-  const datasets = CHART_CONFIG.map(c => {
-    const data = seriesStore[c.key] || [];
-    const map = Object.fromEntries(data.map(p => [p.ym, p.val]));
-    const scale = c.scale || 1;
-    return {
-      label: c.label,
-      data: months.map(m => map[m] != null ? map[m] * scale : null),
-      borderColor: c.color,
-      backgroundColor: c.color,
-      borderWidth: 2,
-      pointRadius: 2.5,
-      pointHoverRadius: 5,
-      tension: 0.3,
-      spanGaps: true,
-      yAxisID: c.axis,
-      hidden: false,
-      _key: c.key,
-    };
-  });
- 
-  const ctx = document.getElementById('combined-canvas').getContext('2d');
-  if (combinedChart) combinedChart.destroy();
- 
-  combinedChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels: months.map(ymLabel), datasets },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      animation: { duration: 500 },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1,
-          titleColor: '#aebfd4', bodyColor: '#e8f0f8',
-          titleFont: { family: 'Space Mono', size: 10 },
-          bodyFont: { family: 'Space Mono', size: 10 },
-          itemSort: (a, b) => b.parsed.y - a.parsed.y,
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, maxRotation: 0, maxTicksLimit: 12 },
-          grid: { color: 'rgba(30,45,66,0.5)' }
-        },
-        y: {
-          position: 'left',
-          title: { display: true, text: '% / ratio×10', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
-          ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
-          grid: { color: 'rgba(30,45,66,0.5)' }
-        },
-        y2: {
-          position: 'right',
-          title: { display: true, text: 'DXY / DBC×4', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
-          ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
-          grid: { drawOnChartArea: false }
-        }
-      }
-    }
-  });
- 
-  buildToggles();
-}
- 
-function buildToggles() {
-  const container = document.getElementById('combined-controls');
-  // Remove old toggles (keep label, divider, all/none buttons)
-  container.querySelectorAll('.ind-toggle').forEach(el => el.remove());
-  const divider = container.querySelector('.ctrl-divider');
- 
-  CHART_CONFIG.forEach((c, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'ind-toggle active';
-    btn.textContent = c.label;
-    btn.style.setProperty('--ind-color', c.color);
-    btn.onclick = () => {
-      const ds = combinedChart.data.datasets[i];
-      ds.hidden = !ds.hidden;
-      btn.classList.toggle('active', !ds.hidden);
-      combinedChart.update();
-    };
-    container.insertBefore(btn, divider);
-  });
-}
- 
-function setAllDatasets(visible) {
-  if (!combinedChart) return;
-  combinedChart.data.datasets.forEach(ds => ds.hidden = !visible);
-  document.querySelectorAll('.ind-toggle').forEach(b => b.classList.toggle('active', visible));
-  combinedChart.update();
-}
- 
-// ─── FED FUNDS SPECIAL LOGIC (needs PCE) ─────────────────────────────────────
-function adjustFedFundsStatus() {
-  const fedData = seriesStore.fedfunds;
-  const pceData = seriesStore.pce;
-  if (!fedData || !pceData || fedData.length < 2) return;
-  const latest = fedData[fedData.length - 1].val;
-  const prev = fedData[fedData.length - 2].val;
-  const pceLatest = pceData[pceData.length - 1].val;
-  const falling = latest < prev;
-  let status = 'green';
-  if (falling && pceLatest > 3) status = 'red';
-  else if (falling) status = 'yellow';
-  setCard('fedfunds', latest.toFixed(2), '%', status);
-}
- 
-// ─── WIDGETS ─────────────────────────────────────────────────────────────────
-function toggleWidget(key, btn) {
-  const cell = document.getElementById('widget-' + key);
-  if (!cell) return;
-  cell.classList.toggle('hidden');
-  btn.classList.toggle('active');
-}
- 
-// ─── MAIN LOAD ───────────────────────────────────────────────────────────────
-async function loadAll() {
-  const btn = document.getElementById('refresh-btn');
-  btn.classList.add('loading'); btn.textContent = '↻ Cargando...';
-  document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleString('es-ES');
- 
-  // Sequential with small delays (avoid proxy rate limits)
-  await loadYoYIndicator('pce', 'PCEPILFE'); await delay(250);
-  await loadYoYIndicator('cpi', 'CPIAUCSL'); await delay(250);
-  await loadDirectIndicator('breakevens', 'T5YIFR', 'm'); await delay(250);
-  await loadDirectIndicator('fedfunds', 'FEDFUNDS'); await delay(250);
-  await loadDirectIndicator('tips', 'DFII10', 'm'); await delay(250);
-  await loadDirectIndicator('yield', 'T10Y2Y', 'm'); await delay(250);
-  await loadDXY(); await delay(250);
-  await loadCopperGold(); await delay(250);
-  await loadCRB();
- 
-  // Fed funds status depends on PCE
-  adjustFedFundsStatus();
- 
-  // Restore manual values
-  if (manualValues.ism) { document.getElementById('input-ism').value = manualValues.ism; applyManual('ism', manualValues.ism); }
-  if (manualValues.dotplot) { document.getElementById('input-dotplot').value = manualValues.dotplot; applyManual('dotplot', manualValues.dotplot); }
- 
-  buildCombinedChart();
-  updateVerdict();
- 
-  btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
-}
- 
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
 loadManualFromStorage();
-loadAll();
+loadCards().then(() => {
+  loadIndChart();
+  loadAssetChart();
+});
 </script>
 </body>
 </html>
