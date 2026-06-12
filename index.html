@@ -467,6 +467,9 @@
       <span class="ctrl-label">Escala:</span>
       <button class="range-btn" data-scale="linear" id="scale-linear" onclick="setScale(this)">Lineal</button>
       <button class="range-btn active" data-scale="log" id="scale-log" onclick="setScale(this)">Log</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">BTC:</span>
+      <button class="range-btn active" id="btc-axis-btn" onclick="toggleBtcAxis()">Eje propio</button>
     </div>
     <div class="chart-wrap">
       <div class="chart-loading hidden" id="asset-loading"><span class="spinner"></span> Cargando datos...</div>
@@ -913,7 +916,7 @@ async function ratioRange(years, reqFreq) {
 // ─── CHART STATE & CONFIG ────────────────────────────────────────────────────
 const chartState = {
   ind:   { years: 2, freq: 'm', chart: null },
-  asset: { years: 2, freq: 'm', chart: null, scale: 'log' },
+  asset: { years: 2, freq: 'm', chart: null, scale: 'log', btcOwnAxis: true },
 };
 
 const IND_CONFIG = [
@@ -1039,30 +1042,35 @@ async function loadAssetChart() {
 
   const datasets = results.map(({ config: c, data }) => {
     const base = data.length ? data[0].y : 1;
+    const ownAxis = c.key === 'btc' && st.btcOwnAxis;
     return {
-      label: c.label,
+      label: c.label + (ownAxis ? ' →' : ''),
       data: data.map(p => ({ x: p.x, y: parseFloat(((p.y / base) * 100).toFixed(2)) })),
       _raw: data.map(p => p.y),
       borderColor: c.color, backgroundColor: c.color,
       borderWidth: 1.8, pointRadius: 0, pointHoverRadius: 4,
-      tension: 0.2, spanGaps: true, yAxisID: 'y',
+      tension: 0.2, spanGaps: true, yAxisID: ownAxis ? 'y2' : 'y',
       hidden: !!hiddenState.asset[c.key], _key: c.key,
     };
   });
 
   if (st.chart) st.chart.destroy();
   const ctx = document.getElementById('asset-canvas').getContext('2d');
-  const opts = baseOptions('Base 100 = inicio periodo');
+  const opts = baseOptions('Base 100 = inicio periodo', st.btcOwnAxis ? 'BTC (base 100)' : null);
   if (st.scale === 'log') {
-    opts.scales.y.type = 'logarithmic';
-    opts.scales.y.ticks.callback = v => {
-      // Show clean round numbers only
+    const logTicks = v => {
       const log = Math.log10(v);
       if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
         return v >= 1000 ? (v/1000) + 'k' : v;
       }
       return null;
     };
+    opts.scales.y.type = 'logarithmic';
+    opts.scales.y.ticks.callback = logTicks;
+    if (opts.scales.y2) {
+      opts.scales.y2.type = 'logarithmic';
+      opts.scales.y2.ticks.callback = logTicks;
+    }
   }
   opts.plugins.tooltip.callbacks = {
     label: ctx => {
@@ -1124,6 +1132,12 @@ function setScale(btn) {
   chartState.asset.scale = btn.dataset.scale;
   document.getElementById('scale-linear').classList.toggle('active', btn.dataset.scale === 'linear');
   document.getElementById('scale-log').classList.toggle('active', btn.dataset.scale === 'log');
+  loadAssetChart();
+}
+
+function toggleBtcAxis() {
+  chartState.asset.btcOwnAxis = !chartState.asset.btcOwnAxis;
+  document.getElementById('btc-axis-btn').classList.toggle('active', chartState.asset.btcOwnAxis);
   loadAssetChart();
 }
 
