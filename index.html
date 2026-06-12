@@ -400,12 +400,16 @@
       <button class="freq-btn" data-chart="asset" data-freq="w" onclick="setFreq('asset',this)">Semanal</button>
       <button class="freq-btn active" data-chart="asset" data-freq="m" onclick="setFreq('asset',this)">Mensual</button>
       <button class="freq-btn" data-chart="asset" data-freq="a" onclick="setFreq('asset',this)">Anual</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Escala:</span>
+      <button class="range-btn" data-scale="linear" id="scale-linear" onclick="setScale(this)">Lineal</button>
+      <button class="range-btn active" data-scale="log" id="scale-log" onclick="setScale(this)">Log</button>
     </div>
     <div class="chart-wrap">
       <div class="chart-loading hidden" id="asset-loading"><span class="spinner"></span> Cargando datos...</div>
       <canvas id="asset-canvas"></canvas>
     </div>
-    <div class="chart-note">Precios normalizados a base 100 al inicio del periodo para comparar rendimiento relativo. El tooltip muestra también el precio real. Histórico limitado por activo (BTC desde 2014, DBC desde 2006, TLT desde 2002...).</div>
+    <div class="chart-note">Precios normalizados a base 100 al inicio del periodo para comparar rendimiento relativo. Escala Log recomendada para periodos largos: las distancias verticales representan múltiplos (%), haciendo comparables activos con rendimientos muy dispares (BTC vs índices). El tooltip muestra también el precio real.</div>
   </div>
 
   <!-- ETFs POR RÉGIMEN -->
@@ -807,7 +811,7 @@ async function ratioRange(years, reqFreq) {
 // ─── CHART STATE & CONFIG ────────────────────────────────────────────────────
 const chartState = {
   ind:   { years: 2, freq: 'm', chart: null },
-  asset: { years: 2, freq: 'm', chart: null },
+  asset: { years: 2, freq: 'm', chart: null, scale: 'log' },
 };
 
 const IND_CONFIG = [
@@ -818,7 +822,7 @@ const IND_CONFIG = [
   { key: 'tips',       label: 'TIPS 10Y Real',    color: '#38d9a9', axis: 'y',  fetch: (y, f) => fredRange('DFII10', y, f, 'd') },
   { key: 'yield',      label: 'Yield 2s10s',      color: '#4dabf7', axis: 'y',  fetch: (y, f) => fredRange('T10Y2Y', y, f, 'd') },
   { key: 'coppergold', label: 'Copper/Gold ×10',  color: '#fb923c', axis: 'y',  fetch: (y, f) => ratioRange(y, f), scale: 10 },
-  { key: 'walcl',      label: 'Liquidez Fed YoY', color: '#22d3ee', axis: 'y',  fetch: (y, f) => walclYoY(y, f) },
+  { key: 'walcl',      label: 'Liquidez Fed YoY', color: '#22d3ee', axis: 'y2', fetch: (y, f) => walclYoY(y, f) },
   { key: 'dxy',        label: 'DXY',              color: '#e599f7', axis: 'y2', fetch: (y, f) => yahooRange('DX-Y.NYB', y, f) },
   { key: 'crb',        label: 'CRB proxy (DBC)',  color: '#a78bfa', axis: 'y2', fetch: (y, f) => yahooRange('DBC', y, f), scale: 4 },
 ];
@@ -904,7 +908,7 @@ async function loadIndChart() {
 
   if (st.chart) st.chart.destroy();
   const ctx = document.getElementById('ind-canvas').getContext('2d');
-  const opts = baseOptions('% / ratio×10', 'DXY / DBC×4');
+  const opts = baseOptions('% / ratio×10', 'DXY / DBC×4 / Liq.YoY%');
   opts.plugins.tooltip.callbacks = {
     label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}`
   };
@@ -947,6 +951,17 @@ async function loadAssetChart() {
   if (st.chart) st.chart.destroy();
   const ctx = document.getElementById('asset-canvas').getContext('2d');
   const opts = baseOptions('Base 100 = inicio periodo');
+  if (st.scale === 'log') {
+    opts.scales.y.type = 'logarithmic';
+    opts.scales.y.ticks.callback = v => {
+      // Show clean round numbers only
+      const log = Math.log10(v);
+      if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
+        return v >= 1000 ? (v/1000) + 'k' : v;
+      }
+      return null;
+    };
+  }
   opts.plugins.tooltip.callbacks = {
     label: ctx => {
       const raw = ctx.dataset._raw?.[ctx.dataIndex];
@@ -1001,6 +1016,13 @@ function setFreq(which, btn) {
   document.querySelectorAll(`.freq-btn[data-chart="${which}"]`).forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   which === 'ind' ? loadIndChart() : loadAssetChart();
+}
+
+function setScale(btn) {
+  chartState.asset.scale = btn.dataset.scale;
+  document.getElementById('scale-linear').classList.toggle('active', btn.dataset.scale === 'linear');
+  document.getElementById('scale-log').classList.toggle('active', btn.dataset.scale === 'log');
+  loadAssetChart();
 }
 
 // ─── SCORING (per-indicator: -1 / 0 / +1) ────────────────────────────────────
