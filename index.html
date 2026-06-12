@@ -18,11 +18,24 @@
     --blue:#40c4ff; --blue-dim:rgba(64,196,255,.1); --blue-border:rgba(64,196,255,.3);
     --orange:#ff9100; --orange-dim:rgba(255,145,0,.12); --orange-border:rgba(255,145,0,.3);
     --accent:#00e5ff;
+    --gridline:rgba(0,229,255,.03);
     --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
+  }
+  body.light {
+    --bg:#eef2f7; --bg2:#ffffff; --bg3:#e4eaf2;
+    --border:#d2dce8; --border2:#bfccdc;
+    --text:#16202e; --text2:#44566c; --text3:#74879d;
+    --green:#00913f; --green-dim:rgba(0,145,63,.1); --green-border:rgba(0,145,63,.35);
+    --yellow:#b07d00; --yellow-dim:rgba(176,125,0,.1); --yellow-border:rgba(176,125,0,.35);
+    --red:#d6336c; --red-dim:rgba(214,51,108,.08); --red-border:rgba(214,51,108,.3);
+    --blue:#1971c2; --blue-dim:rgba(25,113,194,.08); --blue-border:rgba(25,113,194,.3);
+    --orange:#d9480f; --orange-dim:rgba(217,72,15,.08); --orange-border:rgba(217,72,15,.3);
+    --accent:#0b7285;
+    --gridline:rgba(11,114,133,.05);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:100vh;overflow-x:hidden}
-  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
   .container{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:24px}
 
   .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:22px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:16px}
@@ -174,6 +187,53 @@
   .rg-regime-error{font-size:10px;color:var(--text2);line-height:1.6;margin-top:8px}
   .rg-regime-error b{color:var(--yellow)}
 
+  /* THEME TOGGLE */
+  .theme-btn{font-family:var(--mono);font-size:14px;width:38px;height:38px;border-radius:4px;border:1px solid var(--border2);background:var(--bg2);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .theme-btn:hover{border-color:var(--accent)}
+
+  /* ANALYZER */
+  .analyzer{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .analyzer-input-row{display:flex;gap:8px;padding:16px 18px;border-bottom:1px solid var(--border);background:var(--bg3);flex-wrap:wrap;align-items:center}
+  .analyzer-input{flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:13px;padding:9px 12px;border-radius:4px;outline:none;text-transform:uppercase}
+  .analyzer-input:focus{border-color:var(--accent)}
+  .analyzer-btn{font-family:var(--mono);font-size:11px;padding:9px 18px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
+  .analyzer-btn:hover{background:rgba(0,229,255,.08)}
+  .analyzer-hint{font-size:9px;color:var(--text3);width:100%;letter-spacing:.5px}
+  .analyzer-result{padding:18px}
+  .analyzer-head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+  .analyzer-symbol{font-family:var(--sans);font-size:20px;font-weight:800}
+  .analyzer-price{font-size:16px;color:var(--text2)}
+  .analyzer-score-pill{font-family:var(--sans);font-size:14px;font-weight:800;padding:5px 14px;border-radius:4px;margin-left:auto}
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+  .kpi-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:12px 14px}
+  .kpi-label{font-size:9px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+  .kpi-value{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .kpi-sub{font-size:9px;color:var(--text3);margin-top:4px;line-height:1.4}
+  .analyzer-empty{padding:30px 18px;text-align:center;font-size:11px;color:var(--text3)}
+
+  /* SCREENER */
+  .screener{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .screener-controls{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--bg3)}
+  .cat-btn{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;letter-spacing:.5px;transition:all .15s}
+  .cat-btn.active{color:var(--accent);border-color:var(--accent);background:rgba(0,229,255,.08)}
+  .screener-search{background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:3px;outline:none;width:140px;margin-left:auto}
+  .screener-search:focus{border-color:var(--accent)}
+  .screener-wrap{overflow-x:auto}
+  .screener-table{width:100%;border-collapse:collapse;font-size:10.5px;min-width:1100px}
+  .screener-table th{position:sticky;top:0;text-align:right;padding:9px 10px;background:var(--bg3);color:var(--text2);font-weight:700;letter-spacing:.5px;font-size:9px;text-transform:uppercase;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+  .screener-table th:hover{color:var(--accent)}
+  .screener-table th.sorted{color:var(--accent)}
+  .screener-table th:first-child,.screener-table td:first-child{text-align:left}
+  .screener-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .screener-table tr:hover td{background:var(--bg3)}
+  .sc-name{color:var(--text);font-weight:700}
+  .sc-ticker{font-size:9px;color:var(--text3);display:block}
+  .sc-cat{font-size:8px;padding:1px 6px;border-radius:2px;border:1px solid var(--border2);color:var(--text3);letter-spacing:.5px}
+  .sc-pos{color:var(--green)!important}.sc-neg{color:var(--red)!important}
+  .score-pill{display:inline-block;min-width:42px;text-align:center;font-weight:700;padding:3px 8px;border-radius:3px;font-size:11px}
+  .screener-loading{padding:26px;text-align:center;font-size:11px;color:var(--text2)}
+  .screener-meta{font-size:9px;color:var(--text3);padding:10px 18px;letter-spacing:.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -192,7 +252,10 @@
       <h1>MACRO <span>DASHBOARD</span></h1>
       <div class="subtitle">Sistema neutral de regímenes · Asignación táctica multi-activo</div>
     </div>
-    <div class="last-update" id="last-update">Actualizando...</div>
+    <div class="header-right" style="display:flex;align-items:center;gap:12px;">
+      <div class="last-update" id="last-update">Actualizando...</div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+    </div>
   </div>
 
   <!-- REGIME PANEL -->
@@ -410,6 +473,45 @@
       <canvas id="asset-canvas"></canvas>
     </div>
     <div class="chart-note">Precios normalizados a base 100 al inicio del periodo para comparar rendimiento relativo. Escala Log recomendada para periodos largos: las distancias verticales representan múltiplos (%), haciendo comparables activos con rendimientos muy dispares (BTC vs índices). El tooltip muestra también el precio real.</div>
+  </div>
+
+  <!-- ANALIZADOR -->
+  <div class="section-title">Analizador de activos</div>
+  <div class="analyzer">
+    <div class="analyzer-input-row">
+      <input class="analyzer-input" id="analyzer-input" type="text" placeholder="Ticker Yahoo: AAPL, XLU, GC=F, BTC-USD, TEF.MC..." onkeydown="if(event.key==='Enter')runAnalyzer()">
+      <button class="analyzer-btn" onclick="runAnalyzer()">Analizar</button>
+      <div class="analyzer-hint">Formato Yahoo Finance: acciones US directas (AAPL), europeas con sufijo (.MC Madrid, .DE Frankfurt), futuros (=F), crypto (-USD), índices (^)</div>
+    </div>
+    <div id="analyzer-output"><div class="analyzer-empty">Introduce un ticker para analizar momentum, tendencia, riesgo, posicionamiento en opciones y encaje con el régimen macro actual</div></div>
+  </div>
+
+  <!-- SCREENER -->
+  <div class="section-title">Screener multi-activo · Score por régimen</div>
+  <div class="screener">
+    <div class="screener-controls" id="screener-cats">
+      <span class="ctrl-label">Categoría:</span>
+      <button class="cat-btn active" data-cat="all" onclick="setCat(this)">Todas</button>
+      <button class="cat-btn" data-cat="indices" onclick="setCat(this)">Índices RV</button>
+      <button class="cat-btn" data-cat="sectores" onclick="setCat(this)">Sectores</button>
+      <button class="cat-btn" data-cat="rf" onclick="setCat(this)">RF</button>
+      <button class="cat-btn" data-cat="commodities" onclick="setCat(this)">Commodities</button>
+      <button class="cat-btn" data-cat="crypto" onclick="setCat(this)">Crypto</button>
+      <button class="cat-btn" data-cat="fx" onclick="setCat(this)">FX</button>
+      <input class="screener-search" id="screener-search" placeholder="Buscar..." oninput="renderScreener()">
+      <button class="ctrl-btn-all" onclick="loadScreener(true)">↻ Refrescar</button>
+    </div>
+    <div class="screener-wrap">
+      <div class="screener-loading" id="screener-loading">Pulsa ↻ Refrescar para cargar el screener (~30s la primera vez; después queda cacheado 6 horas)</div>
+      <table class="screener-table" id="screener-table" style="display:none;">
+        <thead><tr id="screener-head"></tr></thead>
+        <tbody id="screener-body"></tbody>
+      </table>
+    </div>
+    <div class="screener-meta">
+      <span>Score = Tendencia 25% + Momentum 25% + Retorno/Riesgo 20% + Encaje régimen 30% · Click en cabeceras para ordenar</span>
+      <span id="screener-cache-info"></span>
+    </div>
   </div>
 
   <!-- ETFs POR RÉGIMEN -->
@@ -848,20 +950,20 @@ function baseOptions(yTitle, y2Title) {
     x: {
       type: 'time',
       time: { tooltipFormat: 'dd MMM yyyy' },
-      ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, maxRotation: 0, autoSkipPadding: 20 },
-      grid: { color: 'rgba(30,45,66,0.5)' }
+      ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 9 }, maxRotation: 0, autoSkipPadding: 20 },
+      grid: { color: 'rgba(126,147,171,0.18)' }
     },
     y: {
       position: 'left',
       title: { display: true, text: yTitle, color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
-      ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
-      grid: { color: 'rgba(30,45,66,0.5)' }
+      ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 9 } },
+      grid: { color: 'rgba(126,147,171,0.18)' }
     }
   };
   if (y2Title) scales.y2 = {
     position: 'right',
     title: { display: true, text: y2Title, color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
-    ticks: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 } },
+    ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 9 } },
     grid: { drawOnChartArea: false }
   };
   return {
@@ -1243,21 +1345,22 @@ function updateRegime() {
   // Regime
   let regime, color, desc, alloc, quadId;
   const liquidity = scores.walcl?.score || 0;
+  let regimeKey = 'neutral';
 
   if (growth >= 1 && inflation <= 0) {
-    regime = '🟢 EXPANSIÓN'; color = 'var(--green)'; quadId = 'quad-expansion';
+    regime = '🟢 EXPANSIÓN'; color = 'var(--green)'; quadId = 'quad-expansion'; regimeKey = 'expansion';
     desc = 'Crecimiento acelerando con inflación contenida. El entorno clásico risk-on: la RV growth y tech lideran, los emergentes acompañan y BTC tiene su asignación máxima' + (liquidity > 0 ? ' — reforzado además por la liquidez Fed en expansión.' : liquidity < 0 ? ', aunque la liquidez Fed contrayéndose pide moderar la beta.' : '.');
     alloc = ['<b>55-65%</b> RV global (sesgo growth/tech)', '<b>10-15%</b> Emergentes', '<b>5-15%</b> BTC', '<b>5-10%</b> RF corta / cash', '<b>0-5%</b> Oro'];
   } else if (growth >= 1 && inflation >= 1) {
-    regime = '🟠 SOBRECALENTAMIENTO'; color = 'var(--orange)'; quadId = 'quad-overheat';
+    regime = '🟠 SOBRECALENTAMIENTO'; color = 'var(--orange)'; quadId = 'quad-overheat'; regimeKey = 'overheat';
     desc = 'Crecimiento e inflación acelerando a la vez. Las commodities industriales y la RV value/energía toman el relevo del growth. La RF nominal sufre. BTC se reduce: aguanta mientras fluya la liquidez pero es vulnerable al giro de la Fed.';
     alloc = ['<b>25-35%</b> Commodities industriales (cobre, energía, DBC)', '<b>25-35%</b> RV value/energía', '<b>10-15%</b> Oro', '<b>3-8%</b> BTC', '<b>10-15%</b> Cash táctico'];
   } else if (growth <= -1 && inflation >= 1) {
-    regime = '🔴 ESTANFLACIÓN'; color = 'var(--red)'; quadId = 'quad-stagflation';
+    regime = '🔴 ESTANFLACIÓN'; color = 'var(--red)'; quadId = 'quad-stagflation'; regimeKey = 'stagflation';
     desc = 'Economía frenando con precios calientes: el peor entorno para carteras tradicionales (RV y RF caen juntas). El oro es el activo del régimen. BTC al mínimo — empíricamente NO es cobertura inflacionaria: en 2022 cayó un 65% mientras el oro aguantó.';
     alloc = ['<b>35-45%</b> Oro y metales preciosos', '<b>15-20%</b> Commodities defensivas', '<b>25-35%</b> Cash remunerado', '<b>0-3%</b> BTC', '<b>0-10%</b> TIPS'];
   } else if (growth <= -1 && inflation <= 0) {
-    regime = '🔵 RECESIÓN DEFLACIONARIA'; color = 'var(--blue)'; quadId = 'quad-deflation';
+    regime = '🔵 RECESIÓN DEFLACIONARIA'; color = 'var(--blue)'; quadId = 'quad-deflation'; regimeKey = 'deflation';
     desc = 'Economía contrayéndose con inflación cayendo. Los tipos bajarán con fuerza: la RF de gobierno de larga duración es el activo del régimen. BTC a cero — cae primero y más fuerte; el momento de acumular llega cuando la Liquidez Fed (WALCL) gire al alza' + (liquidity > 0 ? ' — y ese giro ya se está produciendo: zona de acumulación.' : '.');
     alloc = ['<b>45-55%</b> RF gobierno larga duración', '<b>25-35%</b> Cash remunerado', '<b>5-10%</b> Oro', '<b>0%</b> BTC (acumular al giro de liquidez)'];
   } else {
@@ -1266,6 +1369,7 @@ function updateRegime() {
     alloc = ['<b>40-50%</b> RV global', '<b>15-20%</b> RF', '<b>10-15%</b> Oro + commodities', '<b>3-8%</b> BTC', '<b>15-20%</b> Cash'];
   }
 
+  currentRegimeKey = regimeKey;
   document.getElementById('regime-name').textContent = regime;
   document.getElementById('regime-name').style.color = color;
   document.getElementById('regime-desc').textContent = desc;
@@ -1319,11 +1423,353 @@ function renderModStrip() {
   }).join('');
 }
 
+// ─── THEME ───────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  document.getElementById('theme-btn').textContent = isLight ? '☀️' : '🌙';
+  try { localStorage.setItem('macro_theme', isLight ? 'light' : 'dark'); } catch(e) {}
+}
+function initTheme() {
+  try {
+    if (localStorage.getItem('macro_theme') === 'light') {
+      document.body.classList.add('light');
+      document.getElementById('theme-btn').textContent = '☀️';
+    }
+  } catch(e) {}
+}
+
+// ─── KPI COMPUTATION (shared by analyzer & screener) ─────────────────────────
+let currentRegimeKey = 'neutral';
+
+// Weekly closes → KPI set
+function computeKPIs(data, spxData) {
+  // data: ascending [{x, y}] weekly, ~2y
+  const n = data.length;
+  if (n < 30) return null;
+  const px = data.map(p => p.y);
+  const last = px[n-1];
+
+  const ret = (weeks) => n > weeks ? (last / px[n-1-weeks] - 1) * 100 : null;
+  const r1m = ret(4), r3m = ret(13), r12m = ret(52);
+
+  // MA40w (≈ MA200 daily)
+  const maWin = Math.min(40, n);
+  const ma40 = px.slice(-maWin).reduce((a,b) => a+b, 0) / maWin;
+  const distMA = (last / ma40 - 1) * 100;
+
+  // 52w high distance
+  const win52 = px.slice(-52);
+  const high52 = Math.max(...win52);
+  const dist52 = (last / high52 - 1) * 100;
+
+  // Weekly returns for vol/beta
+  const rets = [];
+  for (let i = Math.max(1, n-52); i < n; i++) rets.push(px[i]/px[i-1] - 1);
+  const mean = rets.reduce((a,b) => a+b, 0) / rets.length;
+  const variance = rets.reduce((a,b) => a + (b-mean)**2, 0) / rets.length;
+  const annVol = Math.sqrt(variance) * Math.sqrt(52) * 100;
+
+  // Max drawdown 52w
+  let peak = win52[0], maxDD = 0;
+  for (const p of win52) {
+    if (p > peak) peak = p;
+    const dd = (p/peak - 1) * 100;
+    if (dd < maxDD) maxDD = dd;
+  }
+
+  // Beta vs SPX (weekly, last 52)
+  let beta = null;
+  if (spxData && spxData.length > 53) {
+    const spx = spxData.map(p => p.y);
+    const m = spx.length;
+    const sRets = [];
+    for (let i = Math.max(1, m-52); i < m; i++) sRets.push(spx[i]/spx[i-1] - 1);
+    const len = Math.min(rets.length, sRets.length);
+    const a = rets.slice(-len), b = sRets.slice(-len);
+    const ma = a.reduce((x,y)=>x+y,0)/len, mb = b.reduce((x,y)=>x+y,0)/len;
+    let cov = 0, varB = 0;
+    for (let i = 0; i < len; i++) { cov += (a[i]-ma)*(b[i]-mb); varB += (b[i]-mb)**2; }
+    if (varB > 0) beta = cov / varB;
+  }
+
+  const retVol = (r12m != null && annVol > 0) ? r12m / annVol : null;
+
+  return { last, r1m, r3m, r12m, distMA, dist52, annVol, maxDD, beta, retVol };
+}
+
+function scoreComponents(k, regimeFit) {
+  const clamp = (v) => Math.max(0, Math.min(100, v));
+  const t = clamp(50 + k.distMA * 4);
+  const mblend = (k.r1m ?? 0) * 0.2 + (k.r3m ?? 0) * 0.35 + (k.r12m ?? 0) * 0.45;
+  const m = clamp(50 + mblend * 1.5);
+  const r = clamp(50 + (k.retVol ?? 0) * 25);
+  const reg = regimeFit != null ? regimeFit : 50;
+  const total = 0.25*t + 0.25*m + 0.20*r + 0.30*reg;
+  return { t, m, r, reg, total };
+}
+
+function scoreColor(s) {
+  if (s >= 65) return { bg: 'var(--green-dim)', fg: 'var(--green)', bd: 'var(--green-border)' };
+  if (s >= 45) return { bg: 'var(--yellow-dim)', fg: 'var(--yellow)', bd: 'var(--yellow-border)' };
+  return { bg: 'var(--red-dim)', fg: 'var(--red)', bd: 'var(--red-border)' };
+}
+
+const REGIME_LABELS = { expansion: 'Expansión', overheat: 'Sobrecalentamiento', stagflation: 'Estanflación', deflation: 'Recesión defl.', neutral: 'Neutral' };
+
+// ─── UNIVERSE ────────────────────────────────────────────────────────────────
+// fit: {expansion, overheat, stagflation, deflation} 0-100
+const UNIVERSE = [
+  { sym:'^GSPC',   name:'S&P 500',          cat:'indices',     fit:{expansion:85, overheat:55, stagflation:25, deflation:30} },
+  { sym:'^NDX',    name:'Nasdaq 100',       cat:'indices',     fit:{expansion:95, overheat:45, stagflation:15, deflation:30} },
+  { sym:'^RUT',    name:'Russell 2000',     cat:'indices',     fit:{expansion:85, overheat:50, stagflation:20, deflation:20} },
+  { sym:'VGK',     name:'Europa (VGK)',     cat:'indices',     fit:{expansion:75, overheat:60, stagflation:25, deflation:25} },
+  { sym:'EWJ',     name:'Japón (EWJ)',      cat:'indices',     fit:{expansion:75, overheat:55, stagflation:25, deflation:25} },
+  { sym:'EEM',     name:'Emergentes (EEM)', cat:'indices',     fit:{expansion:85, overheat:65, stagflation:25, deflation:15} },
+  { sym:'XLK',     name:'Tecnología',       cat:'sectores',    fit:{expansion:95, overheat:40, stagflation:15, deflation:30} },
+  { sym:'XLE',     name:'Energía',          cat:'sectores',    fit:{expansion:50, overheat:95, stagflation:70, deflation:15} },
+  { sym:'XLF',     name:'Financiero',       cat:'sectores',    fit:{expansion:80, overheat:65, stagflation:20, deflation:15} },
+  { sym:'XLV',     name:'Salud',            cat:'sectores',    fit:{expansion:55, overheat:45, stagflation:50, deflation:60} },
+  { sym:'XLU',     name:'Utilities',        cat:'sectores',    fit:{expansion:40, overheat:30, stagflation:50, deflation:75} },
+  { sym:'XLB',     name:'Materiales',       cat:'sectores',    fit:{expansion:65, overheat:90, stagflation:45, deflation:15} },
+  { sym:'XLI',     name:'Industrial',       cat:'sectores',    fit:{expansion:75, overheat:75, stagflation:30, deflation:20} },
+  { sym:'TLT',     name:'Treasury 20+Y',    cat:'rf',          fit:{expansion:35, overheat:5,  stagflation:15, deflation:95} },
+  { sym:'IEF',     name:'Treasury 7-10Y',   cat:'rf',          fit:{expansion:40, overheat:10, stagflation:25, deflation:90} },
+  { sym:'TIP',     name:'TIPS',             cat:'rf',          fit:{expansion:45, overheat:55, stagflation:70, deflation:55} },
+  { sym:'HYG',     name:'High Yield',       cat:'rf',          fit:{expansion:75, overheat:50, stagflation:20, deflation:20} },
+  { sym:'SGOV',    name:'T-Bills 0-3M',     cat:'rf',          fit:{expansion:30, overheat:45, stagflation:80, deflation:85} },
+  { sym:'GC=F',    name:'Oro',              cat:'commodities', fit:{expansion:35, overheat:60, stagflation:95, deflation:60} },
+  { sym:'SI=F',    name:'Plata',            cat:'commodities', fit:{expansion:45, overheat:75, stagflation:85, deflation:40} },
+  { sym:'HG=F',    name:'Cobre',            cat:'commodities', fit:{expansion:70, overheat:95, stagflation:45, deflation:10} },
+  { sym:'CL=F',    name:'Petróleo WTI',     cat:'commodities', fit:{expansion:55, overheat:95, stagflation:65, deflation:10} },
+  { sym:'DBC',     name:'Cesta Commodities',cat:'commodities', fit:{expansion:55, overheat:95, stagflation:75, deflation:10} },
+  { sym:'GDX',     name:'Mineras Oro',      cat:'commodities', fit:{expansion:35, overheat:65, stagflation:90, deflation:45} },
+  { sym:'COPX',    name:'Mineras Cobre',    cat:'commodities', fit:{expansion:65, overheat:95, stagflation:45, deflation:10} },
+  { sym:'BTC-USD', name:'Bitcoin',          cat:'crypto',      fit:{expansion:90, overheat:50, stagflation:15, deflation:20} },
+  { sym:'ETH-USD', name:'Ethereum',         cat:'crypto',      fit:{expansion:90, overheat:45, stagflation:10, deflation:15} },
+  { sym:'DX-Y.NYB',name:'Dólar (DXY)',      cat:'fx',          fit:{expansion:30, overheat:35, stagflation:60, deflation:70} },
+];
+
+// ─── ANALYZER ────────────────────────────────────────────────────────────────
+async function fetchPutCallRatio(symbol) {
+  try {
+    const url = `https://query1.finance.yahoo.com/v7/finance/options/${symbol}`;
+    const data = await proxyFetch(url);
+    const opt = data?.optionChain?.result?.[0]?.options?.[0];
+    if (!opt) return null;
+    const sumOI = arr => (arr || []).reduce((s, o) => s + (o.openInterest || 0), 0);
+    const putOI = sumOI(opt.puts), callOI = sumOI(opt.calls);
+    if (!callOI) return null;
+    return { ratio: putOI / callOI, putOI, callOI };
+  } catch(e) { return null; }
+}
+
+async function runAnalyzer() {
+  const input = document.getElementById('analyzer-input');
+  const out = document.getElementById('analyzer-output');
+  const sym = input.value.trim().toUpperCase();
+  if (!sym) return;
+  out.innerHTML = '<div class="analyzer-empty"><span class="spinner"></span> Analizando ' + sym + '...</div>';
+
+  try {
+    const [data, spx] = await Promise.all([
+      yahooRange(sym, 2, 'w'),
+      yahooRange('^GSPC', 2, 'w'),
+    ]);
+    const k = computeKPIs(data, spx);
+    if (!k) throw new Error('Datos insuficientes (¿ticker correcto?)');
+
+    // Put/Call (best effort, only for stocks/ETFs — skip futures/crypto/indices)
+    let pcr = null;
+    if (!sym.includes('=') && !sym.includes('-') && !sym.startsWith('^')) {
+      pcr = await fetchPutCallRatio(sym);
+    }
+
+    // Regime fit if in universe
+    const uniMatch = UNIVERSE.find(u => u.sym === sym);
+    const regimeFit = uniMatch ? (currentRegimeKey === 'neutral' ? 50 : uniMatch.fit[currentRegimeKey]) : null;
+    const sc = scoreComponents(k, regimeFit);
+    const col = scoreColor(sc.total);
+
+    const fmt = (v, dec=1, suffix='%') => v == null ? 'N/D' : (v >= 0 && suffix === '%' ? '+' : '') + v.toFixed(dec) + suffix;
+    const cls = v => v == null ? '' : v >= 0 ? 'sc-pos' : 'sc-neg';
+    const pcrInterp = pcr ? (pcr.ratio > 1.1 ? 'Posicionamiento bajista (cobertura alta)' : pcr.ratio < 0.7 ? 'Posicionamiento alcista' : 'Posicionamiento neutral') : '';
+
+    out.innerHTML = `
+      <div class="analyzer-result">
+        <div class="analyzer-head">
+          <div class="analyzer-symbol">${sym}</div>
+          <div class="analyzer-price">${k.last >= 1000 ? k.last.toFixed(0) : k.last.toFixed(2)}</div>
+          <div class="analyzer-score-pill" style="background:${col.bg};color:${col.fg};border:1px solid ${col.bd};">Score ${sc.total.toFixed(0)}/100${regimeFit == null ? ' *' : ''}</div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">Momentum 1 mes</div><div class="kpi-value ${cls(k.r1m)}">${fmt(k.r1m)}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Momentum 3 meses</div><div class="kpi-value ${cls(k.r3m)}">${fmt(k.r3m)}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Momentum 12 meses</div><div class="kpi-value ${cls(k.r12m)}">${fmt(k.r12m)}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Tendencia (vs MA200d)</div><div class="kpi-value ${cls(k.distMA)}">${fmt(k.distMA)}</div><div class="kpi-sub">${k.distMA >= 0 ? 'Por encima de su media de 200 días' : 'Por debajo de su media de 200 días'}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Dist. máx 52 sem</div><div class="kpi-value ${cls(k.dist52)}">${fmt(k.dist52)}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Volatilidad anual</div><div class="kpi-value">${k.annVol.toFixed(1)}%</div><div class="kpi-sub">${k.annVol < 15 ? 'Baja' : k.annVol < 30 ? 'Media' : k.annVol < 50 ? 'Alta' : 'Muy alta'}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Max drawdown 1A</div><div class="kpi-value sc-neg">${k.maxDD.toFixed(1)}%</div></div>
+          <div class="kpi-card"><div class="kpi-label">Beta vs S&P 500</div><div class="kpi-value">${k.beta == null ? 'N/D' : k.beta.toFixed(2)}</div><div class="kpi-sub">${k.beta == null ? '' : k.beta > 1.3 ? 'Amplifica al mercado' : k.beta > 0.7 ? 'Acompaña al mercado' : k.beta > 0.2 ? 'Defensivo' : 'Descorrelacionado'}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Retorno / Volatilidad</div><div class="kpi-value ${cls(k.retVol)}">${k.retVol == null ? 'N/D' : k.retVol.toFixed(2)}</div><div class="kpi-sub">Rendimiento 12m por unidad de riesgo</div></div>
+          <div class="kpi-card"><div class="kpi-label">Put/Call ratio (OI)</div><div class="kpi-value">${pcr ? pcr.ratio.toFixed(2) : 'N/D'}</div><div class="kpi-sub">${pcr ? pcrInterp : 'No disponible para este activo'}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Encaje régimen actual</div><div class="kpi-value">${regimeFit == null ? 'N/D' : regimeFit + '/100'}</div><div class="kpi-sub">${regimeFit == null ? 'Activo fuera del universo mapeado — score sin componente de régimen (50 neutro)' : 'Régimen: ' + REGIME_LABELS[currentRegimeKey]}</div></div>
+        </div>
+      </div>`;
+  } catch(e) {
+    out.innerHTML = '<div class="analyzer-empty">Error: ' + e.message + '</div>';
+  }
+}
+
+// ─── SCREENER ────────────────────────────────────────────────────────────────
+let screenerData = [];
+let screenerSort = { key: 'score', dir: -1 };
+let screenerCat = 'all';
+
+const SCREENER_COLS = [
+  { key: 'name',   label: 'Activo' },
+  { key: 'last',   label: 'Precio' },
+  { key: 'r1m',    label: '1M %' },
+  { key: 'r3m',    label: '3M %' },
+  { key: 'r12m',   label: '12M %' },
+  { key: 'distMA', label: 'vs MA200' },
+  { key: 'dist52', label: 'Dist máx 52s' },
+  { key: 'annVol', label: 'Vol anual' },
+  { key: 'maxDD',  label: 'MaxDD 1A' },
+  { key: 'beta',   label: 'Beta' },
+  { key: 'retVol', label: 'Ret/Vol' },
+  { key: 'fit',    label: 'Régimen' },
+  { key: 'score',  label: 'Score' },
+];
+
+async function loadScreener(force) {
+  const loading = document.getElementById('screener-loading');
+  const table = document.getElementById('screener-table');
+
+  // Cache check
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem('screener_cache_v1') || 'null');
+      if (cached && Date.now() - cached.ts < 6 * 3600 * 1000) {
+        screenerData = cached.data;
+        rescoreScreener();
+        loading.style.display = 'none';
+        table.style.display = '';
+        renderScreener();
+        updateCacheInfo(cached.ts);
+        return;
+      }
+    } catch(e) {}
+    return; // no cache and not forced → wait for user
+  }
+
+  loading.style.display = '';
+  table.style.display = 'none';
+  loading.innerHTML = '<span class="spinner"></span> Cargando 0/' + UNIVERSE.length + '...';
+
+  // SPX first for beta
+  let spx = null;
+  try { spx = await yahooRange('^GSPC', 2, 'w'); } catch(e) {}
+
+  const rows = [];
+  for (let i = 0; i < UNIVERSE.length; i++) {
+    const u = UNIVERSE[i];
+    loading.innerHTML = '<span class="spinner"></span> Cargando ' + (i+1) + '/' + UNIVERSE.length + ' — ' + u.name + '...';
+    try {
+      const data = u.sym === '^GSPC' && spx ? spx : await yahooRange(u.sym, 2, 'w');
+      const k = computeKPIs(data, spx);
+      if (k) rows.push({ sym: u.sym, name: u.name, cat: u.cat, fitMap: u.fit, ...k });
+    } catch(e) { console.warn('screener', u.sym, e.message); }
+    await delay(120);
+  }
+
+  screenerData = rows;
+  rescoreScreener();
+  try { localStorage.setItem('screener_cache_v1', JSON.stringify({ ts: Date.now(), data: rows })); } catch(e) {}
+
+  loading.style.display = 'none';
+  table.style.display = '';
+  renderScreener();
+  updateCacheInfo(Date.now());
+}
+
+function rescoreScreener() {
+  screenerData.forEach(row => {
+    const fit = currentRegimeKey === 'neutral' ? 50 : (row.fitMap?.[currentRegimeKey] ?? 50);
+    row.fit = fit;
+    row.score = scoreComponents(row, fit).total;
+  });
+}
+
+function updateCacheInfo(ts) {
+  document.getElementById('screener-cache-info').textContent =
+    'Datos: ' + new Date(ts).toLocaleString('es-ES') + ' · Régimen aplicado: ' + REGIME_LABELS[currentRegimeKey];
+}
+
+function setCat(btn) {
+  screenerCat = btn.dataset.cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScreener();
+}
+
+function sortScreener(key) {
+  if (screenerSort.key === key) screenerSort.dir *= -1;
+  else screenerSort = { key, dir: -1 };
+  renderScreener();
+}
+
+function renderScreener() {
+  if (!screenerData.length) return;
+  const head = document.getElementById('screener-head');
+  const body = document.getElementById('screener-body');
+  const search = (document.getElementById('screener-search').value || '').toLowerCase();
+
+  head.innerHTML = SCREENER_COLS.map(c =>
+    `<th class="${screenerSort.key === c.key ? 'sorted' : ''}" onclick="sortScreener('${c.key}')">${c.label}${screenerSort.key === c.key ? (screenerSort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`
+  ).join('');
+
+  let rows = screenerData.filter(r =>
+    (screenerCat === 'all' || r.cat === screenerCat) &&
+    (!search || r.name.toLowerCase().includes(search) || r.sym.toLowerCase().includes(search))
+  );
+
+  const k = screenerSort.key, d = screenerSort.dir;
+  rows.sort((a, b) => {
+    const va = a[k], vb = b[k];
+    if (typeof va === 'string') return d * va.localeCompare(vb);
+    return d * ((va ?? -Infinity) - (vb ?? -Infinity));
+  });
+
+  const catLabels = { indices: 'ÍNDICE', sectores: 'SECTOR', rf: 'RF', commodities: 'CMDTY', crypto: 'CRYPTO', fx: 'FX' };
+  const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'sc-pos' : 'sc-neg'}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
+
+  body.innerHTML = rows.map(r => {
+    const col = scoreColor(r.score);
+    return `<tr>
+      <td><span class="sc-name">${r.name}</span><span class="sc-ticker">${r.sym} <span class="sc-cat">${catLabels[r.cat]}</span></span></td>
+      <td>${r.last >= 1000 ? r.last.toFixed(0) : r.last.toFixed(2)}</td>
+      <td>${fmtPct(r.r1m)}</td>
+      <td>${fmtPct(r.r3m)}</td>
+      <td>${fmtPct(r.r12m)}</td>
+      <td>${fmtPct(r.distMA)}</td>
+      <td>${fmtPct(r.dist52)}</td>
+      <td>${r.annVol.toFixed(1)}%</td>
+      <td><span class="sc-neg">${r.maxDD.toFixed(1)}%</span></td>
+      <td>${r.beta == null ? '—' : r.beta.toFixed(2)}</td>
+      <td>${r.retVol == null ? '—' : r.retVol.toFixed(2)}</td>
+      <td>${r.fit}/100</td>
+      <td><span class="score-pill" style="background:${col.bg};color:${col.fg};border:1px solid ${col.bd};">${r.score.toFixed(0)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
+initTheme();
 loadManualFromStorage();
 loadCards().then(() => {
   loadIndChart();
   loadAssetChart();
+  loadScreener(false); // load from cache if available; refresh applies current regime
 });
 </script>
 </body>
