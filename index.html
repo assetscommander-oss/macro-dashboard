@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Macro Dashboard — Ruben</title>
+<title>Macro Dashboard — Sistema de Regímenes</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -16,6 +16,7 @@
     --yellow:#ffd740; --yellow-dim:rgba(255,215,64,.1); --yellow-border:rgba(255,215,64,.3);
     --red:#ff5252; --red-dim:rgba(255,82,82,.12); --red-border:rgba(255,82,82,.3);
     --blue:#40c4ff; --blue-dim:rgba(64,196,255,.1); --blue-border:rgba(64,196,255,.3);
+    --orange:#ff9100; --orange-dim:rgba(255,145,0,.12); --orange-border:rgba(255,145,0,.3);
     --accent:#00e5ff;
     --mono:'Space Mono',monospace; --sans:'Syne',sans-serif;
   }
@@ -28,27 +29,44 @@
   .header-left h1{font-family:var(--sans);font-size:28px;font-weight:800;letter-spacing:-.5px}
   .header-left h1 span{color:var(--accent)}
   .header-left .subtitle{font-size:11px;color:var(--text2);margin-top:4px;letter-spacing:2px;text-transform:uppercase}
-  .header-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-  .signal-box{display:flex;align-items:center;gap:12px;padding:12px 20px;border-radius:4px;border:1px solid var(--border2);background:var(--bg2)}
-  .signal-count{font-family:var(--sans);font-size:36px;font-weight:800;line-height:1}
-  .signal-label{font-size:10px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;line-height:1.4}
-  .last-update{font-size:10px;color:var(--text2);letter-spacing:1px}
+  .last-update{font-size:10px;color:var(--text2);letter-spacing:1px;text-align:right}
 
-  .reco-panel{border:1px solid var(--border2);border-radius:6px;background:var(--bg2);padding:18px 22px;margin-bottom:28px}
-  .reco-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
-  .reco-verdict{font-family:var(--sans);font-size:20px;font-weight:800;margin-bottom:8px}
-  .reco-detail{font-size:11px;color:var(--text2);line-height:1.7}
-  .reco-alloc{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  /* REGIME PANEL */
+  .regime-panel{border:1px solid var(--border2);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .regime-main{display:grid;grid-template-columns:1fr 1.4fr;gap:1px;background:var(--border)}
+  @media(max-width:900px){.regime-main{grid-template-columns:1fr}}
+  .regime-left{background:var(--bg2);padding:22px}
+  .regime-right{background:var(--bg2);padding:22px}
+  .regime-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:12px}
+  .regime-name{font-family:var(--sans);font-size:24px;font-weight:800;margin-bottom:10px}
+  .regime-desc{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:14px}
+  .axis-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .axis-label{font-size:10px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;width:110px;flex-shrink:0}
+  .axis-bar{flex:1;height:18px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;position:relative;overflow:hidden}
+  .axis-center{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--border2)}
+  .axis-fill{position:absolute;top:2px;bottom:2px;border-radius:2px;transition:all .5s}
+  .axis-score{font-size:12px;font-weight:700;width:46px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums}
+  .regime-quad{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .quad-cell{padding:10px 12px;border-radius:4px;border:1px solid var(--border2);background:var(--bg3);opacity:.45;transition:all .3s}
+  .quad-cell.active{opacity:1;border-width:2px}
+  .quad-name{font-family:var(--sans);font-size:11px;font-weight:700;margin-bottom:3px}
+  .quad-assets{font-size:9px;color:var(--text2);line-height:1.5}
+  .alloc-title{font-size:10px;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 8px}
+  .reco-alloc{display:flex;gap:8px;flex-wrap:wrap}
   .alloc-chip{font-size:10px;padding:5px 12px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);letter-spacing:.5px}
   .alloc-chip b{color:var(--accent)}
+  .mod-strip{display:flex;flex-wrap:wrap;gap:8px;padding:14px 22px;border-top:1px solid var(--border);background:var(--bg3)}
+  .mod-chip{font-size:9px;padding:4px 10px;border-radius:3px;border:1px solid var(--border2);color:var(--text2);letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+  .mod-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
   .layers{display:flex;flex-direction:column;gap:16px;margin-bottom:28px}
   .layer{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2);animation:fadeUp .4s ease both}
-  .layer:nth-child(1){animation-delay:.05s}.layer:nth-child(2){animation-delay:.1s}.layer:nth-child(3){animation-delay:.15s}.layer:nth-child(4){animation-delay:.2s}
+  .layer:nth-child(1){animation-delay:.05s}.layer:nth-child(2){animation-delay:.1s}.layer:nth-child(3){animation-delay:.15s}
   @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   .layer-header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border)}
   .layer-icon{font-size:14px}
   .layer-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text)}
+  .layer-sub{font-size:9px;color:var(--text2);margin-left:auto;letter-spacing:.5px}
   .layer-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:1px;background:var(--border)}
 
   .indicator-card{background:var(--bg2);padding:16px 18px;transition:background .2s}
@@ -102,20 +120,33 @@
   .chart-loading.hidden{display:none}
   .chart-note{font-size:9px;color:var(--text3);padding:0 18px 14px;letter-spacing:.5px}
 
-  .funds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:28px}
-  .fund-column{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2)}
-  .fund-col-header{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:10px}
-  .fund-col-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 6px currentColor}
-  .fund-col-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
-  .fund-col-subtitle{font-size:9px;color:var(--text2);margin-left:auto}
-  .fund-item{padding:10px 16px;border-bottom:1px solid var(--border)}
-  .fund-item:last-child{border-bottom:none}
-  .fund-item:hover{background:var(--bg3)}
-  .fund-name{font-family:var(--sans);font-size:12px;font-weight:600;margin-bottom:3px}
-  .fund-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .fund-exposure{font-size:10px;color:var(--text2)}
-  .fund-gestora{font-size:9px;color:var(--text2);padding:1px 5px;border:1px solid var(--border2);border-radius:2px}
-  .fund-tag{font-size:8px;padding:1px 5px;border-radius:2px;background:rgba(0,229,255,.08);color:var(--accent);border:1px solid rgba(0,229,255,.2);text-transform:uppercase}
+  /* ETF TABLE */
+  .etf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:28px}
+  .etf-column{border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--bg2)}
+  .etf-col-header{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:10px}
+  .etf-col-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 6px currentColor}
+  .etf-col-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+  .etf-col-subtitle{font-size:9px;color:var(--text2);margin-left:auto}
+  .etf-item{padding:10px 16px;border-bottom:1px solid var(--border)}
+  .etf-item:last-child{border-bottom:none}
+  .etf-item:hover{background:var(--bg3)}
+  .etf-name{font-family:var(--sans);font-size:12px;font-weight:600;margin-bottom:3px}
+  .etf-name .ticker{color:var(--accent);font-family:var(--mono);font-size:11px}
+  .etf-meta{font-size:10px;color:var(--text2)}
+
+  /* GUIDE */
+  .guide{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .guide-layer{border-bottom:1px solid var(--border)}
+  .guide-layer:last-child{border-bottom:none}
+  .guide-layer-header{display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--bg3);border-bottom:1px solid var(--border)}
+  .guide-item{padding:16px 18px;border-bottom:1px solid var(--border)}
+  .guide-item:last-child{border-bottom:none}
+  .guide-name{font-family:var(--sans);font-size:13px;font-weight:700;margin-bottom:6px}
+  .guide-what{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+  .guide-levels{display:flex;flex-direction:column;gap:5px}
+  .guide-level{font-size:10px;line-height:1.6;color:var(--text2);display:flex;gap:8px}
+  .guide-level .lvl{flex-shrink:0;font-weight:700;width:120px}
+  .lvl-green{color:var(--green)}.lvl-yellow{color:var(--yellow)}.lvl-red{color:var(--red)}
 
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
@@ -133,118 +164,155 @@
   <div class="header">
     <div class="header-left">
       <h1>MACRO <span>DASHBOARD</span></h1>
-      <div class="subtitle">Sistema de rotación táctica · Superciclo Commodities</div>
+      <div class="subtitle">Sistema neutral de regímenes · Asignación táctica multi-activo</div>
     </div>
-    <div class="header-right">
-      <div class="signal-box">
-        <div><div class="signal-count" id="red-count" style="color:var(--text3);">—</div><div class="signal-label">SEÑALES<br>EN ROJO</div></div>
-        <div style="width:1px;height:40px;background:var(--border);"></div>
-        <div><div class="signal-count" style="color:var(--text3);">11</div><div class="signal-label">TOTAL<br>INDICADORES</div></div>
-      </div>
-      <div class="last-update" id="last-update">Actualizando...</div>
-    </div>
+    <div class="last-update" id="last-update">Actualizando...</div>
   </div>
 
-  <!-- RECOMMENDATION -->
-  <div class="reco-panel">
-    <div class="reco-title">📍 Posicionamiento recomendado</div>
-    <div class="reco-verdict" id="reco-verdict" style="color:var(--text3);">Calculando...</div>
-    <div class="reco-detail" id="reco-detail">Cargando indicadores...</div>
-    <div class="reco-alloc" id="reco-alloc"></div>
+  <!-- REGIME PANEL -->
+  <div class="regime-panel">
+    <div class="regime-main">
+      <div class="regime-left">
+        <div class="regime-title">⚙️ Posición en los ejes</div>
+        <div class="axis-row">
+          <div class="axis-label">Crecimiento</div>
+          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="growth-fill"></div></div>
+          <div class="axis-score" id="growth-score">—</div>
+        </div>
+        <div class="axis-row">
+          <div class="axis-label">Inflación</div>
+          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="inflation-fill"></div></div>
+          <div class="axis-score" id="inflation-score">—</div>
+        </div>
+        <div class="regime-quad">
+          <div class="quad-cell" id="quad-expansion" style="border-color:var(--green);">
+            <div class="quad-name" style="color:var(--green);">🟢 Expansión</div>
+            <div class="quad-assets">Crec.↑ Infl.↓ · RV growth/tech, emergentes, BTC máximo</div>
+          </div>
+          <div class="quad-cell" id="quad-overheat" style="border-color:var(--orange);">
+            <div class="quad-name" style="color:var(--orange);">🟠 Sobrecalentamiento</div>
+            <div class="quad-assets">Crec.↑ Infl.↑ · Commodities industriales, RV value/energía</div>
+          </div>
+          <div class="quad-cell" id="quad-deflation" style="border-color:var(--blue);">
+            <div class="quad-name" style="color:var(--blue);">🔵 Recesión deflacionaria</div>
+            <div class="quad-assets">Crec.↓ Infl.↓ · RF larga duración, cash</div>
+          </div>
+          <div class="quad-cell" id="quad-stagflation" style="border-color:var(--red);">
+            <div class="quad-name" style="color:var(--red);">🔴 Estanflación</div>
+            <div class="quad-assets">Crec.↓ Infl.↑ · Oro, metales preciosos, cash</div>
+          </div>
+        </div>
+      </div>
+      <div class="regime-right">
+        <div class="regime-title">📍 Régimen detectado</div>
+        <div class="regime-name" id="regime-name" style="color:var(--text3);">Calculando...</div>
+        <div class="regime-desc" id="regime-desc">Cargando indicadores para determinar el régimen macro actual...</div>
+        <div class="alloc-title">Asignación orientativa</div>
+        <div class="reco-alloc" id="reco-alloc"></div>
+      </div>
+    </div>
+    <div class="mod-strip" id="mod-strip"></div>
   </div>
 
   <!-- SEMÁFORO -->
-  <div class="section-title">Semáforo de indicadores</div>
+  <div class="section-title">Indicadores por eje</div>
   <div class="layers">
+
+    <!-- EJE CRECIMIENTO -->
     <div class="layer">
-      <div class="layer-header"><span class="layer-icon">🔥</span><span class="layer-title">Capa 1 — Inflación Real</span></div>
+      <div class="layer-header"><span class="layer-icon">📈</span><span class="layer-title">Eje Crecimiento</span><span class="layer-sub">¿La economía acelera o frena?</span></div>
+      <div class="layer-cards">
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">ISM PMI Manufacturing</div><div class="card-source"><a href="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/" target="_blank">ISM ↗</a> · Mensual (día 1)</div></div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-ism"></div></div></div>
+          <div class="card-value value-loading" id="val-ism">—</div>
+          <div class="card-thresholds"><span class="threshold t-green">&gt;52 expansión</span><span class="threshold t-yellow">49–52 estancado</span><span class="threshold t-red">&lt;49 contracción</span></div>
+          <div class="card-temporal">Termómetro del ciclo industrial. Puntúa el eje crecimiento: +1 / 0 / -1</div>
+          <div class="manual-input-row"><input class="manual-input" id="input-ism" type="number" placeholder="ej: 49.2" step="0.1"><button class="manual-btn" onclick="setManual('ism')">OK</button></div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Yield Curve 2Y–10Y</div><div class="card-source">FRED · T10Y2Y</div></div><div class="status-dot dot-loading" id="dot-yield"></div></div>
+          <div class="card-value value-loading" id="val-yield"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">&gt;+0.5% empinada</span><span class="threshold t-yellow">-0.2 a +0.5% plana</span><span class="threshold t-red">&lt;-0.2% invertida</span></div>
+          <div class="card-temporal">Curva empinada = expansión por delante. Invertida = frenazo descontado</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Copper/Gold Ratio</div><div class="card-source">Yahoo · HG=F / GC=F</div></div><div class="status-dot dot-loading" id="dot-coppergold"></div></div>
+          <div class="card-value value-loading" id="val-coppergold"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">&gt;0.18 cobre lidera</span><span class="threshold t-yellow">0.13–0.18 equilibrio</span><span class="threshold t-red">&lt;0.13 oro domina</span></div>
+          <div class="card-temporal">Cobre = demanda industrial real. Oro = refugio. El ratio revela cuál pesa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJE INFLACIÓN -->
+    <div class="layer">
+      <div class="layer-header"><span class="layer-icon">🔥</span><span class="layer-title">Eje Inflación</span><span class="layer-sub">¿Los precios aceleran o se enfrían?</span></div>
       <div class="layer-cards">
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">PCE Core</div><div class="card-source">FRED · PCEPILFE</div></div><div class="status-dot dot-loading" id="dot-pce"></div></div>
           <div class="card-value value-loading" id="val-pce"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–3%</span><span class="threshold t-red">Rojo &gt;3%</span></div>
-          <div class="card-temporal">Rojo requiere &gt;3% Y 3 meses consecutivos al alza</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;2% fría</span><span class="threshold t-yellow">2–3% objetivo±</span><span class="threshold t-red">&gt;3% caliente</span></div>
+          <div class="card-temporal">La métrica oficial de la Fed. Rojo pleno requiere 3 meses consecutivos al alza</div>
           <div id="trend-pce"></div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">CPI General</div><div class="card-source">FRED · CPIAUCSL</div></div><div class="status-dot dot-loading" id="dot-cpi"></div></div>
           <div class="card-value value-loading" id="val-cpi"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;3%</span><span class="threshold t-yellow">Amarillo 3–4%</span><span class="threshold t-red">Rojo &gt;4%</span></div>
-          <div class="card-temporal">Rojo requiere &gt;4% Y 3 meses consecutivos al alza</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;2.5% fría</span><span class="threshold t-yellow">2.5–4% presión</span><span class="threshold t-red">&gt;4% caliente</span></div>
+          <div class="card-temporal">La inflación "de la calle". Rojo pleno requiere 3 meses consecutivos al alza</div>
           <div id="trend-cpi"></div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Breakevens 5Y5Y</div><div class="card-source">FRED · T5YIFR</div></div><div class="status-dot dot-loading" id="dot-breakevens"></div></div>
           <div class="card-value value-loading" id="val-breakevens"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;2.5%</span><span class="threshold t-yellow">Amarillo 2.5–2.8%</span><span class="threshold t-red">Rojo &gt;2.8%</span></div>
-          <div class="card-temporal">Expectativas de inflación del mercado de bonos a 5 años vista</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;2.3% ancladas</span><span class="threshold t-yellow">2.3–2.8% tensión</span><span class="threshold t-red">&gt;2.8% desancladas</span></div>
+          <div class="card-temporal">Expectativas del mercado de bonos a 5 años vista. Mide credibilidad de la Fed</div>
         </div>
       </div>
     </div>
+
+    <!-- MODIFICADORES -->
     <div class="layer">
-      <div class="layer-header"><span class="layer-icon">🏦</span><span class="layer-title">Capa 2 — Política Monetaria</span></div>
+      <div class="layer-header"><span class="layer-icon">⚡</span><span class="layer-title">Modificadores</span><span class="layer-sub">Amplifican o suavizan el régimen · dimensionan BTC</span></div>
       <div class="layer-cards">
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Fed Funds Rate</div><div class="card-source">FRED · FEDFUNDS</div></div><div class="status-dot dot-loading" id="dot-fedfunds"></div></div>
           <div class="card-value value-loading" id="val-fedfunds"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde estable/subiendo</span><span class="threshold t-yellow">Amarillo bajando, inflación ok</span><span class="threshold t-red">Rojo bajando + inflación &gt;3%</span></div>
-          <div class="card-temporal">Rojo = la Fed estimula con inflación alta (tu tesis Warsh)</div>
+          <div class="card-thresholds"><span class="threshold t-green">Estable</span><span class="threshold t-yellow">Bajando, inflación ok</span><span class="threshold t-red">Bajando + inflación &gt;3%</span></div>
+          <div class="card-temporal">Política acomodaticia con inflación alta acelera el giro hacia estanflación</div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Fed Dot Plot</div><div class="card-source"><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank">Fed.gov ↗</a> · Trimestral</div></div>
             <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-dotplot"></div></div></div>
           <div class="card-value value-loading" id="val-dotplot">—</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde estable/al alza</span><span class="threshold t-yellow">Amarillo -50/-75bps</span><span class="threshold t-red">Rojo ≤-100bps + inflación alta</span></div>
-          <div class="card-temporal">Introduce bps proyectados (ej: -75). Se publica con cada SEP trimestral</div>
+          <div class="card-thresholds"><span class="threshold t-green">Estable/al alza</span><span class="threshold t-yellow">-50/-75bps</span><span class="threshold t-red">≤-100bps proyectados</span></div>
+          <div class="card-temporal">Introduce bps proyectados (ej: -75). Anticipa la dirección de la política</div>
           <div class="manual-input-row"><input class="manual-input" id="input-dotplot" type="text" placeholder="ej: -75"><button class="manual-btn" onclick="setManual('dotplot')">OK</button></div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Tipos Reales TIPS 10Y</div><div class="card-source">FRED · DFII10</div></div><div class="status-dot dot-loading" id="dot-tips"></div></div>
           <div class="card-value value-loading" id="val-tips"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;0.5%</span><span class="threshold t-yellow">Amarillo 0–0.5%</span><span class="threshold t-red">Rojo &lt;0%</span></div>
-          <div class="card-temporal">Tipos reales negativos = entorno óptimo para oro y commodities</div>
+          <div class="card-thresholds"><span class="threshold t-green">&gt;1% RF compensa</span><span class="threshold t-yellow">0–1% transición</span><span class="threshold t-red">&lt;0% activos reales</span></div>
+          <div class="card-temporal">Driver clave de oro y BTC: tipos reales negativos = combustible para ambos</div>
         </div>
-      </div>
-    </div>
-    <div class="layer">
-      <div class="layer-header"><span class="layer-icon">⛏️</span><span class="layer-title">Capa 3 — Commodities</span></div>
-      <div class="layer-cards">
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">DXY (Índice Dólar)</div><div class="card-source">Yahoo · DX-Y.NYB</div></div><div class="status-dot dot-loading" id="dot-dxy"></div></div>
           <div class="card-value value-loading" id="val-dxy"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;103</span><span class="threshold t-yellow">Amarillo 100–103</span><span class="threshold t-red">Rojo &lt;100</span></div>
-          <div class="card-temporal">Dólar débil = viento de cola para commodities (correlación inversa)</div>
-        </div>
-        <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Copper/Gold Ratio</div><div class="card-source">Yahoo · HG=F / GC=F</div></div><div class="status-dot dot-loading" id="dot-coppergold"></div></div>
-          <div class="card-value value-loading" id="val-coppergold"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;0.18</span><span class="threshold t-yellow">Amarillo 0.13–0.18</span><span class="threshold t-red">Rojo &lt;0.13</span></div>
-          <div class="card-temporal">Ratio bajo = oro supera al cobre = miedo inflacionario/recesivo</div>
+          <div class="card-thresholds"><span class="threshold t-green">&gt;103 dólar fuerte</span><span class="threshold t-yellow">100–103 neutral</span><span class="threshold t-red">&lt;100 dólar débil</span></div>
+          <div class="card-temporal">Dólar débil favorece commodities, oro, BTC y emergentes. Fuerte favorece RF/cash USD</div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Commodity Index</div><div class="card-source">Yahoo · DBC (proxy CRB)</div></div><div class="status-dot dot-loading" id="dot-crb"></div></div>
           <div class="card-value value-loading" id="val-crb"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &lt;máx 6m</span><span class="threshold t-yellow">Amarillo cerca máx 6m</span><span class="threshold t-red">Rojo ruptura máx 12m</span></div>
-          <div class="card-temporal">Invesco DB Commodity ETF como proxy automatizado del índice CRB</div>
-        </div>
-      </div>
-    </div>
-    <div class="layer">
-      <div class="layer-header"><span class="layer-icon">📈</span><span class="layer-title">Capa 4 — Renta Variable / Ciclo</span></div>
-      <div class="layer-cards">
-        <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Yield Curve 2Y–10Y</div><div class="card-source">FRED · T10Y2Y (mensual)</div></div><div class="status-dot dot-loading" id="dot-yield"></div></div>
-          <div class="card-value value-loading" id="val-yield"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde invertida (&lt;-0.2%)</span><span class="threshold t-yellow">Amarillo -0.2 a +0.2%</span><span class="threshold t-red">Rojo &gt;+0.2% post-inversión</span></div>
-          <div class="card-temporal">El re-empinamiento tras inversión históricamente precede el daño real en RV</div>
+          <div class="card-thresholds"><span class="threshold t-green">Lejos de máximos</span><span class="threshold t-yellow">Cerca máx 6m</span><span class="threshold t-red">Ruptura máx 12m</span></div>
+          <div class="card-temporal">La ruptura de máximos confirma momentum del ciclo de materias primas</div>
         </div>
         <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">ISM PMI Manufacturing</div><div class="card-source"><a href="https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/" target="_blank">ISM ↗</a> · Mensual (día 1)</div></div>
-            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-ism"></div></div></div>
-          <div class="card-value value-loading" id="val-ism">—</div>
-          <div class="card-thresholds"><span class="threshold t-green">Verde &gt;52</span><span class="threshold t-yellow">Amarillo 49–52</span><span class="threshold t-red">Rojo &lt;48</span></div>
-          <div class="card-temporal">Sale el día 1 de cada mes. &lt;48 + inflación alta = estanflación confirmada</div>
-          <div class="manual-input-row"><input class="manual-input" id="input-ism" type="number" placeholder="ej: 49.2" step="0.1"><button class="manual-btn" onclick="setManual('ism')">OK</button></div>
+          <div class="card-top"><div><div class="card-name">Liquidez Fed (Balance)</div><div class="card-source">FRED · WALCL (semanal)</div></div><div class="status-dot dot-loading" id="dot-walcl"></div></div>
+          <div class="card-value value-loading" id="val-walcl"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">Expandiendo &gt;+0.5% 3m</span><span class="threshold t-yellow">Plano ±0.5%</span><span class="threshold t-red">Contrayendo &lt;-0.5% 3m</span></div>
+          <div class="card-temporal">El driver más potente de BTC y activos de riesgo. Su giro al alza marca el momento de acumular BTC tras una caída</div>
         </div>
       </div>
     </div>
@@ -279,7 +347,7 @@
       <div class="chart-loading hidden" id="ind-loading"><span class="spinner"></span> Cargando datos...</div>
       <canvas id="ind-canvas"></canvas>
     </div>
-    <div class="chart-note">Series mensuales por naturaleza (PCE, CPI, Fed Funds) se muestran mensuales aunque la vista sea diaria/semanal. En rangos largos la granularidad fina se agrega automáticamente para mantener el rendimiento.</div>
+    <div class="chart-note">Series mensuales por naturaleza (PCE, CPI, Fed Funds) se muestran mensuales aunque la vista sea diaria/semanal. Liquidez Fed se muestra como variación interanual %. En rangos largos la granularidad fina se agrega automáticamente.</div>
   </div>
 
   <!-- COMBINED ASSETS CHART -->
@@ -311,48 +379,172 @@
       <div class="chart-loading hidden" id="asset-loading"><span class="spinner"></span> Cargando datos...</div>
       <canvas id="asset-canvas"></canvas>
     </div>
-    <div class="chart-note">Precios normalizados a base 100 al inicio del periodo seleccionado para comparar rendimiento relativo. El tooltip muestra también el precio real. Histórico limitado por activo (BTC desde 2014, DBC desde 2006...).</div>
+    <div class="chart-note">Precios normalizados a base 100 al inicio del periodo para comparar rendimiento relativo. El tooltip muestra también el precio real. Histórico limitado por activo (BTC desde 2014, DBC desde 2006, TLT desde 2002...).</div>
   </div>
 
-  <!-- FUNDS -->
-  <div class="section-title">Fondos traspasables en MyInvestor por escenario</div>
-  <div class="funds-grid">
-    <div class="fund-column">
-      <div class="fund-col-header"><div class="fund-col-dot" style="background:var(--green);color:var(--green);"></div><div class="fund-col-title" style="color:var(--green);">RV + Tech / IA</div><div class="fund-col-subtitle">0-1 rojos</div></div>
-      <div class="fund-item"><div class="fund-name">Fundsmith Equity</div><div class="fund-meta"><span class="fund-exposure">RV global quality, peso tech</span><span class="fund-gestora">Fundsmith</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">MS INVF Global Opportunity</div><div class="fund-meta"><span class="fund-exposure">RV global growth</span><span class="fund-gestora">Morgan Stanley</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Baillie Gifford LT Global Growth</div><div class="fund-meta"><span class="fund-exposure">Disruptivo, IA</span><span class="fund-gestora">Baillie Gifford</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Polar Capital Technology</div><div class="fund-meta"><span class="fund-exposure">100% tecnología</span><span class="fund-gestora">Polar Capital</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">BGF World Technology</div><div class="fund-meta"><span class="fund-exposure">Tech global</span><span class="fund-gestora">BlackRock</span><span class="fund-tag">Traspaso ✓</span></div></div>
+  <!-- ETFs POR RÉGIMEN -->
+  <div class="section-title">Instrumentos líquidos por régimen (ETFs USD)</div>
+  <div class="etf-grid">
+    <div class="etf-column">
+      <div class="etf-col-header"><div class="etf-col-dot" style="background:var(--green);color:var(--green);"></div><div class="etf-col-title" style="color:var(--green);">Expansión</div><div class="etf-col-subtitle">Crec.↑ Infl.↓</div></div>
+      <div class="etf-item"><div class="etf-name">Vanguard Total World <span class="ticker">VT</span></div><div class="etf-meta">RV global core</div></div>
+      <div class="etf-item"><div class="etf-name">Invesco QQQ <span class="ticker">QQQ</span></div><div class="etf-meta">Nasdaq 100 · growth/tech</div></div>
+      <div class="etf-item"><div class="etf-name">iShares MSCI EM <span class="ticker">EEM</span></div><div class="etf-meta">Emergentes · beta al ciclo global</div></div>
+      <div class="etf-item"><div class="etf-name">iShares Bitcoin Trust <span class="ticker">IBIT</span></div><div class="etf-meta">BTC spot · asignación máxima 5-15%</div></div>
     </div>
-    <div class="fund-column">
-      <div class="fund-col-header"><div class="fund-col-dot" style="background:var(--yellow);color:var(--yellow);"></div><div class="fund-col-title" style="color:var(--yellow);">Transición Defensiva</div><div class="fund-col-subtitle">2-3 rojos</div></div>
-      <div class="fund-item"><div class="fund-name">Trojan Fund</div><div class="fund-meta"><span class="fund-exposure">Mixto defensivo, oro + RF + RV quality</span><span class="fund-gestora">Troy AM</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Ruffer Total Return</div><div class="fund-meta"><span class="fund-exposure">Protección multiactivo</span><span class="fund-gestora">Ruffer</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">AXA Tresor Court Terme</div><div class="fund-meta"><span class="fund-exposure">Monetario (cash sin peaje fiscal)</span><span class="fund-gestora">AXA</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Groupama Trésorerie</div><div class="fund-meta"><span class="fund-exposure">Monetario alternativo</span><span class="fund-gestora">Groupama</span><span class="fund-tag">Traspaso ✓</span></div></div>
+    <div class="etf-column">
+      <div class="etf-col-header"><div class="etf-col-dot" style="background:var(--orange);color:var(--orange);"></div><div class="etf-col-title" style="color:var(--orange);">Sobrecalentamiento</div><div class="etf-col-subtitle">Crec.↑ Infl.↑</div></div>
+      <div class="etf-item"><div class="etf-name">Invesco DB Commodity <span class="ticker">DBC</span></div><div class="etf-meta">Cesta commodities diversificada</div></div>
+      <div class="etf-item"><div class="etf-name">Global X Copper Miners <span class="ticker">COPX</span></div><div class="etf-meta">Mineras de cobre · crecimiento industrial</div></div>
+      <div class="etf-item"><div class="etf-name">Energy Select SPDR <span class="ticker">XLE</span></div><div class="etf-meta">Energía · RV value con pricing power</div></div>
+      <div class="etf-item"><div class="etf-name">iShares Bitcoin Trust <span class="ticker">IBIT</span></div><div class="etf-meta">BTC reducido 3-8% · vigilar liquidez</div></div>
     </div>
-    <div class="fund-column">
-      <div class="fund-col-header"><div class="fund-col-dot" style="background:var(--red);color:var(--red);"></div><div class="fund-col-title" style="color:var(--red);">Rotación Commodities</div><div class="fund-col-subtitle">≥4 rojos + 2/3 inflación</div></div>
-      <div class="fund-item"><div class="fund-name">BGF World Mining</div><div class="fund-meta"><span class="fund-exposure">Minería: cobre, oro, diversificado</span><span class="fund-gestora">BlackRock</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Wellington Precious Metals</div><div class="fund-meta"><span class="fund-exposure">Oro, plata, metales preciosos</span><span class="fund-gestora">Wellington</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Schroder ISF Global Energy</div><div class="fund-meta"><span class="fund-exposure">Energía + commodities</span><span class="fund-gestora">Schroders</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Carmignac Pf Commodities</div><div class="fund-meta"><span class="fund-exposure">Commodities diversificado</span><span class="fund-gestora">Carmignac</span><span class="fund-tag">Traspaso ✓</span></div></div>
+    <div class="etf-column">
+      <div class="etf-col-header"><div class="etf-col-dot" style="background:var(--red);color:var(--red);"></div><div class="etf-col-title" style="color:var(--red);">Estanflación</div><div class="etf-col-subtitle">Crec.↓ Infl.↑</div></div>
+      <div class="etf-item"><div class="etf-name">SPDR Gold Shares <span class="ticker">GLD</span></div><div class="etf-meta">Oro físico · el activo del régimen</div></div>
+      <div class="etf-item"><div class="etf-name">iShares Silver Trust <span class="ticker">SLV</span></div><div class="etf-meta">Plata física · beta alta al oro</div></div>
+      <div class="etf-item"><div class="etf-name">SPDR Gold Miners <span class="ticker">GDX</span></div><div class="etf-meta">Mineras de oro · apalancamiento operativo</div></div>
+      <div class="etf-item"><div class="etf-name">SPDR T-Bills 1-3M <span class="ticker">BIL</span></div><div class="etf-meta">Cash remunerado · BTC mínimo 0-3%</div></div>
     </div>
-    <div class="fund-column">
-      <div class="fund-col-header"><div class="fund-col-dot" style="background:var(--blue);color:var(--blue);"></div><div class="fund-col-title" style="color:var(--blue);">Recesión Deflacionaria</div><div class="fund-col-subtitle">PMI&lt;48 + inflación verde</div></div>
-      <div class="fund-item"><div class="fund-name">Vanguard 20+ Year Euro Treasury</div><div class="fund-meta"><span class="fund-exposure">RF gobierno larga duración</span><span class="fund-gestora">Vanguard</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">iShares Euro Govt Bond Idx</div><div class="fund-meta"><span class="fund-exposure">RF gobierno EUR diversificada</span><span class="fund-gestora">BlackRock</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">AXA Tresor Court Terme</div><div class="fund-meta"><span class="fund-exposure">Monetario / cash</span><span class="fund-gestora">AXA</span><span class="fund-tag">Traspaso ✓</span></div></div>
-      <div class="fund-item"><div class="fund-name">Dunas Valor Prudente</div><div class="fund-meta"><span class="fund-exposure">Retorno absoluto conservador</span><span class="fund-gestora">Dunas Capital</span><span class="fund-tag">Traspaso ✓</span></div></div>
+    <div class="etf-column">
+      <div class="etf-col-header"><div class="etf-col-dot" style="background:var(--blue);color:var(--blue);"></div><div class="etf-col-title" style="color:var(--blue);">Recesión deflacionaria</div><div class="etf-col-subtitle">Crec.↓ Infl.↓</div></div>
+      <div class="etf-item"><div class="etf-name">iShares 20+ Treasury <span class="ticker">TLT</span></div><div class="etf-meta">RF gobierno larga duración · el activo del régimen</div></div>
+      <div class="etf-item"><div class="etf-name">iShares 7-10 Treasury <span class="ticker">IEF</span></div><div class="etf-meta">RF duración intermedia · menos volátil</div></div>
+      <div class="etf-item"><div class="etf-name">iShares 0-3M Treasury <span class="ticker">SGOV</span></div><div class="etf-meta">Cash remunerado · pólvora seca</div></div>
+      <div class="etf-item"><div class="etf-name">iShares Bitcoin Trust <span class="ticker">IBIT</span></div><div class="etf-meta">BTC 0% → acumular cuando Liquidez Fed gire al alza</div></div>
+    </div>
+  </div>
+
+  <!-- GUÍA DE INDICADORES -->
+  <div class="section-title">Guía de indicadores</div>
+  <div class="guide">
+
+    <div class="guide-layer">
+      <div class="guide-layer-header"><span class="layer-icon">📈</span><span class="layer-title">Eje Crecimiento</span></div>
+      <div class="guide-item">
+        <div class="guide-name">ISM PMI Manufacturing</div>
+        <div class="guide-what">Encuesta mensual a directores de compras del sector industrial. Por encima de 50 = expansión; por debajo = contracción. Es el termómetro más seguido del ciclo económico real y suele girar antes que el PIB.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &gt;52</span><span>Expansión industrial. Favorece RV cíclica, emergentes, commodities industriales y crédito. Penaliza RF larga duración.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 49–52</span><span>Estancamiento. Sin dirección clara del ciclo — el resto de indicadores deciden.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &lt;49</span><span>Contracción. Favorece RF de gobierno y cash. Con inflación alta apunta a estanflación (oro); con inflación baja, a recesión deflacionaria (bonos).</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Yield Curve 2Y–10Y</div>
+        <div class="guide-what">Diferencia entre el bono americano a 10 años y el de 2 años. Refleja lo que el mercado de bonos espera del ciclo: empinada = expansión por delante; invertida = frenazo descontado. El re-empinamiento tras una inversión históricamente coincide con la llegada del daño real a la economía.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &gt;+0.5%</span><span>Curva empinada y sana. Favorece RV, banca y activos de ciclo. Entorno normal de expansión.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 -0.2 a +0.5%</span><span>Curva plana o desinvirtiéndose. Zona de transición — máxima atención si viene de inversión profunda.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &lt;-0.2%</span><span>Curva invertida: el mercado descuenta recesión. Favorece RF de calidad y empieza a penalizar RV con 12-18 meses de antelación histórica.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Copper/Gold Ratio</div>
+        <div class="guide-what">El cobre se consume en industria y construcción (demanda real); el oro se compra por miedo (refugio). El ratio entre ambos revela qué narrativa domina: crecimiento o protección. Se calcula como cobre (cents/lb) / oro (USD/oz).</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &gt;0.18</span><span>El cobre lidera: demanda industrial fuerte. Favorece RV cíclica, emergentes y commodities industriales.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 0.13–0.18</span><span>Equilibrio. Ninguna narrativa domina con claridad.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &lt;0.13</span><span>El oro domina: el mercado compra protección. Favorece metales preciosos, RF de calidad y cash. Penaliza RV cíclica.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-layer">
+      <div class="guide-layer-header"><span class="layer-icon">🔥</span><span class="layer-title">Eje Inflación</span></div>
+      <div class="guide-item">
+        <div class="guide-name">PCE Core</div>
+        <div class="guide-what">La métrica de inflación oficial de la Fed (objetivo: 2%). Mide la variación de precios del consumo personal excluyendo alimentos y energía, lo que la hace más estable que el CPI. Es la que determina las decisiones de tipos.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &lt;2%</span><span>Inflación fría. Da margen a la Fed para estimular. Favorece RF nominal y RV growth (duración larga).</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 2–3%</span><span>En torno al objetivo. Entorno neutral — compatible con cualquier régimen.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &gt;3%</span><span>Inflación caliente (confirmada con 3 meses al alza). Favorece activos reales: commodities, oro, RV value con pricing power. Penaliza RF nominal y growth.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">CPI General</div>
+        <div class="guide-what">La inflación "de la calle": incluye todo (energía, alimentos, vivienda). Más volátil que el PCE pero es la referencia mediática, la que mueve expectativas, salarios y política. Divergencias CPI/PCE suelen venir de energía y vivienda.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &lt;2.5%</span><span>Normalidad. Sin presión sobre tipos. Favorece RF y RV indistintamente.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 2.5–4%</span><span>Presión visible. Vigilar tendencia: subiendo favorece reales; bajando favorece nominales.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &gt;4%</span><span>Inflación elevada (confirmada con 3 meses al alza). Favorece commodities y oro; erosiona RF nominal y múltiplos de RV.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Breakevens 5Y5Y</div>
+        <div class="guide-what">Lo que el mercado de bonos espera de inflación a 5 años vista, dentro de 5 años. Filtra el ruido de corto plazo y mide la credibilidad antiinflacionaria de la Fed: si sube, el mercado deja de creer que los precios volverán al 2%.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &lt;2.3%</span><span>Expectativas ancladas. La Fed conserva credibilidad. Favorece RF nominal de larga duración.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 2.3–2.8%</span><span>Tensión en expectativas. Empieza a favorecer TIPS sobre nominales y activos reales en el margen.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &gt;2.8%</span><span>Expectativas desancladas: el mercado descuenta inflación estructural. Favorece oro, commodities y TIPS. Muy negativo para RF nominal larga.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-layer">
+      <div class="guide-layer-header"><span class="layer-icon">⚡</span><span class="layer-title">Modificadores</span></div>
+      <div class="guide-item">
+        <div class="guide-name">Fed Funds Rate</div>
+        <div class="guide-what">El tipo de interés oficial de la Fed: la palanca que encarece o abarata el dinero. Su dirección importa más que su nivel, y su coherencia con la inflación define si la política es ortodoxa o acomodaticia.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 Estable/subiendo</span><span>Política ortodoxa. No amplifica ningún régimen.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 Bajando, inflación ok</span><span>Estímulo justificado. Favorece RV, RF y BTC simultáneamente (más liquidez sin coste inflacionario).</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 Bajando + inflación &gt;3%</span><span>Política acomodaticia con precios calientes: acelera el giro hacia sobrecalentamiento/estanflación. Favorece activos reales con fuerza.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Fed Dot Plot</div>
+        <div class="guide-what">Las proyecciones de tipos de cada miembro del FOMC, publicadas trimestralmente en el SEP. Anticipan la dirección de la política monetaria antes de que ocurra — el mercado cotiza los dots, no los tipos actuales.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 Estables/al alza</span><span>Sin estímulo previsto. Neutral para todos los activos.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 -50/-75bps</span><span>Bajadas moderadas proyectadas. Viento de cola suave para RV, RF y BTC.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 ≤-100bps</span><span>Estímulo agresivo proyectado. Si coincide con inflación alta, amplifica el escenario de activos reales; si coincide con recesión, favorece RF larga (los tipos caerán más).</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Tipos Reales TIPS 10Y</div>
+        <div class="guide-what">El tipo a 10 años descontando la inflación esperada: lo que de verdad renta el dinero. Es el principal driver de los activos sin rendimiento (oro, BTC): cuando los bonos no compensan en términos reales, el capital migra hacia ellos.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &gt;1%</span><span>La RF compensa en términos reales. Presiona a la baja oro y BTC; favorece bonos.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 0–1%</span><span>Zona de transición. Sin presión dominante.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &lt;0%</span><span>Mantener bonos pierde dinero real. Entorno históricamente óptimo para oro, y combustible para BTC si la liquidez acompaña.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">DXY (Índice Dólar)</div>
+        <div class="guide-what">El dólar frente a la cesta de divisas principales. Casi todo lo que cotiza globalmente lo hace en dólares: su debilidad abarata commodities para el resto del mundo y empuja capital hacia activos de riesgo y emergentes.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 &gt;103</span><span>Dólar fuerte. Favorece cash USD y RF americana; viento en contra para commodities, oro, BTC y emergentes.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 100–103</span><span>Zona neutral.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 &lt;100</span><span>Dólar débil. Viento de cola para commodities, oro, BTC, emergentes y RV no-USD.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Commodity Index (DBC)</div>
+        <div class="guide-what">Cesta diversificada de materias primas (energía, metales, agrícolas) vía el ETF DBC como proxy del índice CRB. Confirma con precio si el ciclo de commodities es real o solo narrativa — los máximos relevantes rompen con volumen y persistencia.</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 Lejos de máximos</span><span>Sin momentum en materias primas. No confirma régimen inflacionario.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 Cerca máx 6m</span><span>Momentum construyéndose. Primera señal de confirmación de precio.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 Ruptura máx 12m</span><span>Ciclo de commodities confirmado por precio. Refuerza sobrecalentamiento/estanflación y la asignación a materias primas.</span></div>
+        </div>
+      </div>
+      <div class="guide-item">
+        <div class="guide-name">Liquidez Fed (WALCL)</div>
+        <div class="guide-what">El tamaño del balance de la Reserva Federal, publicado semanalmente. Mide si la Fed inyecta o drena liquidez del sistema — empíricamente el driver más potente de BTC y activos de riesgo de alta beta. BTC no es cobertura inflacionaria: es un amplificador de liquidez (en la estanflación de 2022 cayó un 65% mientras el oro aguantó).</div>
+        <div class="guide-levels">
+          <div class="guide-level"><span class="lvl lvl-green">🟢 Expandiendo</span><span>La Fed inyecta. Máximo viento de cola para BTC, RV growth y riesgo en general. El giro de contracción a expansión marca históricamente los suelos de BTC.</span></div>
+          <div class="guide-level"><span class="lvl lvl-yellow">🟡 Plano</span><span>Sin impulso de liquidez. BTC se mueve por flujos propios y narrativa.</span></div>
+          <div class="guide-level"><span class="lvl lvl-red">🔴 Contrayendo (QT)</span><span>La Fed drena. Viento en contra para BTC y activos de alta beta, independientemente del régimen. Reducir riesgo.</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-note">
-      FRED API · Yahoo Finance · Manuales: ISM PMI (mensual) · Fed Dot Plot (trimestral)<br>
-      Regla: ≥4/11 rojos con ≥2/3 inflación → commodities · PMI&lt;48 + inflación verde → RF/cash
+      FRED API · Yahoo Finance · Manuales: ISM PMI (mensual, día 1) · Fed Dot Plot (trimestral)<br>
+      Marco: 2 ejes (crecimiento × inflación) → 4 regímenes · Modificadores dimensionan BTC y amplifican/suavizan · Asignaciones orientativas, no asesoramiento
     </div>
     <button class="refresh-btn" id="refresh-btn" onclick="loadCards()">↻ Actualizar datos</button>
   </div>
@@ -374,7 +566,6 @@ function startDateFor(years) {
   return d.toISOString().slice(0, 10);
 }
 
-// Auto-coarsen granularity on long ranges to keep payloads sane
 function coarsen(freq, years) {
   if (freq === 'd' && years > 10) return 'w';
   if (freq === 'w' && years > 25) return 'm';
@@ -404,8 +595,6 @@ async function proxyFetch(targetUrl) {
   throw new Error('Proxies failed: ' + targetUrl.slice(0, 60));
 }
 
-// FRED range fetch → ascending [{x: ms, y: val}]
-// nativeFreq: the series' own frequency. Requested finer than native → native used.
 async function fredRange(seriesId, years, reqFreq, nativeFreq) {
   const freq = coarsen(reqFreq, years);
   let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=${startDateFor(years)}`;
@@ -417,10 +606,9 @@ async function fredRange(seriesId, years, reqFreq, nativeFreq) {
     .map(o => ({ x: new Date(o.date).getTime(), y: parseFloat(o.value) }));
 }
 
-// Yahoo range fetch → ascending [{x: ms, y: val}]
 async function yahooRange(symbol, years, reqFreq) {
   const freq = coarsen(reqFreq, years);
-  const interval = freq === 'd' ? '1d' : freq === 'w' ? '1wk' : '1mo'; // 'a' aggregated below
+  const interval = freq === 'd' ? '1d' : freq === 'w' ? '1wk' : '1mo';
   const range = years <= 1 ? '1y' : years <= 2 ? '2y' : years <= 5 ? '5y' : years <= 10 ? '10y' : 'max';
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=${interval}&range=${range}`;
   const data = await proxyFetch(url);
@@ -437,20 +625,16 @@ async function yahooRange(symbol, years, reqFreq) {
     out.push({ x: ms, y: closes[i] });
   }
   if (freq === 'a') {
-    // Keep last point of each year
     const byYear = {};
     out.forEach(p => { byYear[new Date(p.x).getFullYear()] = p; });
     out = Object.values(byYear).sort((a, b) => a.x - b.x);
   }
-  // Live price on last point
   const live = result.meta?.regularMarketPrice;
   if (live && out.length) out[out.length - 1] = { ...out[out.length - 1], y: live };
   return out;
 }
 
-// YoY transform for monthly FRED series (PCE, CPI)
 async function fredYoY(seriesId, years, reqFreq) {
-  // Always fetch monthly (native), need extra 13 months back for YoY
   let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=${startDateFor(years + 2)}`;
   const data = await proxyFetch(url);
   if (!data.observations) throw new Error('No obs ' + seriesId);
@@ -473,13 +657,35 @@ async function fredYoY(seriesId, years, reqFreq) {
   return out;
 }
 
-// Copper/Gold ratio history
+// WALCL YoY % (weekly series → for chart)
+async function walclYoY(years, reqFreq) {
+  let url = `${FRED_BASE}?series_id=WALCL&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=${startDateFor(years + 2)}&frequency=m&aggregation_method=avg`;
+  const data = await proxyFetch(url);
+  if (!data.observations) throw new Error('No obs WALCL');
+  const obs = data.observations.filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)));
+  const out = [];
+  const startMs = new Date(startDateFor(years)).getTime();
+  for (let i = 12; i < obs.length; i++) {
+    const cur = parseFloat(obs[i].value);
+    const ago = parseFloat(obs[i - 12].value);
+    if (!ago) continue;
+    const ms = new Date(obs[i].date).getTime();
+    if (ms < startMs) continue;
+    out.push({ x: ms, y: parseFloat(((cur / ago - 1) * 100).toFixed(2)) });
+  }
+  if (reqFreq === 'a') {
+    const byYear = {};
+    out.forEach(p => { byYear[new Date(p.x).getFullYear()] = p; });
+    return Object.values(byYear).sort((a, b) => a.x - b.x);
+  }
+  return out;
+}
+
 async function ratioRange(years, reqFreq) {
   const [gold, copper] = await Promise.all([
     yahooRange('GC=F', years, reqFreq),
     yahooRange('HG=F', years, reqFreq),
   ]);
-  // Align by nearest timestamp (same interval → same stamps usually)
   const goldMap = new Map(gold.map(p => [p.x, p.y]));
   return copper
     .filter(p => goldMap.has(p.x))
@@ -493,15 +699,16 @@ const chartState = {
 };
 
 const IND_CONFIG = [
-  { key: 'pce',        label: 'PCE Core YoY',    color: '#ff6b6b', axis: 'y',  fetch: (y, f) => fredYoY('PCEPILFE', y, f) },
-  { key: 'cpi',        label: 'CPI YoY',         color: '#ffa94d', axis: 'y',  fetch: (y, f) => fredYoY('CPIAUCSL', y, f) },
-  { key: 'breakevens', label: 'Breakevens 5Y5Y', color: '#ffd43b', axis: 'y',  fetch: (y, f) => fredRange('T5YIFR', y, f, 'd') },
-  { key: 'fedfunds',   label: 'Fed Funds',       color: '#69db7c', axis: 'y',  fetch: (y, f) => fredRange('FEDFUNDS', y, f, 'm') },
-  { key: 'tips',       label: 'TIPS 10Y Real',   color: '#38d9a9', axis: 'y',  fetch: (y, f) => fredRange('DFII10', y, f, 'd') },
-  { key: 'yield',      label: 'Yield 2s10s',     color: '#4dabf7', axis: 'y',  fetch: (y, f) => fredRange('T10Y2Y', y, f, 'd') },
-  { key: 'coppergold', label: 'Copper/Gold ×10', color: '#fb923c', axis: 'y',  fetch: (y, f) => ratioRange(y, f), scale: 10 },
-  { key: 'dxy',        label: 'DXY',             color: '#e599f7', axis: 'y2', fetch: (y, f) => yahooRange('DX-Y.NYB', y, f) },
-  { key: 'crb',        label: 'CRB proxy (DBC)', color: '#a78bfa', axis: 'y2', fetch: (y, f) => yahooRange('DBC', y, f), scale: 4 },
+  { key: 'pce',        label: 'PCE Core YoY',     color: '#ff6b6b', axis: 'y',  fetch: (y, f) => fredYoY('PCEPILFE', y, f) },
+  { key: 'cpi',        label: 'CPI YoY',          color: '#ffa94d', axis: 'y',  fetch: (y, f) => fredYoY('CPIAUCSL', y, f) },
+  { key: 'breakevens', label: 'Breakevens 5Y5Y',  color: '#ffd43b', axis: 'y',  fetch: (y, f) => fredRange('T5YIFR', y, f, 'd') },
+  { key: 'fedfunds',   label: 'Fed Funds',        color: '#69db7c', axis: 'y',  fetch: (y, f) => fredRange('FEDFUNDS', y, f, 'm') },
+  { key: 'tips',       label: 'TIPS 10Y Real',    color: '#38d9a9', axis: 'y',  fetch: (y, f) => fredRange('DFII10', y, f, 'd') },
+  { key: 'yield',      label: 'Yield 2s10s',      color: '#4dabf7', axis: 'y',  fetch: (y, f) => fredRange('T10Y2Y', y, f, 'd') },
+  { key: 'coppergold', label: 'Copper/Gold ×10',  color: '#fb923c', axis: 'y',  fetch: (y, f) => ratioRange(y, f), scale: 10 },
+  { key: 'walcl',      label: 'Liquidez Fed YoY', color: '#22d3ee', axis: 'y',  fetch: (y, f) => walclYoY(y, f) },
+  { key: 'dxy',        label: 'DXY',              color: '#e599f7', axis: 'y2', fetch: (y, f) => yahooRange('DX-Y.NYB', y, f) },
+  { key: 'crb',        label: 'CRB proxy (DBC)',  color: '#a78bfa', axis: 'y2', fetch: (y, f) => yahooRange('DBC', y, f), scale: 4 },
 ];
 
 const ASSET_CONFIG = [
@@ -513,10 +720,10 @@ const ASSET_CONFIG = [
   { key: 'copper', label: 'Cobre',      color: '#fb923c', symbol: 'HG=F' },
   { key: 'oil',    label: 'Petróleo',   color: '#4ade80', symbol: 'CL=F' },
   { key: 'em',     label: 'MSCI EM',    color: '#f472b6', symbol: 'EEM' },
+  { key: 'tlt',    label: 'TLT (RF 20+)', color: '#38bdf8', symbol: 'TLT' },
   { key: 'dxyA',   label: 'DXY',        color: '#e599f7', symbol: 'DX-Y.NYB' },
 ];
 
-// Remember hidden state across reloads
 const hiddenState = { ind: {}, asset: {} };
 
 // ─── CHART BUILDERS ──────────────────────────────────────────────────────────
@@ -612,7 +819,6 @@ async function loadAssetChart() {
     await delay(150);
   }
 
-  // Normalize each to base 100 at its first visible point
   const datasets = results.map(({ config: c, data }) => {
     const base = data.length ? data[0].y : 1;
     return {
@@ -685,28 +891,24 @@ function setFreq(which, btn) {
   which === 'ind' ? loadIndChart() : loadAssetChart();
 }
 
-// ─── SEMÁFORO CARDS ──────────────────────────────────────────────────────────
-function statusFor(key, v) {
-  switch (key) {
-    case 'pce':        return v > 3 ? 'red' : v >= 2.5 ? 'yellow' : 'green';
-    case 'cpi':        return v > 4 ? 'red' : v >= 3 ? 'yellow' : 'green';
-    case 'breakevens': return v > 2.8 ? 'red' : v >= 2.5 ? 'yellow' : 'green';
-    case 'tips':       return v < 0 ? 'red' : v < 0.5 ? 'yellow' : 'green';
-    case 'dxy':        return v < 100 ? 'red' : v < 103 ? 'yellow' : 'green';
-    case 'coppergold': return v < 0.13 ? 'red' : v < 0.18 ? 'yellow' : 'green';
-    case 'yield':      return v > 0.2 ? 'red' : v > -0.2 ? 'yellow' : 'green';
-    case 'ism':        return v < 48 ? 'red' : v < 52 ? 'yellow' : 'green';
-    default: return 'green';
-  }
+// ─── SCORING (per-indicator: -1 / 0 / +1) ────────────────────────────────────
+// Growth axis: +1 accelerating, -1 contracting
+// Inflation axis: +1 heating, -1 cooling
+const scores = {};   // key → {axis: 'growth'|'inflation'|null, score}
+
+function statusColor(score, axis) {
+  // For card dot coloring we keep green/yellow/red as visual states tied to the score sign
+  if (axis === 'growth') return score > 0 ? 'green' : score < 0 ? 'red' : 'yellow';
+  if (axis === 'inflation') return score > 0 ? 'red' : score < 0 ? 'green' : 'yellow';
+  return score > 0 ? 'red' : score < 0 ? 'green' : 'yellow'; // modifiers: red = amplifying risk-off/real-assets
 }
 
-function setCard(key, value, unit, statusOverride) {
+function setCard(key, value, unit, color) {
   const valEl = document.getElementById('val-' + key);
   const dotEl = document.getElementById('dot-' + key);
   if (!valEl || !dotEl) return;
-  const status = statusOverride || statusFor(key, parseFloat(value));
-  valEl.innerHTML = `<span class="value-${status}">${value}${unit}</span>`;
-  dotEl.className = `status-dot dot-${status}`;
+  valEl.innerHTML = `<span class="value-${color}">${value}${unit}</span>`;
+  dotEl.className = `status-dot dot-${color}`;
 }
 
 function setCardError(key) {
@@ -714,25 +916,27 @@ function setCardError(key) {
   const dotEl = document.getElementById('dot-' + key);
   if (valEl) valEl.innerHTML = '<span class="value-yellow">N/D</span>';
   if (dotEl) dotEl.className = 'status-dot dot-yellow';
+  scores[key] = { axis: null, score: 0 };
 }
 
 function setTrendBadge(key, r3, r2) {
   const el = document.getElementById('trend-' + key);
   if (!el) return;
-  if (r3) el.innerHTML = '<span class="trend-badge trend-confirmed">🔴 3 meses consecutivos al alza — CONFIRMADO</span>';
-  else if (r2) el.innerHTML = '<span class="trend-badge trend-partial">🟡 2 meses al alza — pendiente confirmación</span>';
-  else el.innerHTML = '<span class="trend-badge trend-no">🟢 Sin tendencia alcista sostenida</span>';
+  if (r3) el.innerHTML = '<span class="trend-badge trend-confirmed">🔺 3 meses consecutivos al alza — tendencia confirmada</span>';
+  else if (r2) el.innerHTML = '<span class="trend-badge trend-partial">⚠ 2 meses al alza — pendiente confirmación</span>';
+  else el.innerHTML = '<span class="trend-badge trend-no">— Sin tendencia alcista sostenida</span>';
 }
 
 let cardData = {};
 
+// ─── CARD LOADING ────────────────────────────────────────────────────────────
 async function loadCards() {
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('loading'); btn.textContent = '↻ Cargando...';
   document.getElementById('last-update').textContent = 'Actualizado: ' + new Date().toLocaleString('es-ES');
 
-  // PCE & CPI YoY with trend confirmation
-  for (const [key, sid] of [['pce', 'PCEPILFE'], ['cpi', 'CPIAUCSL']]) {
+  // ── Inflation axis: PCE & CPI (YoY + trend confirmation)
+  for (const [key, sid, hot, cold] of [['pce', 'PCEPILFE', 3, 2], ['cpi', 'CPIAUCSL', 4, 2.5]]) {
     try {
       const data = await fredYoY(sid, 2, 'm');
       cardData[key] = data;
@@ -741,65 +945,121 @@ async function loadCards() {
       const r3 = n >= 3 && data[n-1].y > data[n-2].y && data[n-2].y > data[n-3].y;
       const r2 = n >= 2 && data[n-1].y > data[n-2].y;
       setTrendBadge(key, r3, r2);
-      let status = statusFor(key, latest);
-      if (status === 'red' && !r3) status = 'yellow';
-      setCard(key, latest.toFixed(2), '%', status);
+      let score = latest > hot ? 1 : latest < cold ? -1 : 0;
+      if (score === 1 && !r3) score = 0; // hot requires 3-month confirmation
+      scores[key] = { axis: 'inflation', score };
+      setCard(key, latest.toFixed(2), '%', statusColor(score, 'inflation'));
     } catch(e) { console.warn(key, e.message); setCardError(key); }
     await delay(200);
   }
 
-  // Direct FRED
-  for (const [key, sid, native] of [['breakevens','T5YIFR','d'], ['fedfunds','FEDFUNDS','m'], ['tips','DFII10','d'], ['yield','T10Y2Y','d']]) {
-    try {
-      const data = await fredRange(sid, 2, 'm', native);
-      cardData[key] = data;
-      setCard(key, data[data.length-1].y.toFixed(2), '%');
-    } catch(e) { console.warn(key, e.message); setCardError(key); }
-    await delay(200);
-  }
-
-  // Fed funds special: falling + PCE>3 = red
+  // ── Breakevens
   try {
-    const fed = cardData.fedfunds, pce = cardData.pce;
-    if (fed && pce && fed.length >= 2) {
-      const latest = fed[fed.length-1].y, prev = fed[fed.length-2].y;
-      const pceLatest = pce[pce.length-1].y;
-      let status = 'green';
-      if (latest < prev && pceLatest > 3) status = 'red';
-      else if (latest < prev) status = 'yellow';
-      setCard('fedfunds', latest.toFixed(2), '%', status);
-    }
-  } catch(e) {}
-
-  // Yahoo cards
-  try {
-    const dxy = await yahooRange('DX-Y.NYB', 1, 'm');
-    setCard('dxy', dxy[dxy.length-1].y.toFixed(2), '');
-  } catch(e) { setCardError('dxy'); }
+    const data = await fredRange('T5YIFR', 2, 'm', 'd');
+    cardData.breakevens = data;
+    const latest = data[data.length-1].y;
+    const score = latest > 2.8 ? 1 : latest < 2.3 ? -1 : 0;
+    scores.breakevens = { axis: 'inflation', score };
+    setCard('breakevens', latest.toFixed(2), '%', statusColor(score, 'inflation'));
+  } catch(e) { setCardError('breakevens'); }
   await delay(200);
 
+  // ── Growth axis: Yield curve
+  try {
+    const data = await fredRange('T10Y2Y', 2, 'm', 'd');
+    cardData.yield = data;
+    const latest = data[data.length-1].y;
+    const score = latest > 0.5 ? 1 : latest < -0.2 ? -1 : 0;
+    scores.yield = { axis: 'growth', score };
+    setCard('yield', latest.toFixed(2), '%', statusColor(score, 'growth'));
+  } catch(e) { setCardError('yield'); }
+  await delay(200);
+
+  // ── Copper/Gold
   try {
     const ratio = await ratioRange(1, 'm');
-    setCard('coppergold', ratio[ratio.length-1].y.toFixed(4), '');
+    const latest = ratio[ratio.length-1].y;
+    const score = latest > 0.18 ? 1 : latest < 0.13 ? -1 : 0;
+    scores.coppergold = { axis: 'growth', score };
+    setCard('coppergold', latest.toFixed(4), '', statusColor(score, 'growth'));
   } catch(e) { setCardError('coppergold'); }
   await delay(200);
 
+  // ── Modifiers: Fed Funds (needs PCE)
+  try {
+    const data = await fredRange('FEDFUNDS', 2, 'm', 'm');
+    cardData.fedfunds = data;
+    const latest = data[data.length-1].y, prev = data[data.length-2].y;
+    const pceLatest = cardData.pce ? cardData.pce[cardData.pce.length-1].y : null;
+    const falling = latest < prev;
+    let score = 0;
+    if (falling && pceLatest != null && pceLatest > 3) score = 1;       // accommodative + hot → amplifies real assets
+    else if (falling) score = 0;
+    scores.fedfunds = { axis: null, score };
+    const color = falling && pceLatest > 3 ? 'red' : falling ? 'yellow' : 'green';
+    setCard('fedfunds', latest.toFixed(2), '%', color);
+  } catch(e) { setCardError('fedfunds'); }
+  await delay(200);
+
+  // ── TIPS
+  try {
+    const data = await fredRange('DFII10', 2, 'm', 'd');
+    cardData.tips = data;
+    const latest = data[data.length-1].y;
+    const score = latest < 0 ? 1 : latest > 1 ? -1 : 0; // +1 = real assets tailwind
+    scores.tips = { axis: null, score };
+    const color = latest < 0 ? 'red' : latest > 1 ? 'green' : 'yellow';
+    setCard('tips', latest.toFixed(2), '%', color);
+  } catch(e) { setCardError('tips'); }
+  await delay(200);
+
+  // ── DXY
+  try {
+    const dxy = await yahooRange('DX-Y.NYB', 1, 'm');
+    const latest = dxy[dxy.length-1].y;
+    const score = latest < 100 ? 1 : latest > 103 ? -1 : 0; // +1 = weak dollar = real assets/risk tailwind
+    scores.dxy = { axis: null, score };
+    const color = latest < 100 ? 'red' : latest > 103 ? 'green' : 'yellow';
+    setCard('dxy', latest.toFixed(2), '', color);
+  } catch(e) { setCardError('dxy'); }
+  await delay(200);
+
+  // ── DBC
   try {
     const dbc = await yahooRange('DBC', 2, 'm');
     const latest = dbc[dbc.length-1].y;
     const max12 = Math.max(...dbc.slice(-12).map(p => p.y));
     const max6 = Math.max(...dbc.slice(-6).map(p => p.y));
-    let status = 'green';
-    if (latest >= max12 * 0.98) status = 'red';
-    else if (latest >= max6 * 0.97) status = 'yellow';
-    setCard('crb', latest.toFixed(2), ' $', status);
+    let score = 0, color = 'green';
+    if (latest >= max12 * 0.98) { score = 1; color = 'red'; }
+    else if (latest >= max6 * 0.97) { score = 0.5; color = 'yellow'; }
+    scores.crb = { axis: null, score };
+    setCard('crb', latest.toFixed(2), ' $', color);
   } catch(e) { setCardError('crb'); }
+  await delay(200);
 
-  // Manual
+  // ── WALCL liquidity (3m change)
+  try {
+    const data = await fredRange('WALCL', 1, 'm', 'w');
+    cardData.walcl = data;
+    const n = data.length;
+    const latest = data[n-1].y;
+    const threeMonthsAgo = data[Math.max(0, n-4)].y;
+    const chg3m = ((latest / threeMonthsAgo - 1) * 100);
+    let score = 0, color = 'yellow';
+    if (chg3m > 0.5) { score = 1; color = 'green'; }       // expanding = risk/BTC tailwind
+    else if (chg3m < -0.5) { score = -1; color = 'red'; }  // QT = headwind
+    scores.walcl = { axis: null, score };
+    setCard('walcl', (latest/1000000).toFixed(2) + 'T', ` (${chg3m >= 0 ? '+' : ''}${chg3m.toFixed(1)}% 3m)`, color);
+  } catch(e) { setCardError('walcl'); }
+
+  // ── Manual
   if (manualValues.ism) { document.getElementById('input-ism').value = manualValues.ism; applyManual('ism', manualValues.ism); }
+  else scores.ism = { axis: 'growth', score: 0 };
   if (manualValues.dotplot) { document.getElementById('input-dotplot').value = manualValues.dotplot; applyManual('dotplot', manualValues.dotplot); }
+  else scores.dotplot = { axis: null, score: 0 };
 
-  updateVerdict();
+  updateRegime();
   btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
 }
 
@@ -811,78 +1071,118 @@ function setManual(key) {
   manualValues[key] = val;
   saveManualToStorage();
   applyManual(key, val);
-  updateVerdict();
+  updateRegime();
 }
 
 function applyManual(key, val) {
   if (key === 'ism') {
     const v = parseFloat(val);
     if (isNaN(v)) return;
-    setCard('ism', v.toFixed(1), '', statusFor('ism', v));
+    const score = v > 52 ? 1 : v < 49 ? -1 : 0;
+    scores.ism = { axis: 'growth', score };
+    setCard('ism', v.toFixed(1), '', statusColor(score, 'growth'));
   } else if (key === 'dotplot') {
     const v = parseFloat(val);
-    let status = 'green';
-    if (!isNaN(v)) { if (v <= -100) status = 'red'; else if (v <= -50) status = 'yellow'; }
+    if (isNaN(v)) return;
+    const score = v <= -100 ? 1 : v <= -50 ? 0.5 : 0;
+    scores.dotplot = { axis: null, score };
+    const color = v <= -100 ? 'red' : v <= -50 ? 'yellow' : 'green';
     const valEl = document.getElementById('val-dotplot');
     const dotEl = document.getElementById('dot-dotplot');
-    if (valEl) valEl.innerHTML = `<span class="value-${status}">${v > 0 ? '+' : ''}${v} bps</span>`;
-    if (dotEl) dotEl.className = `status-dot dot-${status}`;
+    if (valEl) valEl.innerHTML = `<span class="value-${color}">${v > 0 ? '+' : ''}${v} bps</span>`;
+    if (dotEl) dotEl.className = `status-dot dot-${color}`;
   }
 }
 
-// ─── VERDICT ─────────────────────────────────────────────────────────────────
-function countReds() {
-  const keys = ['pce','cpi','breakevens','fedfunds','dotplot','tips','dxy','coppergold','crb','yield','ism'];
-  const inflationKeys = ['pce','cpi','breakevens'];
-  let count = 0, inflationReds = 0, ismRed = false, inflationGreens = 0;
-  keys.forEach(k => {
-    const dot = document.getElementById('dot-' + k);
-    if (dot && dot.classList.contains('dot-red')) {
-      count++;
-      if (inflationKeys.includes(k)) inflationReds++;
-      if (k === 'ism') ismRed = true;
-    }
-    if (dot && dot.classList.contains('dot-green') && inflationKeys.includes(k)) inflationGreens++;
-  });
-  return { count, inflationReds, ismRed, inflationGreens };
-}
+// ─── REGIME DETECTION ────────────────────────────────────────────────────────
+function updateRegime() {
+  const growthKeys = ['ism', 'yield', 'coppergold'];
+  const inflationKeys = ['pce', 'cpi', 'breakevens'];
 
-function updateVerdict() {
-  const { count, inflationReds, ismRed, inflationGreens } = countReds();
-  const countEl = document.getElementById('red-count');
-  const verdictEl = document.getElementById('reco-verdict');
-  const detailEl = document.getElementById('reco-detail');
-  const allocEl = document.getElementById('reco-alloc');
-  countEl.textContent = count;
+  const growth = growthKeys.reduce((s, k) => s + (scores[k]?.score || 0), 0);
+  const inflation = inflationKeys.reduce((s, k) => s + (scores[k]?.score || 0), 0);
 
-  let scenario, color, detail, alloc;
-  if (ismRed && inflationGreens >= 2) {
-    scenario = '🔵 RECESIÓN DEFLACIONARIA — Rotar a RF + Cash';
-    color = 'var(--blue)';
-    detail = 'PMI en contracción con inflación controlada. Favorece bonos de gobierno (los tipos bajarán agresivamente) y liquidez. Las commodities sufren en recesiones deflacionarias — NO es el escenario de tu tesis.';
-    alloc = ['<b>50-60%</b> RF gobierno larga duración', '<b>25-35%</b> Monetario / cash', '<b>10-15%</b> Oro como cobertura'];
-  } else if (count >= 4 && inflationReds >= 2) {
-    scenario = '🔴 ESTANFLACIÓN — Rotar a Commodities';
-    color = 'var(--red)';
-    detail = 'Tu tesis confirmada: inflación sostenida con la Fed estimulando. Las commodities históricamente superan a RV y RF en este entorno. Rota progresivamente hacia metales preciosos, minería y energía.';
-    alloc = ['<b>35-45%</b> Metales preciosos (oro/plata)', '<b>25-30%</b> Minería diversificada', '<b>15-20%</b> Energía', '<b>10-15%</b> Monetario táctico'];
-  } else if (count >= 2) {
-    scenario = '🟡 TRANSICIÓN — Reducir riesgo gradualmente';
-    color = 'var(--yellow)';
-    detail = 'Señales mixtas. Mantén el core de RV pero construye posiciones defensivas y primera exposición a commodities. Fase de preparación: reducir beta sin salir del mercado.';
-    alloc = ['<b>40-50%</b> RV (reducir tech de mayor beta)', '<b>20-25%</b> Mixtos defensivos', '<b>15-20%</b> Primera posición commodities', '<b>10-15%</b> Monetario'];
+  // Axis bars (-3..+3)
+  renderAxis('growth', growth);
+  renderAxis('inflation', inflation);
+
+  // Regime
+  let regime, color, desc, alloc, quadId;
+  const liquidity = scores.walcl?.score || 0;
+
+  if (growth >= 1 && inflation <= 0) {
+    regime = '🟢 EXPANSIÓN'; color = 'var(--green)'; quadId = 'quad-expansion';
+    desc = 'Crecimiento acelerando con inflación contenida. El entorno clásico risk-on: la RV growth y tech lideran, los emergentes acompañan y BTC tiene su asignación máxima' + (liquidity > 0 ? ' — reforzado además por la liquidez Fed en expansión.' : liquidity < 0 ? ', aunque la liquidez Fed contrayéndose pide moderar la beta.' : '.');
+    alloc = ['<b>55-65%</b> RV global (sesgo growth/tech)', '<b>10-15%</b> Emergentes', '<b>5-15%</b> BTC', '<b>5-10%</b> RF corta / cash', '<b>0-5%</b> Oro'];
+  } else if (growth >= 1 && inflation >= 1) {
+    regime = '🟠 SOBRECALENTAMIENTO'; color = 'var(--orange)'; quadId = 'quad-overheat';
+    desc = 'Crecimiento e inflación acelerando a la vez. Las commodities industriales y la RV value/energía toman el relevo del growth. La RF nominal sufre. BTC se reduce: aguanta mientras fluya la liquidez pero es vulnerable al giro de la Fed.';
+    alloc = ['<b>25-35%</b> Commodities industriales (cobre, energía, DBC)', '<b>25-35%</b> RV value/energía', '<b>10-15%</b> Oro', '<b>3-8%</b> BTC', '<b>10-15%</b> Cash táctico'];
+  } else if (growth <= -1 && inflation >= 1) {
+    regime = '🔴 ESTANFLACIÓN'; color = 'var(--red)'; quadId = 'quad-stagflation';
+    desc = 'Economía frenando con precios calientes: el peor entorno para carteras tradicionales (RV y RF caen juntas). El oro es el activo del régimen. BTC al mínimo — empíricamente NO es cobertura inflacionaria: en 2022 cayó un 65% mientras el oro aguantó.';
+    alloc = ['<b>35-45%</b> Oro y metales preciosos', '<b>15-20%</b> Commodities defensivas', '<b>25-35%</b> Cash remunerado', '<b>0-3%</b> BTC', '<b>0-10%</b> TIPS'];
+  } else if (growth <= -1 && inflation <= 0) {
+    regime = '🔵 RECESIÓN DEFLACIONARIA'; color = 'var(--blue)'; quadId = 'quad-deflation';
+    desc = 'Economía contrayéndose con inflación cayendo. Los tipos bajarán con fuerza: la RF de gobierno de larga duración es el activo del régimen. BTC a cero — cae primero y más fuerte; el momento de acumular llega cuando la Liquidez Fed (WALCL) gire al alza' + (liquidity > 0 ? ' — y ese giro ya se está produciendo: zona de acumulación.' : '.');
+    alloc = ['<b>45-55%</b> RF gobierno larga duración', '<b>25-35%</b> Cash remunerado', '<b>5-10%</b> Oro', '<b>0%</b> BTC (acumular al giro de liquidez)'];
   } else {
-    scenario = '🟢 RISK-ON — Mantener RV + Tech/IA';
-    color = 'var(--green)';
-    detail = 'Entorno favorable para renta variable. La liquidez fluye y la inflación no amenaza todavía. La fase de expansión de tu tesis (dinero barato → bolsa sube) sigue vigente.';
-    alloc = ['<b>60-70%</b> RV global core', '<b>20-30%</b> Tech / IA (satélite)', '<b>5-10%</b> Monetario (pólvora seca)'];
+    regime = '⚪ TRANSICIÓN / NEUTRAL'; color = 'var(--text2)'; quadId = null;
+    desc = 'Los ejes no marcan dirección clara — zona de cambio de régimen. Mantén una asignación equilibrada y deja que los modificadores (liquidez, dólar, tipos reales) inclinen el sesgo hasta que un cuadrante se confirme.';
+    alloc = ['<b>40-50%</b> RV global', '<b>15-20%</b> RF', '<b>10-15%</b> Oro + commodities', '<b>3-8%</b> BTC', '<b>15-20%</b> Cash'];
   }
 
-  countEl.style.color = color;
-  verdictEl.style.color = color;
-  verdictEl.textContent = scenario;
-  detailEl.textContent = detail;
-  allocEl.innerHTML = alloc.map(a => `<span class="alloc-chip">${a}</span>`).join('');
+  document.getElementById('regime-name').textContent = regime;
+  document.getElementById('regime-name').style.color = color;
+  document.getElementById('regime-desc').textContent = desc;
+  document.getElementById('reco-alloc').innerHTML = alloc.map(a => `<span class="alloc-chip">${a}</span>`).join('');
+
+  // Quadrant highlight
+  ['quad-expansion','quad-overheat','quad-stagflation','quad-deflation'].forEach(id => {
+    document.getElementById(id).classList.toggle('active', id === quadId);
+  });
+
+  // Modifier strip
+  renderModStrip();
+}
+
+function renderAxis(axis, score) {
+  const fill = document.getElementById(axis + '-fill');
+  const scoreEl = document.getElementById(axis + '-score');
+  const pct = Math.max(-3, Math.min(3, score)) / 3 * 50; // -50..+50
+  if (pct >= 0) {
+    fill.style.left = '50%'; fill.style.width = pct + '%';
+  } else {
+    fill.style.left = (50 + pct) + '%'; fill.style.width = (-pct) + '%';
+  }
+  const color = axis === 'growth'
+    ? (score > 0 ? 'var(--green)' : score < 0 ? 'var(--red)' : 'var(--yellow)')
+    : (score > 0 ? 'var(--red)' : score < 0 ? 'var(--blue)' : 'var(--yellow)');
+  fill.style.background = color;
+  scoreEl.textContent = (score > 0 ? '+' : '') + score;
+  scoreEl.style.color = color;
+}
+
+function renderModStrip() {
+  const mods = [
+    { key: 'fedfunds', label: 'Fed Funds' },
+    { key: 'dotplot', label: 'Dot Plot' },
+    { key: 'tips', label: 'TIPS' },
+    { key: 'dxy', label: 'DXY' },
+    { key: 'crb', label: 'DBC' },
+    { key: 'walcl', label: 'Liquidez' },
+  ];
+  const strip = document.getElementById('mod-strip');
+  strip.innerHTML = mods.map(m => {
+    const dot = document.getElementById('dot-' + m.key);
+    let color = 'var(--text3)';
+    if (dot) {
+      if (dot.classList.contains('dot-green')) color = 'var(--green)';
+      else if (dot.classList.contains('dot-yellow')) color = 'var(--yellow)';
+      else if (dot.classList.contains('dot-red')) color = 'var(--red)';
+    }
+    return `<span class="mod-chip"><span class="mod-dot" style="background:${color};box-shadow:0 0 5px ${color};"></span>${m.label}</span>`;
+  }).join('');
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
