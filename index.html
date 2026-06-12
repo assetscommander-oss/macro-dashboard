@@ -234,6 +234,15 @@
   .screener-loading{padding:26px;text-align:center;font-size:11px;color:var(--text2)}
   .screener-meta{font-size:9px;color:var(--text3);padding:10px 18px;letter-spacing:.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
+  /* SENTIMENT */
+  .senti-bar{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,#ff5252 0%,#ffd740 50%,#00e676 100%);margin-top:8px;opacity:.85}
+  body.light .senti-bar{background:linear-gradient(90deg,#d6336c 0%,#b07d00 50%,#00913f 100%)}
+  .senti-marker{position:absolute;top:-4px;width:4px;height:22px;background:var(--text);border-radius:2px;box-shadow:0 0 6px rgba(0,0,0,.5);transition:left .6s;left:50%}
+  .senti-labels{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+  .senti-read{font-size:11px;margin-top:8px;line-height:1.6}
+  .senti-read b{font-family:var(--sans)}
+  .senti-tactic{font-size:10px;color:var(--text2);line-height:1.6;margin-top:6px;padding:8px 10px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2)}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -298,6 +307,11 @@
         <div class="regime-desc" id="regime-desc">Cargando indicadores para determinar el régimen macro actual...</div>
         <div class="alloc-title">Asignación orientativa</div>
         <div class="reco-alloc" id="reco-alloc"></div>
+        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado</div>
+        <div class="senti-bar"><div class="senti-marker" id="senti-marker"></div></div>
+        <div class="senti-labels"><span>Pánico</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Euforia</span></div>
+        <div class="senti-read" id="senti-read">Cargando sentimiento...</div>
+        <div class="senti-tactic" id="senti-tactic" style="display:none;"></div>
       </div>
     </div>
     <div class="mod-strip" id="mod-strip"></div>
@@ -402,6 +416,48 @@
           <div class="card-value value-loading" id="val-walcl"><span class="spinner"></span> Cargando</div>
           <div class="card-thresholds"><span class="threshold t-green">Expandiendo &gt;+0.5% 3m</span><span class="threshold t-yellow">Plano ±0.5%</span><span class="threshold t-red">Contrayendo &lt;-0.5% 3m</span></div>
           <div class="card-temporal">El driver más potente de BTC y activos de riesgo. Su giro al alza marca el momento de acumular BTC tras una caída</div>
+        </div>
+      </div>
+    </div>
+    <!-- SENTIMIENTO -->
+    <div class="layer">
+      <div class="layer-header"><span class="layer-icon">🌡️</span><span class="layer-title">Sentimiento</span><span class="layer-sub">Capa de timing táctico · no determina el régimen</span></div>
+      <div class="layer-cards">
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">VIX</div><div class="card-source">Yahoo · ^VIX</div></div><div class="status-dot dot-loading" id="dot-vix"></div></div>
+          <div class="card-value value-loading" id="val-vix"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;20 calma</span><span class="threshold t-yellow">20–30 tensión</span><span class="threshold t-red">&gt;30 miedo/pánico</span></div>
+          <div class="card-temporal">Volatilidad implícita del S&P 500 — el "índice del miedo"</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Estructura VIX/VIX3M</div><div class="card-source">Yahoo · ^VIX / ^VIX3M</div></div><div class="status-dot dot-loading" id="dot-vixstruct"></div></div>
+          <div class="card-value value-loading" id="val-vixstruct"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;0.95 contango</span><span class="threshold t-yellow">0.95–1.0 tensión</span><span class="threshold t-red">&gt;1.0 backwardation</span></div>
+          <div class="card-temporal">Invertida = el mercado paga más por protección inmediata = estrés agudo</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Spreads High Yield</div><div class="card-source">FRED · BAMLH0A0HYM2</div></div><div class="status-dot dot-loading" id="dot-hyspread"></div></div>
+          <div class="card-value value-loading" id="val-hyspread"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">&lt;3.5% calma</span><span class="threshold t-yellow">3.5–5% tensión</span><span class="threshold t-red">&gt;5% estrés crédito</span></div>
+          <div class="card-temporal">El crédito suele oler los problemas antes que la bolsa</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Crypto Fear & Greed</div><div class="card-source">alternative.me</div></div><div class="status-dot dot-loading" id="dot-cryptofg"></div></div>
+          <div class="card-value value-loading" id="val-cryptofg"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-red">&lt;25 miedo extremo</span><span class="threshold t-green">25–75 rango medio</span><span class="threshold t-yellow">&gt;75 codicia extrema</span></div>
+          <div class="card-temporal">Dimensiona BTC: miedo extremo = acumular en régimen favorable; codicia = recortar</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">CNN Fear & Greed</div><div class="card-source">CNN · best effort</div></div><div class="status-dot dot-loading" id="dot-cnnfg"></div></div>
+          <div class="card-value value-loading" id="val-cnnfg"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-red">&lt;25 miedo extremo</span><span class="threshold t-green">25–75 rango medio</span><span class="threshold t-yellow">&gt;75 codicia extrema</span></div>
+          <div class="card-temporal">Agregado de 7 componentes de sentimiento. Si el proxy lo bloquea mostrará N/D</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Put/Call SPY (OI)</div><div class="card-source">Yahoo options · best effort</div></div><div class="status-dot dot-loading" id="dot-pcallspy"></div></div>
+          <div class="card-value value-loading" id="val-pcallspy"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-yellow">&lt;0.7 complacencia</span><span class="threshold t-green">0.7–1.1 normal</span><span class="threshold t-red">&gt;1.1 cobertura alta</span></div>
+          <div class="card-temporal">Open interest puts/calls del vencimiento más cercano del SPY</div>
         </div>
       </div>
     </div>
@@ -928,6 +984,8 @@ const IND_CONFIG = [
   { key: 'yield',      label: 'Yield 2s10s',      color: '#4dabf7', axis: 'y',  fetch: (y, f) => fredRange('T10Y2Y', y, f, 'd') },
   { key: 'coppergold', label: 'Copper/Gold ×10',  color: '#fb923c', axis: 'y',  fetch: (y, f) => ratioRange(y, f), scale: 10 },
   { key: 'walcl',      label: 'Liquidez Fed YoY', color: '#22d3ee', axis: 'y2', fetch: (y, f) => walclYoY(y, f) },
+  { key: 'hyspread',   label: 'Spreads HY',       color: '#f97316', axis: 'y',  fetch: (y, f) => fredRange('BAMLH0A0HYM2', y, f, 'd') },
+  { key: 'vix',        label: 'VIX',              color: '#94a3b8', axis: 'y2', fetch: (y, f) => yahooRange('^VIX', y, f) },
   { key: 'dxy',        label: 'DXY',              color: '#e599f7', axis: 'y2', fetch: (y, f) => yahooRange('DX-Y.NYB', y, f) },
   { key: 'crb',        label: 'CRB proxy (DBC)',  color: '#a78bfa', axis: 'y2', fetch: (y, f) => yahooRange('DBC', y, f), scale: 4 },
 ];
@@ -1309,7 +1367,11 @@ async function loadCards() {
   if (manualValues.dotplot) { document.getElementById('input-dotplot').value = manualValues.dotplot; applyManual('dotplot', manualValues.dotplot); }
   else scores.dotplot = { axis: null, score: 0 };
 
+  // ── Sentiment layer
+  await loadSentiment();
+
   updateRegime();
+  renderSentiment(); // re-render tactic with final regime
   btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
 }
 
@@ -1342,6 +1404,127 @@ function applyManual(key, val) {
     if (valEl) valEl.innerHTML = `<span class="value-${color}">${v > 0 ? '+' : ''}${v} bps</span>`;
     if (dotEl) dotEl.className = `status-dot dot-${color}`;
   }
+}
+
+// ─── SENTIMENT ───────────────────────────────────────────────────────────────
+const sentiment = { vix: null, struct: null, hy: null, cfg: null, cnn: null, pcall: null, score: null };
+const clamp01 = v => Math.max(0, Math.min(100, v));
+
+async function loadSentiment() {
+  // VIX + structure
+  try {
+    const [vixD, vix3mD] = await Promise.all([yahooRange('^VIX', 1, 'm'), yahooRange('^VIX3M', 1, 'm')]);
+    const vix = vixD[vixD.length-1].y;
+    sentiment.vix = vix;
+    const color = vix > 30 ? 'red' : vix >= 20 ? 'yellow' : 'green';
+    setCard('vix', vix.toFixed(1), '', color);
+    const vix3m = vix3mD[vix3mD.length-1].y;
+    if (vix3m > 0) {
+      const ratio = vix / vix3m;
+      sentiment.struct = ratio;
+      const c2 = ratio > 1.0 ? 'red' : ratio >= 0.95 ? 'yellow' : 'green';
+      setCard('vixstruct', ratio.toFixed(3), ratio > 1 ? ' ⚠ invertida' : '', c2);
+    } else setCardError('vixstruct');
+  } catch(e) { setCardError('vix'); setCardError('vixstruct'); }
+  await delay(200);
+
+  // HY spreads
+  try {
+    const data = await fredRange('BAMLH0A0HYM2', 1, 'm', 'd');
+    const hy = data[data.length-1].y;
+    sentiment.hy = hy;
+    const color = hy > 5 ? 'red' : hy >= 3.5 ? 'yellow' : 'green';
+    setCard('hyspread', hy.toFixed(2), '%', color);
+  } catch(e) { setCardError('hyspread'); }
+  await delay(200);
+
+  // Crypto Fear & Greed (alternative.me supports CORS; fallback to proxy)
+  try {
+    let data = null;
+    try {
+      const r = await fetch('https://api.alternative.me/fng/?limit=1');
+      if (r.ok) data = await r.json();
+    } catch(e) {}
+    if (!data) data = await proxyFetch('https://api.alternative.me/fng/?limit=1');
+    const v = parseInt(data?.data?.[0]?.value);
+    if (isNaN(v)) throw new Error('no value');
+    sentiment.cfg = v;
+    const color = v < 25 ? 'red' : v > 75 ? 'yellow' : 'green';
+    setCard('cryptofg', v, '/100 · ' + (data.data[0].value_classification || ''), color);
+  } catch(e) { setCardError('cryptofg'); }
+  await delay(200);
+
+  // CNN Fear & Greed (best effort)
+  try {
+    const data = await proxyFetch('https://production.dataviz.cnn.io/index/fearandgreed/graphdata');
+    const v = Math.round(data?.fear_and_greed?.score);
+    if (isNaN(v)) throw new Error('no score');
+    sentiment.cnn = v;
+    const color = v < 25 ? 'red' : v > 75 ? 'yellow' : 'green';
+    setCard('cnnfg', v, '/100 · ' + (data.fear_and_greed.rating || ''), color);
+  } catch(e) { setCardError('cnnfg'); }
+  await delay(200);
+
+  // Put/Call SPY
+  try {
+    const pcr = await fetchPutCallRatio('SPY');
+    if (!pcr) throw new Error('no options data');
+    sentiment.pcall = pcr.ratio;
+    const color = pcr.ratio > 1.1 ? 'red' : pcr.ratio < 0.7 ? 'yellow' : 'green';
+    setCard('pcallspy', pcr.ratio.toFixed(2), '', color);
+  } catch(e) { setCardError('pcallspy'); }
+
+  // Aggregate (0 = panic, 100 = euphoria); average of available components
+  const comps = [];
+  if (sentiment.vix != null) comps.push(clamp01(110 - 2.4 * sentiment.vix));
+  if (sentiment.struct != null) comps.push(clamp01((1.2 - sentiment.struct) * 250));
+  if (sentiment.hy != null) comps.push(clamp01(110 - sentiment.hy * 14));
+  if (sentiment.cfg != null) comps.push(sentiment.cfg);
+  if (sentiment.cnn != null) comps.push(sentiment.cnn);
+  if (sentiment.pcall != null) comps.push(clamp01(50 + (1.0 - sentiment.pcall) * 70));
+  sentiment.score = comps.length ? comps.reduce((a,b) => a+b, 0) / comps.length : null;
+  renderSentiment();
+}
+
+function sentimentLabel(s) {
+  if (s < 20) return 'Pánico extremo';
+  if (s < 40) return 'Miedo';
+  if (s < 60) return 'Neutral';
+  if (s < 80) return 'Codicia';
+  return 'Euforia';
+}
+
+function renderSentiment() {
+  const s = sentiment.score;
+  const marker = document.getElementById('senti-marker');
+  const read = document.getElementById('senti-read');
+  const tactic = document.getElementById('senti-tactic');
+  if (s == null) { read.textContent = 'Sentimiento no disponible'; return; }
+
+  marker.style.left = `calc(${s}% - 2px)`;
+  const label = sentimentLabel(s);
+  const color = s < 25 ? 'var(--red)' : s > 75 ? 'var(--yellow)' : s < 40 ? 'var(--orange)' : 'var(--text)';
+  read.innerHTML = `<b style="color:${color};">${label}</b> · ${s.toFixed(0)}/100`;
+
+  // Tactical message: contrarian at extremes, conditioned on regime
+  const riskOn = ['expansion', 'overheat'].includes(currentRegimeKey);
+  let msg = null;
+  if (s <= 25 && riskOn) {
+    msg = '⚡ Pánico con régimen favorable al riesgo — históricamente la mejor zona de entrada dentro del régimen activo ("be greedy when others are fearful").';
+  } else if (s <= 25) {
+    msg = '⚠ Pánico coherente con régimen defensivo — no es señal de compra de riesgo por sí solo. Para BTC, esperar el giro de la liquidez Fed.';
+  } else if (s >= 75 && (currentRegimeKey === 'overheat' || currentRegimeKey === 'stagflation')) {
+    msg = '🔔 Euforia en régimen tardío — zona histórica de recorte y recogida de beneficios en activos de riesgo.';
+  } else if (s >= 75) {
+    msg = '🔔 Euforia — no añadir riesgo a estos niveles; mantener posiciones con disciplina de salida.';
+  }
+  // BTC refinement via crypto F&G
+  if (sentiment.cfg != null) {
+    if (sentiment.cfg <= 20 && riskOn) msg = (msg ? msg + ' ' : '') + '₿ Crypto F&G en miedo extremo + régimen favorable: acumular BTC hacia el techo de su rango.';
+    else if (sentiment.cfg >= 80) msg = (msg ? msg + ' ' : '') + '₿ Crypto F&G en codicia extrema: recortar BTC hacia el suelo de su rango.';
+  }
+  if (msg) { tactic.style.display = ''; tactic.textContent = msg; }
+  else tactic.style.display = 'none';
 }
 
 // ─── REGIME DETECTION ────────────────────────────────────────────────────────
