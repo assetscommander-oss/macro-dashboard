@@ -148,6 +148,32 @@
   .guide-level .lvl{flex-shrink:0;font-weight:700;width:120px}
   .lvl-green{color:var(--green)}.lvl-yellow{color:var(--yellow)}.lvl-red{color:var(--red)}
 
+  /* REGIME EXPLANATION */
+  .regime-guide{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .rg-block{padding:18px;border-bottom:1px solid var(--border)}
+  .rg-block:last-child{border-bottom:none}
+  .rg-title{font-family:var(--sans);font-size:14px;font-weight:700;margin-bottom:10px}
+  .rg-text{font-size:11px;color:var(--text2);line-height:1.8;margin-bottom:10px}
+  .rg-text:last-child{margin-bottom:0}
+  .rg-text b{color:var(--text)}
+  .rg-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin:10px 0}
+  .rg-list li{font-size:10px;color:var(--text2);line-height:1.6;padding-left:14px;position:relative}
+  .rg-list li::before{content:'·';position:absolute;left:2px;color:var(--accent)}
+  .rules-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:10px}
+  .rules-table th{text-align:left;padding:7px 10px;background:var(--bg3);color:var(--text2);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:9px;border:1px solid var(--border)}
+  .rules-table td{padding:7px 10px;border:1px solid var(--border);color:var(--text2);line-height:1.5}
+  .rules-table td:first-child{color:var(--text);font-weight:700}
+  .rules-table .axis-head td{background:var(--bg3);color:var(--accent);font-weight:700;letter-spacing:1px;font-size:9px;text-transform:uppercase}
+  .td-p1{color:var(--red)!important}.td-0{color:var(--yellow)!important}.td-m1{color:var(--green)!important}
+  .rg-regime{padding:14px 16px;border-radius:5px;border:1px solid var(--border2);background:var(--bg3);margin-bottom:12px}
+  .rg-regime:last-child{margin-bottom:0}
+  .rg-regime-name{font-family:var(--sans);font-size:13px;font-weight:700;margin-bottom:4px}
+  .rg-regime-rule{font-size:10px;font-family:var(--mono);padding:4px 10px;border-radius:3px;background:var(--bg);border:1px solid var(--border2);display:inline-block;margin-bottom:8px;color:var(--text)}
+  .rg-regime-desc{font-size:10.5px;color:var(--text2);line-height:1.7;margin-bottom:8px}
+  .rg-regime-example{font-size:9.5px;color:var(--text3);line-height:1.6;font-style:italic;border-left:2px solid var(--border2);padding-left:10px}
+  .rg-regime-error{font-size:10px;color:var(--text2);line-height:1.6;margin-top:8px}
+  .rg-regime-error b{color:var(--yellow)}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -537,6 +563,92 @@
           <div class="guide-level"><span class="lvl lvl-red">🔴 Contrayendo (QT)</span><span>La Fed drena. Viento en contra para BTC y activos de alta beta, independientemente del régimen. Reducir riesgo.</span></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- GUÍA DE EJES Y REGÍMENES -->
+  <div class="section-title">Cómo leer los ejes y los regímenes</div>
+  <div class="regime-guide">
+
+    <div class="rg-block">
+      <div class="rg-title">📐 Los dos ejes</div>
+      <div class="rg-text">El sistema reduce todos los indicadores a dos preguntas. <b>Eje Crecimiento — ¿la economía acelera o frena?</b> Lo puntúan ISM PMI, Yield Curve y Copper/Gold Ratio: cada uno aporta +1 (acelerando), 0 (neutral) o -1 (frenando). El resultado va de +3 a -3. <b>Eje Inflación — ¿los precios aceleran o se enfrían?</b> Lo puntúan PCE Core, CPI y Breakevens 5Y5Y con la misma escala. Matiz importante: PCE y CPI solo puntúan +1 si además de superar su umbral llevan 3 meses consecutivos al alza — un dato suelto caliente no activa el eje.</div>
+      <ul class="rg-list">
+        <li><b>+2 o +3</b>: señal clara — los termómetros del eje apuntan en la misma dirección</li>
+        <li><b>+1 a -1</b>: zona ambigua — el eje está girando o sin dirección definida</li>
+        <li><b>-2 o -3</b>: señal clara en sentido contrario, confirmada por varios indicadores</li>
+      </ul>
+      <div class="rg-text">La clave del sistema: <b>ningún indicador manda por sí solo</b>. Un PCE alto con ISM fuerte significa algo muy distinto (sobrecalentamiento) que un PCE alto con ISM hundido (estanflación). El cruce de los dos ejes define el régimen, no ningún dato individual.</div>
+    </div>
+
+    <div class="rg-block">
+      <div class="rg-title">🎯 Cómo puntúa cada indicador</div>
+      <table class="rules-table">
+        <tr><th>Indicador</th><th>+1</th><th>0</th><th>-1</th></tr>
+        <tr class="axis-head"><td colspan="4">Eje Crecimiento (+1 = acelerando)</td></tr>
+        <tr><td>ISM PMI</td><td class="td-p1">&gt;52</td><td class="td-0">49–52</td><td class="td-m1">&lt;49</td></tr>
+        <tr><td>Yield Curve 2s10s</td><td class="td-p1">&gt;+0.5%</td><td class="td-0">-0.2 a +0.5%</td><td class="td-m1">&lt;-0.2%</td></tr>
+        <tr><td>Copper/Gold Ratio</td><td class="td-p1">&gt;0.18</td><td class="td-0">0.13–0.18</td><td class="td-m1">&lt;0.13</td></tr>
+        <tr class="axis-head"><td colspan="4">Eje Inflación (+1 = calentándose)</td></tr>
+        <tr><td>PCE Core</td><td class="td-p1">&gt;3% y 3 meses al alza</td><td class="td-0">2–3% (o &gt;3% sin confirmar)</td><td class="td-m1">&lt;2%</td></tr>
+        <tr><td>CPI General</td><td class="td-p1">&gt;4% y 3 meses al alza</td><td class="td-0">2.5–4% (o &gt;4% sin confirmar)</td><td class="td-m1">&lt;2.5%</td></tr>
+        <tr><td>Breakevens 5Y5Y</td><td class="td-p1">&gt;2.8%</td><td class="td-0">2.3–2.8%</td><td class="td-m1">&lt;2.3%</td></tr>
+      </table>
+      <div class="rg-text">Nota sobre los colores de cada eje: en Crecimiento el verde es acelerar; en Inflación el verde es enfriarse. La tabla muestra la puntuación, no el color del semáforo.</div>
+    </div>
+
+    <div class="rg-block">
+      <div class="rg-title">🕐 Los 4 regímenes (el reloj de inversión)</div>
+      <div class="rg-text">La economía rota históricamente por estos cuatro cuadrantes en sentido horario — Expansión → Sobrecalentamiento → Estanflación → Recesión → vuelta a Expansión — aunque puede saltarse fases o retroceder. Cada cuadrante tiene activos que históricamente lo dominan.</div>
+
+      <div class="rg-regime" style="border-color:var(--green-border);">
+        <div class="rg-regime-name" style="color:var(--green);">🟢 Expansión</div>
+        <div class="rg-regime-rule">Crecimiento ≥ +1 · Inflación ≤ 0</div>
+        <div class="rg-regime-desc">El entorno "Goldilocks": la economía crece sin presión de precios, los bancos centrales no estorban. Es el régimen de la renta variable, especialmente growth y tecnología — los beneficios crecen y los tipos no comprimen los múltiplos. Emergentes acompañan. BTC tiene aquí su máxima asignación: risk-on + liquidez es su hábitat. La RF aburre pero no daña.</div>
+        <div class="rg-regime-example">Ejemplo: ISM 53 (+1), Yield +0.3% (0), Copper/Gold 0.19 (+1) → Crecimiento +2. PCE 2.4% (0), CPI 2.8% (0), Breakevens 2.2% (-1) → Inflación -1. Resultado: Expansión.</div>
+        <div class="rg-regime-error"><b>Error típico:</b> estar infrainvertido por miedo.</div>
+      </div>
+
+      <div class="rg-regime" style="border-color:var(--orange-border);">
+        <div class="rg-regime-name" style="color:var(--orange);">🟠 Sobrecalentamiento</div>
+        <div class="rg-regime-rule">Crecimiento ≥ +1 · Inflación ≥ +1</div>
+        <div class="rg-regime-desc">La expansión madura: la demanda supera a la oferta y los precios aceleran. La RV sigue subiendo pero cambia el liderazgo — de growth a value, energía y materiales, que tienen pricing power. Las commodities industriales (cobre, energía) son el activo estrella. La RF nominal es el gran perdedor: la inflación erosiona cupones fijos. BTC se reduce: aguanta mientras la liquidez fluye, pero este régimen termina con la Fed endureciendo, y BTC anticipa ese giro cayendo antes que la bolsa.</div>
+        <div class="rg-regime-example">Ejemplo: ISM 54 (+1), Yield +0.6% (+1) → Crecimiento +2. PCE 3.4% confirmado (+1), Breakevens 2.9% (+1) → Inflación +2. Resultado: Sobrecalentamiento.</div>
+        <div class="rg-regime-error"><b>Error típico:</b> confundir el último tramo de subida con una nueva expansión.</div>
+      </div>
+
+      <div class="rg-regime" style="border-color:var(--red-border);">
+        <div class="rg-regime-name" style="color:var(--red);">🔴 Estanflación</div>
+        <div class="rg-regime-rule">Crecimiento ≤ -1 · Inflación ≥ +1</div>
+        <div class="rg-regime-desc">El peor cuadrante para carteras tradicionales: la economía se frena pero los precios no ceden, así que RV y RF caen a la vez y la diversificación clásica 60/40 falla. El oro es el activo del régimen — protege contra la inflación sin depender del ciclo. El cash remunerado, aunque pierda algo contra la inflación, pierde menos que casi todo lo demás. BTC al mínimo: 2022 demostró que no es cobertura inflacionaria sino activo de liquidez, y en estanflación la liquidez se drena.</div>
+        <div class="rg-regime-example">Ejemplo: ISM 47 (-1), Copper/Gold 0.12 (-1) → Crecimiento -2. PCE 3.6% confirmado (+1), CPI 4.5% confirmado (+1) → Inflación +2. Resultado: Estanflación.</div>
+        <div class="rg-regime-error"><b>Error típico:</b> comprar "la caída" de RV demasiado pronto.</div>
+      </div>
+
+      <div class="rg-regime" style="border-color:var(--blue-border);">
+        <div class="rg-regime-name" style="color:var(--blue);">🔵 Recesión deflacionaria</div>
+        <div class="rg-regime-rule">Crecimiento ≤ -1 · Inflación ≤ 0</div>
+        <div class="rg-regime-desc">La demanda se hunde y arrastra los precios. Suena mal pero es el paraíso de la RF de gobierno de larga duración: los bancos centrales recortan tipos agresivamente y los bonos largos se disparan. El cash da opcionalidad para comprar barato después. Las commodities sufren (no hay demanda) y la RV también, hasta que el mercado huele el estímulo. Aquí BTC hace suelo: cae primero y más fuerte que todo, pero es el activo que más rebota cuando la Fed pivota — el giro al alza del balance (WALCL) es históricamente la señal de acumulación.</div>
+        <div class="rg-regime-example">Ejemplo: ISM 46 (-1), Yield -0.5% (-1) → Crecimiento -2. PCE 1.8% (-1), CPI 2.1% (-1) → Inflación -2. Resultado: Recesión deflacionaria.</div>
+        <div class="rg-regime-error"><b>Error típico:</b> quedarse en cash cuando el estímulo ya ha girado el ciclo.</div>
+      </div>
+
+      <div class="rg-regime">
+        <div class="rg-regime-name" style="color:var(--text2);">⚪ Transición / Neutral</div>
+        <div class="rg-regime-rule">No se cumple ninguna de las 4 condiciones anteriores</div>
+        <div class="rg-regime-desc">Cuando los ejes no suman señal clara (típicamente cuando algún eje queda en 0), el sistema no fuerza un régimen. Es deliberado: los peores errores de asignación se cometen anticipando un cuadrante que nunca llega. En transición se mantiene cartera equilibrada y se deja que los modificadores inclinen el sesgo hasta que el cruce se confirme.</div>
+      </div>
+    </div>
+
+    <div class="rg-block">
+      <div class="rg-title">⚡ Los modificadores no determinan el régimen — lo matizan</div>
+      <ul class="rg-list">
+        <li><b>Fed Funds bajando + PCE &gt;3%</b> → acelera la transición hacia Sobrecalentamiento/Estanflación</li>
+        <li><b>TIPS &lt;0%</b> → amplifica la asignación a oro dentro del régimen activo</li>
+        <li><b>DXY &lt;100</b> → viento de cola adicional para commodities y BTC en cualquier régimen</li>
+        <li><b>DBC rompiendo máximos de 12 meses</b> → confirma por precio los regímenes inflacionarios</li>
+        <li><b>WALCL expandiendo (&gt;+0.5% en 3m)</b> → sube la asignación BTC hacia el techo de su rango; contrayendo (&lt;-0.5%) → la baja hacia el suelo. En Recesión deflacionaria, su giro al alza es la señal de acumulación de BTC</li>
+      </ul>
     </div>
   </div>
 
