@@ -608,7 +608,7 @@
       </table>
     </div>
     <div class="screener-meta">
-      <span>Score = Tendencia 25% + Momentum 25% + Retorno/Riesgo 20% + Encaje régimen 30% · Sent. = sentimiento global (informativo, no afecta al Score) · Click en cabeceras para ordenar</span>
+      <span>Score = Tendencia 25% + Momentum 25% + Retorno/Riesgo 20% + Encaje régimen 30% · Sent. = sentimiento global aplicable a cada activo (Crypto F&G para cripto, termómetro general para el resto). Informativo, no afecta al Score · Click en cabeceras para ordenar</span>
       <span id="screener-cache-info"></span>
     </div>
   </div>
@@ -1971,6 +1971,23 @@ async function runAnalyzer() {
     const sc = scoreComponents(k, regimeFit);
     const col = scoreColor(sc.total);
 
+    // Sentiment context — Crypto F&G for crypto tickers, global thermometer for the rest
+    const isCrypto = (uniMatch && uniMatch.cat === 'crypto') || sym.endsWith('-USD') && (sym.startsWith('BTC') || sym.startsWith('ETH') || sym.startsWith('SOL') || sym.startsWith('BNB') || sym.startsWith('XRP') || sym.startsWith('ADA') || sym.startsWith('DOGE'));
+    let sentLabel = 'No disponible', sentValue = null, sentSource = '';
+    if (isCrypto && sentiment.cfg != null) {
+      sentValue = sentiment.cfg;
+      sentSource = 'Crypto F&G';
+      if (sentValue < 25) sentLabel = '🔴 Miedo extremo';
+      else if (sentValue < 45) sentLabel = '🟠 Miedo';
+      else if (sentValue <= 55) sentLabel = '⚪ Neutral';
+      else if (sentValue <= 75) sentLabel = '🟢 Codicia';
+      else sentLabel = '🟡 Codicia extrema';
+    } else if (!isCrypto && sentiment.score != null) {
+      sentValue = sentiment.score;
+      sentSource = 'Termómetro global';
+      sentLabel = sentimentLabel(sentValue);
+    }
+
     const fmt = (v, dec=1, suffix='%') => v == null ? 'N/D' : (v >= 0 && suffix === '%' ? '+' : '') + v.toFixed(dec) + suffix;
     const cls = v => v == null ? '' : v >= 0 ? 'sc-pos' : 'sc-neg';
     const pcrInterp = pcr ? (pcr.ratio > 1.1 ? 'Posicionamiento bajista (cobertura alta)' : pcr.ratio < 0.7 ? 'Posicionamiento alcista' : 'Posicionamiento neutral') : '';
@@ -1993,6 +2010,7 @@ async function runAnalyzer() {
           <div class="kpi-card"><div class="kpi-label">Beta vs S&P 500</div><div class="kpi-value">${k.beta == null ? 'N/D' : k.beta.toFixed(2)}</div><div class="kpi-sub">${k.beta == null ? '' : k.beta > 1.3 ? 'Amplifica al mercado' : k.beta > 0.7 ? 'Acompaña al mercado' : k.beta > 0.2 ? 'Defensivo' : 'Descorrelacionado'}</div></div>
           <div class="kpi-card"><div class="kpi-label">Retorno / Volatilidad</div><div class="kpi-value ${cls(k.retVol)}">${k.retVol == null ? 'N/D' : k.retVol.toFixed(2)}</div><div class="kpi-sub">Rendimiento 12m por unidad de riesgo</div></div>
           <div class="kpi-card"><div class="kpi-label">Put/Call ratio (OI)</div><div class="kpi-value">${pcr ? pcr.ratio.toFixed(2) : 'N/D'}</div><div class="kpi-sub">${pcr ? pcrInterp : 'No disponible para este activo'}</div></div>
+          <div class="kpi-card"><div class="kpi-label">Sentimiento aplicable</div><div class="kpi-value">${sentValue == null ? 'N/D' : sentValue.toFixed(0) + '/100'}</div><div class="kpi-sub">${sentValue == null ? '' : sentLabel + ' · ' + sentSource}</div></div>
           <div class="kpi-card"><div class="kpi-label">Encaje régimen actual</div><div class="kpi-value">${regimeFit == null ? 'N/D' : regimeFit + '/100'}</div><div class="kpi-sub">${regimeFit == null ? 'Activo fuera del universo mapeado — score sin componente de régimen (50 neutro)' : 'Régimen: ' + REGIME_LABELS[currentRegimeKey]}</div></div>
         </div>
       </div>`;
@@ -2126,17 +2144,29 @@ function renderScreener() {
   const catLabels = { indices: 'ÍNDICE', sectores: 'SECTOR', rf: 'RF', commodities: 'CMDTY', crypto: 'CRYPTO', fx: 'FX' };
   const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'sc-pos' : 'sc-neg'}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
 
-  // Global sentiment cell (same value for all rows — informative, not part of score)
-  const sentCell = () => {
-    const s = sentiment.score;
+  // Sentiment cell — Crypto F&G for BTC/ETH, global thermometer for the rest
+  const sentCell = (cat) => {
+    const isCrypto = cat === 'crypto';
+    const s = isCrypto ? sentiment.cfg : sentiment.score;
     if (s == null) return '<span style="color:var(--text3);">—</span>';
-    let color = 'var(--yellow)';
-    if (s < 25) color = 'var(--red)';
-    else if (s > 75) color = 'var(--yellow)';
-    else if (s >= 40 && s <= 60) color = 'var(--text2)';
-    else if (s >= 25) color = 'var(--green)';
-    const label = sentimentLabel(s);
-    return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="${label} (${s.toFixed(0)}/100)"></span>`;
+    let color, label;
+    if (isCrypto) {
+      // Crypto F&G: <25 fear (good for entries), >75 greed (caution), middle = neutral green
+      if (s < 25) { color = 'var(--red)'; label = 'Miedo extremo cripto'; }
+      else if (s < 45) { color = 'var(--orange)'; label = 'Miedo cripto'; }
+      else if (s <= 55) { color = 'var(--text2)'; label = 'Neutral cripto'; }
+      else if (s <= 75) { color = 'var(--green)'; label = 'Codicia cripto'; }
+      else { color = 'var(--yellow)'; label = 'Codicia extrema cripto'; }
+      return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="₿ ${label} (${s}/100)"></span>`;
+    } else {
+      if (s < 25) color = 'var(--red)';
+      else if (s > 75) color = 'var(--yellow)';
+      else if (s >= 40 && s <= 60) color = 'var(--text2)';
+      else if (s >= 25 && s < 40) color = 'var(--orange)';
+      else color = 'var(--green)';
+      label = sentimentLabel(s);
+      return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="${label} (${s.toFixed(0)}/100)"></span>`;
+    }
   };
 
   body.innerHTML = rows.map(r => {
@@ -2154,7 +2184,7 @@ function renderScreener() {
       <td>${r.beta == null ? '—' : r.beta.toFixed(2)}</td>
       <td>${r.retVol == null ? '—' : r.retVol.toFixed(2)}</td>
       <td>${r.fit}/100</td>
-      <td>${sentCell()}</td>
+      <td>${sentCell(r.cat)}</td>
       <td><span class="score-pill" style="background:${col.bg};color:${col.fg};border:1px solid ${col.bd};">${r.score.toFixed(0)}</span></td>
     </tr>`;
   }).join('');
