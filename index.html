@@ -283,6 +283,59 @@
   .bt-table td:first-child{text-align:left;color:var(--text)}
   .bt-warn{padding:10px 14px;border-radius:4px;background:var(--yellow-dim);border:1px solid var(--yellow-border);color:var(--yellow);font-size:10px;line-height:1.6;margin-bottom:14px}
 
+  /* TAB NAV */
+  .tab-nav{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--border)}
+  .tab-btn{font-family:var(--sans);font-size:12px;padding:11px 22px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;transition:all .15s}
+  .tab-btn:hover{color:var(--text)}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab-content{display:none}
+  .tab-content.active{display:block;animation:fadeUp .3s ease both}
+
+  /* PENSION TAB */
+  .pen-info{padding:18px 22px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin-bottom:24px;font-size:11px;line-height:1.7;color:var(--text2)}
+  .pen-info b{color:var(--text)}
+  .pen-info-from-macro{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2);font-size:10px;letter-spacing:.5px}
+  .pen-info-from-macro .lbl{color:var(--text3);text-transform:uppercase;font-size:9px}
+  .pen-info-from-macro .val{font-family:var(--sans);font-weight:700}
+
+  .pen-table-wrap{overflow-x:auto}
+  .pen-table{width:100%;border-collapse:collapse;font-size:10.5px;min-width:1200px}
+  .pen-table th{position:sticky;top:0;text-align:right;padding:10px 10px;background:var(--bg3);color:var(--text2);font-weight:700;letter-spacing:.5px;font-size:9px;text-transform:uppercase;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+  .pen-table th:hover{color:var(--accent)}
+  .pen-table th.sorted{color:var(--accent)}
+  .pen-table th:first-child,.pen-table td:first-child{text-align:left}
+  .pen-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text2);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pen-table tr.expandable{cursor:pointer}
+  .pen-table tr.expandable:hover td{background:var(--bg3)}
+  .pen-name{color:var(--text);font-weight:700}
+  .pen-sub{font-size:9px;color:var(--text3);display:block;margin-top:2px}
+  .pen-cat-tag{font-size:8px;padding:1px 6px;border-radius:2px;border:1px solid var(--border2);color:var(--text3);letter-spacing:.5px;margin-right:5px}
+  .pen-fmc{font-family:var(--mono);color:var(--text);font-weight:700}
+  .pen-fmc.high{color:var(--red)}
+  .pen-fmc.med{color:var(--yellow)}
+  .pen-detail-row{display:none}
+  .pen-detail-row.open{display:table-row}
+  .pen-detail-row td{background:var(--bg);padding:18px 22px;border-bottom:2px solid var(--accent)}
+  .pen-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;text-align:left;font-variant-numeric:normal}
+  .pen-detail-block{background:var(--bg2);padding:12px 14px;border-radius:4px;border:1px solid var(--border)}
+  .pen-detail-label{font-size:9px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+  .pen-detail-value{font-size:11px;color:var(--text);line-height:1.6}
+
+  .pen-reco{border:1px solid var(--border2);border-radius:6px;background:var(--bg2);padding:22px;margin-bottom:24px}
+  .pen-reco-title{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:12px}
+  .pen-reco-regime{font-family:var(--sans);font-size:18px;font-weight:800;margin-bottom:8px}
+  .pen-reco-desc{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:14px}
+  .pen-reco-list{display:flex;flex-direction:column;gap:8px}
+  .pen-reco-line{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2);font-size:11px}
+  .pen-reco-pct{font-family:var(--sans);font-weight:800;font-size:14px;min-width:48px;color:var(--accent)}
+  .pen-reco-fund{flex:1;color:var(--text)}
+  .pen-reco-fund-meta{font-size:9px;color:var(--text2);display:block;margin-top:2px}
+
+  .pen-chart-wrap{padding:18px;height:380px;position:relative}
+  .pen-chart-wrap canvas{width:100%!important;height:100%!important}
+  .pen-chart-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,18,.7);z-index:5;font-size:12px;color:var(--text2);gap:8px}
+  .pen-chart-loading.hidden{display:none}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -306,6 +359,15 @@
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
     </div>
   </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="macro" onclick="switchTab('macro')">🌐 Macro Dashboard</button>
+    <button class="tab-btn" data-tab="pension" onclick="switchTab('pension')">🇬🇧 Pensión L&G</button>
+  </div>
+
+  <!-- TAB: MACRO -->
+  <div class="tab-content active" id="tab-macro">
 
   <!-- REGIME PANEL -->
   <div class="regime-panel">
@@ -1001,6 +1063,85 @@ Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
     <div id="bt-output"><div class="bt-empty">Pulsa "Ejecutar backtest" — la primera vez descarga ~30 series históricas (~40s); después queda cacheado en localStorage.</div></div>
   </div>
 
+  </div>
+  <!-- END TAB MACRO -->
+
+  <!-- TAB: PENSIÓN L&G -->
+  <div class="tab-content" id="tab-pension">
+
+    <div class="pen-info">
+      Análisis específico de los <b>16 fondos disponibles</b> en tu plan de pensiones Airbus/Legal & General. Datos extraídos de los factsheets a 30 abril 2026 (Equity, Multi-asset, Property, Cash) y 31 marzo 2026 (Fixed interest, Airbus Growth). El régimen macro detectado en la otra pestaña determina el encaje y la asignación recomendada.
+      <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div class="pen-info-from-macro"><span class="lbl">Régimen vigente</span><span class="val" id="pen-current-regime" style="color:var(--text3);">Calculando...</span></div>
+        <div class="pen-info-from-macro"><span class="lbl">Sentimiento</span><span class="val" id="pen-current-senti" style="color:var(--text3);">—</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Recomendación específica L&G según régimen</div>
+    <div class="pen-reco">
+      <div class="pen-reco-title">📍 Asignación orientativa</div>
+      <div class="pen-reco-regime" id="pen-reco-regime" style="color:var(--text3);">Cargando...</div>
+      <div class="pen-reco-desc" id="pen-reco-desc">Los fondos se eligen combinando el régimen macro vigente con el encaje específico de cada fondo L&G, priorizando bajo FMC dentro de cada categoría.</div>
+      <div class="pen-reco-list" id="pen-reco-list"></div>
+    </div>
+
+    <div class="section-title">Tu universo de fondos · 16 opciones</div>
+    <div class="chart-section">
+      <div class="chart-controls">
+        <span class="ctrl-label">Categoría:</span>
+        <button class="cat-btn active" data-pcat="all" onclick="setPenCat(this)">Todas</button>
+        <button class="cat-btn" data-pcat="Equity" onclick="setPenCat(this)">Equity</button>
+        <button class="cat-btn" data-pcat="Multi-asset" onclick="setPenCat(this)">Multi-asset</button>
+        <button class="cat-btn" data-pcat="Fixed interest" onclick="setPenCat(this)">Fixed interest</button>
+        <button class="cat-btn" data-pcat="Property" onclick="setPenCat(this)">Property</button>
+        <button class="cat-btn" data-pcat="Cash" onclick="setPenCat(this)">Cash</button>
+      </div>
+      <div class="pen-table-wrap">
+        <table class="pen-table" id="pen-table">
+          <thead><tr id="pen-head"></tr></thead>
+          <tbody id="pen-body"></tbody>
+        </table>
+      </div>
+      <div class="screener-meta">
+        <span>Score = 30% rentabilidad histórica · 20% consistencia · 50% encaje régimen · FMC = comisión de gestión anual aplicada · Click en fila para ver detalles · Click en cabeceras para ordenar</span>
+      </div>
+    </div>
+
+    <div class="section-title">Chart en tiempo real (benchmark proxy)</div>
+    <div class="chart-section">
+      <div class="chart-controls" id="pen-chart-toggles">
+        <span class="ctrl-label">Fondos:</span>
+        <span class="ctrl-divider" id="pen-toggle-end"></span>
+        <button class="ctrl-btn-all" onclick="setPenChartAll(true)">Todos</button>
+        <button class="ctrl-btn-all" onclick="setPenChartAll(false)">Ninguno</button>
+      </div>
+      <div class="chart-controls">
+        <span class="ctrl-label">Histórico:</span>
+        <button class="range-btn" data-pen-years="1" onclick="setPenChartRange(this)">1A</button>
+        <button class="range-btn active" data-pen-years="2" onclick="setPenChartRange(this)">2A</button>
+        <button class="range-btn" data-pen-years="5" onclick="setPenChartRange(this)">5A</button>
+        <button class="range-btn" data-pen-years="10" onclick="setPenChartRange(this)">10A</button>
+        <button class="range-btn" data-pen-years="25" onclick="setPenChartRange(this)">25A</button>
+        <span class="ctrl-divider"></span>
+        <span class="ctrl-label">Vista:</span>
+        <button class="freq-btn" data-pen-freq="d" onclick="setPenChartFreq(this)">Diaria</button>
+        <button class="freq-btn" data-pen-freq="w" onclick="setPenChartFreq(this)">Semanal</button>
+        <button class="freq-btn active" data-pen-freq="m" onclick="setPenChartFreq(this)">Mensual</button>
+        <span class="ctrl-divider"></span>
+        <span class="ctrl-label">Escala:</span>
+        <button class="range-btn" data-pen-scale="linear" onclick="setPenChartScale(this)">Lineal</button>
+        <button class="range-btn active" data-pen-scale="log" onclick="setPenChartScale(this)">Log</button>
+      </div>
+      <div class="pen-chart-wrap">
+        <div class="pen-chart-loading hidden" id="pen-chart-loading"><span class="spinner"></span> Cargando datos...</div>
+        <canvas id="pen-chart-canvas"></canvas>
+      </div>
+      <div class="chart-note">Cada fondo se representa con el <b>precio de su benchmark proxy</b> (ETF cotizado equivalente) ya que los fondos PMC institucionales no cotizan en Yahoo. Los precios reales del fondo siguen al benchmark con una pequeña tracking difference (~0.1-0.5%/año por FMC). Para fondos activos (CT Responsible, Veritas, Airbus Growth) el proxy es menos preciso pero da la dirección. Normalizado a base 100 al inicio del periodo.</div>
+    </div>
+
+  </div>
+  <!-- END TAB PENSIÓN -->
+
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-note">
@@ -1556,6 +1697,11 @@ async function loadCards() {
 
   updateRegime();
   renderSentiment(); // re-render tactic with final regime
+  // Sync pension tab data even if user hasn't opened it yet (for when they do)
+  computePensionScores();
+  if (document.getElementById('tab-pension').classList.contains('active')) {
+    syncPensionFromMacro();
+  }
   btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
 }
 
@@ -2525,38 +2671,479 @@ function renderBacktest(r) {
           `<tr><td>${REGIME_LABELS[k] || k}</td><td>${v}</td><td>${(v/(r.years*12)*100).toFixed(1)}%</td></tr>`
         ).join('')}
       </table>
-      <div style="font-size:10px;color:var(--text2);margin:18px 0 8px;letter-spacing:1px;text-transform:uppercase;">Últimas 12 decisiones del sistema</div>
-      <table class="bt-table">
-        <tr><th>Mes</th><th>Régimen</th><th>Holdings</th></tr>
-        ${r.holdingsLog.slice(-12).reverse().map(h =>
+      <div style="font-size:10px;color:var(--text2);margin:18px 0 8px;letter-spacing:1px;text-transform:uppercase;">Histórico completo de decisiones · ${r.holdingsLog.length} meses</div>
+      <div style="max-height:420px;overflow-y:auto;border:1px solid var(--border);border-radius:4px;">
+      <table class="bt-table" style="margin:0;">
+        <thead style="position:sticky;top:0;z-index:2;"><tr><th style="background:var(--bg3);">Mes</th><th style="background:var(--bg3);">Régimen</th><th style="background:var(--bg3);">Holdings</th></tr></thead>
+        <tbody>
+        ${r.holdingsLog.slice().reverse().map(h =>
           `<tr><td>${h.ym}</td><td>${REGIME_LABELS[h.regime] || h.regime}</td><td>${h.holdings}</td></tr>`
         ).join('')}
+        </tbody>
       </table>
+      </div>
     </div>
   `;
 
   if (btState.chart) btState.chart.destroy();
   const ctx = document.getElementById('bt-canvas').getContext('2d');
-  const opts = baseOptions('Equity (base 100)');
-  opts.scales.y.type = 'logarithmic';
-  opts.scales.y.ticks.callback = v => {
-    const log = Math.log10(v);
-    if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
-      return v >= 1000 ? (v/1000) + 'k' : v;
-    }
-    return null;
+  // Transform equity (base 100) → % profit (base 0)
+  const stratPct = r.equity.strat.map(p => ({ x: p.x, y: p.y - 100 }));
+  const benchPct = r.equity.bench.map(p => ({ x: p.x, y: p.y - 100 }));
+  const opts = baseOptions('Beneficio acumulado (%)');
+  opts.scales.y.ticks.callback = v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%';
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`
   };
   opts.plugins.legend = { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 10 } } };
   btState.chart = new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [
-        { label: strategyLabels[btState.strat], data: r.equity.strat, borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.2 },
-        { label: 'S&P 500 buy & hold', data: r.equity.bench, borderColor: '#7e93ab', backgroundColor: '#7e93ab', borderWidth: 1.5, pointRadius: 0, tension: 0.2, borderDash: [4, 4] },
+        { label: strategyLabels[btState.strat], data: stratPct, borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.2 },
+        { label: 'S&P 500 buy & hold', data: benchPct, borderColor: '#7e93ab', backgroundColor: '#7e93ab', borderWidth: 1.5, pointRadius: 0, tension: 0.2, borderDash: [4, 4] },
       ]
     },
     options: opts
   });
+}
+
+// ─── TAB SWITCHING ───────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-' + tab));
+  if (tab === 'pension') {
+    syncPensionFromMacro();
+    if (!pensionState.chartLoaded) loadPenChart();
+  }
+}
+
+// ─── PENSION TAB ─────────────────────────────────────────────────────────────
+// 16 funds available in Airbus / L&G workplace pension scheme
+// fit = encaje por régimen (0-100). proxy = Yahoo ticker for benchmark.
+const LG_FUNDS = [
+  // Equity (10)
+  { name: 'L&G World (ex UK) Equity Index', cat: 'Equity', fmc: 0.12, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QBYH95', code: 'NED3', benchmark: 'FTSE World ex UK Index', launch: '14 May 2004', size: '£1,907m', aim: 'Tracks FTSE World (ex UK) Index dentro de ±0.50%. Core de RV global desarrollada — 68% USA, large/mid cap.', perf: { y1: 30.30, y3: 17.54, y5: 11.99 }, annual: [17.03, 3.37, 24.23, -3.63, 16.33], fit: { expansion: 92, overheat: 50, stagflation: 22, deflation: 28 } },
+  { name: 'Airbus Growth Fund', cat: 'Equity', fmc: 0.06, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPM3', benchmark: 'Composite global growth', launch: 'Mar 2021', size: '£284m', aim: 'Fondo gestor del esquema Airbus. Mix global growth, 61% USA, peso tech alto. FMC ultra-bajo (0.06%) por economías de escala del esquema.', perf: { y1: 15.18, y3: 14.01, y5: 10.40 }, annual: [15.18, 4.73, 22.87, -3.20, 14.31], fit: { expansion: 90, overheat: 45, stagflation: 18, deflation: 28 } },
+  { name: 'L&G UK Equity Index', cat: 'Equity', fmc: 0.10, proxy: 'ISF.L', proxyName: 'iShares Core FTSE 100 UCITS', isin: 'GB00B4MV7743', code: 'NBC3', benchmark: 'FTSE All-Share Index', launch: '14 May 2004', size: '£588m', aim: 'Tracks FTSE All-Share. Solo UK (incluye small/mid caps). Sesgo a value, dividendo, energía y financiero.', perf: { y1: 24.69, y3: 13.13, y5: 10.78 }, annual: [22.84, 9.92, 7.73, 2.34, null], fit: { expansion: 75, overheat: 75, stagflation: 35, deflation: 22 } },
+  { name: 'L&G Global Equity 50-50', cat: 'Equity', fmc: 0.10, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QVNX86', code: 'NDZ3', benchmark: '50% UK / 50% World ex UK', launch: '14 May 2004', size: '£718m', aim: '50% UK + 50% global desarrollados. Sesgo UK más fuerte que el World ex UK puro.', perf: { y1: 27.51, y3: null, y5: null }, annual: [21.57, 5.64, 13.58, 1, null], fit: { expansion: 82, overheat: 60, stagflation: 28, deflation: 25 } },
+  { name: 'L&G Global Fossil Fuel Exclusions', cat: 'Equity', fmc: 0.16, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPX3', benchmark: 'Solactive L&G ESG Developed', launch: 'Mar 2021', size: '£75m', aim: 'Replica RV global desarrollada excluyendo combustibles fósiles. Underperforma cuando energía lidera (Sobrecalentamiento).', perf: { y1: 13.88, y3: 13.06, y5: 10.17 }, annual: [null, null, null, null, null], fit: { expansion: 88, overheat: 30, stagflation: 18, deflation: 28 } },
+  { name: 'L&G HSBC Islamic Global Equity', cat: 'Equity', fmc: 0.20, proxy: 'ISDE.L', proxyName: 'iShares MSCI World Islamic UCITS', isin: 'GB00BD1JRG10', code: 'BB43', benchmark: 'Dow Jones Islamic Market Titans 100', launch: '23 Sep 2011', size: '£612m', aim: 'Sharia: excluye bancos, alcohol, juego, cerdo, armas. Concentra en tech y salud → behavior estructural más cercano a Nasdaq que a MSCI World.', perf: { y1: 36.70, y3: 21.03, y5: null }, annual: [17.33, 3.57, 32.15, -5.85, null], fit: { expansion: 95, overheat: 40, stagflation: 15, deflation: 30 } },
+  { name: 'L&G World Emerging Markets', cat: 'Equity', fmc: 0.26, proxy: 'EEM', proxyName: 'iShares MSCI Emerging Markets', isin: 'GB00B4XB7L79', code: 'NQM3', benchmark: 'FTSE Emerging Index', launch: '15 Mar 2010', size: '£169m', aim: 'Tracks FTSE Emerging. Beta alta al ciclo global, sensible a USD débil y commodities.', perf: { y1: 29.01, y3: 13.52, y5: 5.29 }, annual: [17.41, 8.14, 5.72, -4.90, -3.46], fit: { expansion: 88, overheat: 70, stagflation: 25, deflation: 12 } },
+  { name: 'L&G Ethical Global Equity Index', cat: 'Equity', fmc: 0.30, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4LNM547', code: 'NEB3', benchmark: 'FTSE4Good Developed Index', launch: '14 May 2004', size: '£491m', aim: 'Tracks FTSE4Good (exclusiones éticas). FMC 3× más alto que el World ex UK por el filtro ético.', perf: { y1: 31.49, y3: 17, y5: null }, annual: [17.22, 2.46, 23.52, -1, null], fit: { expansion: 88, overheat: 45, stagflation: 20, deflation: 28 } },
+  { name: 'L&G Veritas Global Focus', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB00BD1JSW43', code: 'BN73', benchmark: 'Composite', launch: '28 Sep 2017', size: '£5m', aim: 'GESTIÓN ACTIVA. Cartera concentrada de empresas globales. FMC 0.74% — 6× el de un índice. Underperformance reciente vs benchmark (-7.09% 2026 vs +17% del MSCI World).', perf: { y1: 0.39, y3: 4.77, y5: null }, annual: [-7.09, 2.72, 17.44, null, null], fit: { expansion: 70, overheat: 45, stagflation: 30, deflation: 35 } },
+  { name: 'L&G CT Responsible Global Equity', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB0033145045', code: 'B4M3', benchmark: 'MSCI ACWI ESG focus', launch: '26 Oct 2018', size: '£29m', aim: 'GESTIÓN ACTIVA ESG. FMC 0.74%. Underperformance reciente vs benchmark MSCI World (+14.60% vs +27%).', perf: { y1: 14.60, y3: 7, y5: null }, annual: [2.88, -4.12, 16.31, -5.38, 9.84], fit: { expansion: 80, overheat: 40, stagflation: 25, deflation: 32 } },
+  // Multi-asset (1)
+  { name: 'L&G Diversified Fund', cat: 'Multi-asset', fmc: 0.26, propExp: 0.05, proxy: 'AOM', proxyName: 'iShares Moderate Allocation (40/60 RV/RF)', isin: 'GB00B8KLQD32', code: 'NWW3', benchmark: 'Mixed Investment 20-60% Shares', launch: '18 Oct 2012', size: '£226m', aim: 'Multi-activo 20-60% RV. Diseñado para crecimiento moderado con menor volatilidad que RV pura.', perf: { y1: 16.09, y3: 9.23, y5: 5.02 }, annual: [11.33, 4.47, 8.76, -5.69, 6.16], fit: { expansion: 70, overheat: 55, stagflation: 45, deflation: 60 } },
+  // Fixed interest (4)
+  { name: 'L&G Over 15 Year Gilts Index', cat: 'Fixed interest', fmc: 0.08, proxy: 'IGLT.L', proxyName: 'iShares Core UK Gilts UCITS', isin: 'GB00B4NH9G49', code: 'NBR3', benchmark: 'FTSE A Gov Over 15Y', launch: '14 May 2004', size: '£58m', aim: 'Gilts UK larga duración. Equivalente UK del TLT. Sufre con tipos al alza; explota cuando los recortan.', perf: { y1: -3.46, y3: -3.63, y5: -11.06 }, annual: [-0.23, -7.33, -4.82, -29.88, -7.92], fit: { expansion: 35, overheat: 5, stagflation: 18, deflation: 95 } },
+  { name: 'L&G AAA-AA-A Corp Bond Over 15Y', cat: 'Fixed interest', fmc: 0.12, proxy: 'SLXX.L', proxyName: 'iShares Core £ Corp Bond UCITS', isin: 'GB00B4NHFN30', code: 'NEK3', benchmark: 'iBoxx £ Non-Gilts ex-BBB Over 15Y', launch: '14 May 2004', size: '£20m', aim: 'Bonos corporativos UK calidad alta, duración larga. Mezcla riesgo de tipos (negativo) + crédito (positivo en expansión).', perf: { y1: -0.16, y3: -0.32, y5: -7.91 }, annual: [0.59, -4.78, 3.31, -25.44, -9.80], fit: { expansion: 40, overheat: 10, stagflation: 20, deflation: 88 } },
+  { name: 'L&G Over 5 Year Index Linked Gilts', cat: 'Fixed interest', fmc: 0.08, proxy: 'INXG.L', proxyName: 'iShares £ Index-Linked Gilts UCITS', isin: 'GB00B3RQR779', code: 'NEC3', benchmark: 'FTSE A Index-Linked Over 5Y', launch: '14 May 2004', size: '£35m', aim: 'Gilts UK ligados a inflación (linkers). Combina duración + protección inflación. Equivalente UK de los TIPS.', perf: { y1: 1.11, y3: null, y5: null }, annual: [2.61, -9.33, -7.89, -29.46, null], fit: { expansion: 45, overheat: 70, stagflation: 78, deflation: 55 } },
+  { name: 'Airbus Short Dated Credit', cat: 'Fixed interest', fmc: 0.16, proxy: 'IS15.L', proxyName: 'iShares £ Corp Bond 0-5yr UCITS', isin: null, code: 'BPN3', benchmark: 'SONIA 3-month + 1.5%', launch: 'Mar 2021', size: '£0.2m', aim: 'Crédito corto plazo (1-3 años). Defensivo: poco riesgo de tipos y poco crédito. Alternativa a Cash con algo más de yield.', perf: { y1: 4.27, y3: 5.41, y5: 2.30 }, annual: [4.27, 5.54, 6.43, -2.42, -1], fit: { expansion: 40, overheat: 40, stagflation: 65, deflation: 70 } },
+  // Property (1)
+  { name: 'L&G Sustainable Property Fund', cat: 'Property', fmc: 0.55, propExp: 1.14, proxy: 'IPRP.L', proxyName: 'iShares European Property UCITS', isin: 'GB00BGYBWM68', code: 'B5N3', benchmark: 'ABI Property sector', launch: '26 Oct 2018', size: '£40m', aim: 'Inmobiliario directo UK + REITs globales. COSTE TOTAL ≈ 1.69% (FMC 0.55% + Property Expense 1.14%). El más caro del lote.', perf: { y1: 5.42, y3: 5.97, y5: 2.76 }, annual: [5.63, 4.74, 1.42, -13.93, 11.51], fit: { expansion: 65, overheat: 75, stagflation: 50, deflation: 35 } },
+  // Cash (1)
+  { name: 'L&G PMC Cash Fund', cat: 'Cash', fmc: 0.09, proxy: 'IGLS.L', proxyName: 'iShares £ Gilts 0-5yr UCITS', isin: 'GB00B4VD0B60', code: 'EAB3', benchmark: 'SONIA', launch: '21 Dec 1977', size: '£1,069m', aim: 'Monetario UK. Preserva capital con yield acorde a tipos cortos. FMC mínimo. Defensivo absoluto.', perf: { y1: 4.03, y3: 4.77, y5: null }, annual: [4.09, 5.10, 5.12, 2.23, 0.05], fit: { expansion: 25, overheat: 40, stagflation: 75, deflation: 80 } },
+];
+
+const pensionState = {
+  cat: 'all',
+  sort: { key: 'score', dir: -1 },
+  expanded: null,
+  chartLoaded: false,
+  chartYears: 2,
+  chartFreq: 'm',
+  chartScale: 'log',
+  chartHidden: {},
+  chart: null,
+};
+
+function syncPensionFromMacro() {
+  const reg = REGIME_LABELS[currentRegimeKey] || 'Calculando...';
+  const colorMap = { expansion: 'var(--green)', overheat: 'var(--orange)', stagflation: 'var(--red)', deflation: 'var(--blue)', neutral: 'var(--text2)' };
+  const el = document.getElementById('pen-current-regime');
+  if (el) { el.textContent = reg; el.style.color = colorMap[currentRegimeKey] || 'var(--text2)'; }
+  const senti = document.getElementById('pen-current-senti');
+  if (senti && sentiment.score != null) {
+    senti.textContent = sentimentLabel(sentiment.score) + ' (' + sentiment.score.toFixed(0) + '/100)';
+    senti.style.color = sentiment.score < 25 ? 'var(--red)' : sentiment.score > 75 ? 'var(--yellow)' : 'var(--text)';
+  }
+  computePensionScores();
+  renderPensionTable();
+  renderPensionReco();
+}
+
+// ─── PENSION SCORING ─────────────────────────────────────────────────────────
+// Adapted weights: 30% historical perf, 20% consistency (low stddev), 50% regime fit
+function computePensionScores() {
+  LG_FUNDS.forEach(f => {
+    // Historical perf score: weight y1 .2, y3 .35, y5 .45 (similar to momentum)
+    const perfVals = [f.perf.y1, f.perf.y3, f.perf.y5].filter(v => v != null);
+    let perfScore = 50;
+    if (perfVals.length) {
+      const w = [0.20, 0.35, 0.45].slice(0, perfVals.length);
+      const wSum = w.reduce((a,b)=>a+b, 0);
+      const wAvg = perfVals.reduce((s, v, i) => s + v * w[i], 0) / wSum;
+      perfScore = Math.max(0, Math.min(100, 50 + wAvg * 2));
+    }
+
+    // Consistency score: lower stddev of annual returns = higher score
+    const annualVals = f.annual.filter(v => v != null && typeof v === 'number');
+    let consScore = 50;
+    if (annualVals.length >= 3) {
+      const mean = annualVals.reduce((a,b)=>a+b, 0) / annualVals.length;
+      const variance = annualVals.reduce((a,b) => a + (b - mean)**2, 0) / annualVals.length;
+      const sd = Math.sqrt(variance);
+      // sd 0 → 100, sd 20+ → 0
+      consScore = Math.max(0, Math.min(100, 100 - sd * 5));
+    }
+
+    // Regime fit
+    const fit = currentRegimeKey === 'neutral' ? 50 : (f.fit[currentRegimeKey] ?? 50);
+    f._perfScore = perfScore;
+    f._consScore = consScore;
+    f._fitScore = fit;
+    f._score = 0.30 * perfScore + 0.20 * consScore + 0.50 * fit;
+  });
+}
+
+function fmcClass(fmc) {
+  if (fmc >= 0.5) return 'high';
+  if (fmc >= 0.25) return 'med';
+  return '';
+}
+
+const PEN_COLS = [
+  { key: 'name', label: 'Fondo' },
+  { key: 'fmc', label: 'FMC' },
+  { key: 'perfY1', label: '1A %' },
+  { key: 'perfY3', label: '3A %' },
+  { key: 'perfY5', label: '5A %' },
+  { key: 'y2022', label: '2022 %' },
+  { key: '_perfScore', label: 'Rent.' },
+  { key: '_consScore', label: 'Cons.' },
+  { key: '_fitScore', label: 'Régimen' },
+  { key: '_score', label: 'Score' },
+];
+
+function setPenCat(btn) {
+  pensionState.cat = btn.dataset.pcat;
+  document.querySelectorAll('[data-pcat]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPensionTable();
+}
+
+function sortPen(key) {
+  if (pensionState.sort.key === key) pensionState.sort.dir *= -1;
+  else pensionState.sort = { key, dir: -1 };
+  renderPensionTable();
+}
+
+function togglePenDetail(idx) {
+  pensionState.expanded = pensionState.expanded === idx ? null : idx;
+  renderPensionTable();
+}
+
+function renderPensionTable() {
+  const head = document.getElementById('pen-head');
+  const body = document.getElementById('pen-body');
+  if (!head || !body) return;
+
+  head.innerHTML = PEN_COLS.map(c =>
+    `<th class="${pensionState.sort.key === c.key ? 'sorted' : ''}" onclick="sortPen('${c.key}')">${c.label}${pensionState.sort.key === c.key ? (pensionState.sort.dir > 0 ? ' ▲' : ' ▼') : ''}</th>`
+  ).join('');
+
+  let rows = LG_FUNDS.filter(f => pensionState.cat === 'all' || f.cat === pensionState.cat);
+  const sk = pensionState.sort.key, d = pensionState.sort.dir;
+  rows.sort((a, b) => {
+    let va, vb;
+    if (sk === 'name') { va = a.name; vb = b.name; return d * va.localeCompare(vb); }
+    if (sk === 'fmc') { va = a.fmc; vb = b.fmc; }
+    else if (sk === 'perfY1') { va = a.perf.y1; vb = b.perf.y1; }
+    else if (sk === 'perfY3') { va = a.perf.y3; vb = b.perf.y3; }
+    else if (sk === 'perfY5') { va = a.perf.y5; vb = b.perf.y5; }
+    else if (sk === 'y2022') { va = a.annual[4]; vb = b.annual[4]; }
+    else { va = a[sk]; vb = b[sk]; }
+    return d * ((va ?? -Infinity) - (vb ?? -Infinity));
+  });
+
+  const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'sc-pos' : 'sc-neg'}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
+
+  body.innerHTML = rows.map((f, i) => {
+    const idx = LG_FUNDS.indexOf(f);
+    const col = scoreColor(f._score);
+    const totalCost = f.propExp ? `${f.fmc.toFixed(2)}% <span style="color:var(--text3);">+ ${f.propExp}% prop</span>` : `${f.fmc.toFixed(2)}%`;
+    const propTotal = f.propExp ? ` <small style="color:var(--red);">(total ${(f.fmc + f.propExp).toFixed(2)}%)</small>` : '';
+    const expanded = pensionState.expanded === idx;
+    return `
+      <tr class="expandable" onclick="togglePenDetail(${idx})">
+        <td><span class="pen-name">${f.name}</span><span class="pen-sub"><span class="pen-cat-tag">${f.cat.toUpperCase()}</span>${f.code || ''} · ${f.proxyName}</span></td>
+        <td><span class="pen-fmc ${fmcClass(f.fmc + (f.propExp || 0))}">${totalCost}</span>${propTotal}</td>
+        <td>${fmtPct(f.perf.y1)}</td>
+        <td>${fmtPct(f.perf.y3)}</td>
+        <td>${fmtPct(f.perf.y5)}</td>
+        <td>${fmtPct(f.annual[4])}</td>
+        <td>${f._perfScore.toFixed(0)}</td>
+        <td>${f._consScore.toFixed(0)}</td>
+        <td>${f._fitScore}/100</td>
+        <td><span class="score-pill" style="background:${col.bg};color:${col.fg};border:1px solid ${col.bd};">${f._score.toFixed(0)}</span></td>
+      </tr>
+      <tr class="pen-detail-row ${expanded ? 'open' : ''}">
+        <td colspan="10">
+          <div class="pen-detail-grid">
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Objetivo del fondo</div>
+              <div class="pen-detail-value">${f.aim}</div>
+            </div>
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Datos básicos</div>
+              <div class="pen-detail-value">
+                <b>Benchmark:</b> ${f.benchmark}<br>
+                <b>ISIN:</b> ${f.isin || 'No disponible'}<br>
+                <b>Código L&G:</b> ${f.code || '—'}<br>
+                <b>Lanzamiento:</b> ${f.launch}<br>
+                <b>Tamaño:</b> ${f.size}
+              </div>
+            </div>
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Comisiones</div>
+              <div class="pen-detail-value">
+                <b>FMC:</b> ${f.fmc.toFixed(2)}%/año<br>
+                ${f.propExp ? `<b>Property expense:</b> ${f.propExp.toFixed(2)}%/año<br><b>Coste total:</b> <span style="color:var(--red);">${(f.fmc + f.propExp).toFixed(2)}%/año</span><br>` : ''}
+                <small style="color:var(--text3);">Rentabilidades del PDF ya descontada la FMC. Aplican charges adicionales del esquema Airbus (consultar T&C).</small>
+              </div>
+            </div>
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Rentabilidades anuales (Marzo)</div>
+              <div class="pen-detail-value" style="font-family:var(--mono);">
+                2026: ${f.annual[0] != null ? f.annual[0].toFixed(2) + '%' : '—'}<br>
+                2025: ${f.annual[1] != null ? f.annual[1].toFixed(2) + '%' : '—'}<br>
+                2024: ${f.annual[2] != null ? f.annual[2].toFixed(2) + '%' : '—'}<br>
+                2023: ${f.annual[3] != null ? f.annual[3].toFixed(2) + '%' : '—'}<br>
+                2022: ${f.annual[4] != null ? f.annual[4].toFixed(2) + '%' : '—'}
+              </div>
+            </div>
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Encaje por régimen (0-100)</div>
+              <div class="pen-detail-value" style="font-family:var(--mono);">
+                🟢 Expansión: <b>${f.fit.expansion}</b><br>
+                🟠 Sobrecalentamiento: <b>${f.fit.overheat}</b><br>
+                🔴 Estanflación: <b>${f.fit.stagflation}</b><br>
+                🔵 Recesión deflacionaria: <b>${f.fit.deflation}</b>
+              </div>
+            </div>
+            <div class="pen-detail-block">
+              <div class="pen-detail-label">Score actual desglosado</div>
+              <div class="pen-detail-value" style="font-family:var(--mono);">
+                Rentabilidad histórica (30%): <b>${f._perfScore.toFixed(0)}</b><br>
+                Consistencia (20%): <b>${f._consScore.toFixed(0)}</b><br>
+                Encaje régimen actual (50%): <b>${f._fitScore}</b><br>
+                <b style="color:var(--accent);">Score total: ${f._score.toFixed(1)}/100</b>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ─── RECOMMENDATION ──────────────────────────────────────────────────────────
+const REGIME_RECO = {
+  expansion: {
+    title: '🟢 EXPANSIÓN — Maximizar exposición RV',
+    desc: 'Régimen risk-on: la RV growth global lidera. Prioriza fondos World ex UK y similares con FMC bajo. Evita gilts largos y cash.',
+    targets: [
+      { matcher: f => f.cat === 'Equity' && f.proxy === 'IWRD.L' && f.fmc < 0.2 && !f.name.includes('Veritas') && !f.name.includes('CT Responsible') && !f.name.includes('Ethical'), pct: 50, role: 'Core RV global' },
+      { matcher: f => f.cat === 'Equity' && f.name.includes('Emerging'), pct: 15, role: 'Satélite emergentes' },
+      { matcher: f => f.cat === 'Equity' && (f.name.includes('Islamic') || f.name.includes('Fossil Fuel')), pct: 15, role: 'Sesgo tech/growth alternativo' },
+      { matcher: f => f.cat === 'Multi-asset', pct: 15, role: 'Estabilizador' },
+      { matcher: f => f.cat === 'Cash', pct: 5, role: 'Pólvora seca' },
+    ]
+  },
+  overheat: {
+    title: '🟠 SOBRECALENTAMIENTO — Rotar a sectores con pricing power',
+    desc: 'Inflación calentándose con crecimiento aún positivo. UK Equity tiene más peso en energía/materiales/financiero. Index-Linked Gilts protege contra inflación.',
+    targets: [
+      { matcher: f => f.name === 'L&G UK Equity Index', pct: 25, role: 'UK Equity (energía/materiales/financiero)' },
+      { matcher: f => f.cat === 'Equity' && f.name.includes('Emerging'), pct: 20, role: 'Emergentes (commodities exporters)' },
+      { matcher: f => f.cat === 'Equity' && f.proxy === 'IWRD.L' && f.fmc < 0.2 && !f.name.includes('Veritas') && !f.name.includes('CT Responsible'), pct: 20, role: 'RV global reducida' },
+      { matcher: f => f.name.includes('Index Linked Gilts'), pct: 20, role: 'Protección inflación' },
+      { matcher: f => f.cat === 'Property', pct: 10, role: 'Inmobiliario (assets reales)' },
+      { matcher: f => f.cat === 'Cash', pct: 5, role: 'Liquidez' },
+    ]
+  },
+  stagflation: {
+    title: '🔴 ESTANFLACIÓN — Preservar capital, evitar RF nominal',
+    desc: 'El peor cuadrante para carteras tradicionales. Index-Linked Gilts y Cash son los activos del régimen. Reduce RV al mínimo. NO bonos nominales.',
+    targets: [
+      { matcher: f => f.name.includes('Index Linked Gilts'), pct: 35, role: 'Protección inflación (clave)' },
+      { matcher: f => f.cat === 'Cash', pct: 30, role: 'Preservación capital' },
+      { matcher: f => f.name === 'Airbus Short Dated Credit', pct: 15, role: 'Crédito corto (poca duración)' },
+      { matcher: f => f.cat === 'Equity' && f.name === 'L&G UK Equity Index', pct: 10, role: 'UK Equity (defensivo con dividendo)' },
+      { matcher: f => f.cat === 'Multi-asset', pct: 10, role: 'Diversificador' },
+    ]
+  },
+  deflation: {
+    title: '🔵 RECESIÓN DEFLACIONARIA — Duración larga y cash',
+    desc: 'Los gilts largos son el activo del régimen: los tipos bajarán agresivamente. Cash da opcionalidad para comprar barato.',
+    targets: [
+      { matcher: f => f.name.includes('Over 15 Year Gilts'), pct: 35, role: 'Gilts larga duración (clave)' },
+      { matcher: f => f.name.includes('Corp Bond Over 15Y'), pct: 20, role: 'Corp bond larga (yield extra)' },
+      { matcher: f => f.cat === 'Cash', pct: 25, role: 'Opcionalidad' },
+      { matcher: f => f.name === 'Airbus Short Dated Credit', pct: 10, role: 'Crédito corto' },
+      { matcher: f => f.cat === 'Multi-asset', pct: 10, role: 'Diversificador' },
+    ]
+  },
+  neutral: {
+    title: '⚪ TRANSICIÓN — Cartera equilibrada',
+    desc: 'Los ejes no marcan dirección clara. Mantén equilibrio entre RV core, RF y cash hasta que el régimen se confirme.',
+    targets: [
+      { matcher: f => f.cat === 'Equity' && f.proxy === 'IWRD.L' && f.fmc < 0.15 && !f.name.includes('Veritas') && !f.name.includes('CT Responsible') && !f.name.includes('Ethical'), pct: 35, role: 'Core RV global' },
+      { matcher: f => f.cat === 'Multi-asset', pct: 20, role: 'Multi-activo estabilizador' },
+      { matcher: f => f.name.includes('Over 15 Year Gilts'), pct: 15, role: 'RF gobierno larga' },
+      { matcher: f => f.name.includes('Index Linked Gilts'), pct: 10, role: 'Protección inflación' },
+      { matcher: f => f.cat === 'Cash', pct: 20, role: 'Liquidez' },
+    ]
+  }
+};
+
+function renderPensionReco() {
+  const reco = REGIME_RECO[currentRegimeKey] || REGIME_RECO.neutral;
+  const regimeEl = document.getElementById('pen-reco-regime');
+  const descEl = document.getElementById('pen-reco-desc');
+  const listEl = document.getElementById('pen-reco-list');
+  if (!listEl) return;
+
+  const colorMap = { expansion: 'var(--green)', overheat: 'var(--orange)', stagflation: 'var(--red)', deflation: 'var(--blue)', neutral: 'var(--text2)' };
+  regimeEl.textContent = reco.title;
+  regimeEl.style.color = colorMap[currentRegimeKey] || 'var(--text2)';
+  descEl.textContent = reco.desc;
+
+  // For each target, find the best fund (lowest FMC matching)
+  listEl.innerHTML = reco.targets.map(t => {
+    const matches = LG_FUNDS.filter(t.matcher).sort((a, b) => a.fmc - b.fmc);
+    const fund = matches[0];
+    if (!fund) return '';
+    return `<div class="pen-reco-line">
+      <span class="pen-reco-pct">${t.pct}%</span>
+      <div class="pen-reco-fund">${fund.name}<span class="pen-reco-fund-meta">${t.role} · FMC ${fund.fmc.toFixed(2)}%${fund.propExp ? ' (+ ' + fund.propExp + '% property)' : ''}${fund.code ? ' · código ' + fund.code : ''}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ─── PENSION CHART (benchmark proxies) ───────────────────────────────────────
+function setPenChartRange(btn) {
+  pensionState.chartYears = parseInt(btn.dataset.penYears);
+  document.querySelectorAll('[data-pen-years]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPenChart();
+}
+function setPenChartFreq(btn) {
+  pensionState.chartFreq = btn.dataset.penFreq;
+  document.querySelectorAll('[data-pen-freq]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPenChart();
+}
+function setPenChartScale(btn) {
+  pensionState.chartScale = btn.dataset.penScale;
+  document.querySelectorAll('[data-pen-scale]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPenChart();
+}
+function setPenChartAll(visible) {
+  if (!pensionState.chart) return;
+  pensionState.chart.data.datasets.forEach(ds => { ds.hidden = !visible; pensionState.chartHidden[ds._key] = !visible; });
+  document.querySelectorAll('#pen-chart-toggles .ind-toggle').forEach(b => b.classList.toggle('active', visible));
+  pensionState.chart.update();
+}
+
+// Distinct colors for funds
+const PEN_COLORS = ['#60a5fa','#a78bfa','#f59e0b','#fcd34d','#cbd5e1','#fb923c','#4ade80','#f472b6','#38bdf8','#e599f7','#22d3ee','#94a3b8','#ff6b6b','#69db7c','#ffd43b','#f97316'];
+
+async function loadPenChart() {
+  const loading = document.getElementById('pen-chart-loading');
+  loading.classList.remove('hidden');
+
+  // Default hidden state: only first 4 visible to avoid clutter on first load
+  if (!pensionState.chartLoaded) {
+    LG_FUNDS.forEach((f, i) => { pensionState.chartHidden[f.name] = i >= 4; });
+  }
+
+  // Fetch each fund's proxy (with simple dedup since several use IWRD.L)
+  const proxyCache = {};
+  const results = [];
+  for (let i = 0; i < LG_FUNDS.length; i++) {
+    const f = LG_FUNDS[i];
+    let data;
+    if (proxyCache[f.proxy]) {
+      data = proxyCache[f.proxy];
+    } else {
+      try {
+        data = await yahooRange(f.proxy, pensionState.chartYears, pensionState.chartFreq);
+        proxyCache[f.proxy] = data;
+      } catch(e) {
+        console.warn('pen proxy', f.proxy, e.message);
+        data = [];
+      }
+      await delay(120);
+    }
+    results.push({ fund: f, data, color: PEN_COLORS[i % PEN_COLORS.length] });
+  }
+
+  // Normalize to base 100
+  const datasets = results.map(({ fund, data, color }) => {
+    const base = data.length ? data[0].y : 1;
+    return {
+      label: fund.name,
+      data: data.map(p => ({ x: p.x, y: parseFloat(((p.y / base) * 100).toFixed(2)) })),
+      borderColor: color, backgroundColor: color,
+      borderWidth: 1.7, pointRadius: 0, pointHoverRadius: 4,
+      tension: 0.2, spanGaps: true, yAxisID: 'y',
+      hidden: !!pensionState.chartHidden[fund.name], _key: fund.name,
+    };
+  });
+
+  if (pensionState.chart) pensionState.chart.destroy();
+  const ctx = document.getElementById('pen-chart-canvas').getContext('2d');
+  const opts = baseOptions('Base 100 · proxy de benchmark');
+  if (pensionState.chartScale === 'log') {
+    opts.scales.y.type = 'logarithmic';
+    opts.scales.y.ticks.callback = v => {
+      const log = Math.log10(v);
+      if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
+        return v >= 1000 ? (v/1000) + 'k' : v;
+      }
+      return null;
+    };
+  }
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`
+  };
+  pensionState.chart = new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+
+  // Build toggles
+  const container = document.getElementById('pen-chart-toggles');
+  container.querySelectorAll('.ind-toggle').forEach(el => el.remove());
+  const anchor = document.getElementById('pen-toggle-end');
+  results.forEach((r, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ind-toggle' + (pensionState.chartHidden[r.fund.name] ? '' : ' active');
+    btn.textContent = r.fund.name.replace('L&G PMC ', '').replace('L&G ', '').slice(0, 24);
+    btn.title = r.fund.name + ' (proxy: ' + r.fund.proxy + ')';
+    btn.style.setProperty('--ind-color', r.color);
+    btn.onclick = () => {
+      const ds = pensionState.chart.data.datasets[i];
+      ds.hidden = !ds.hidden;
+      pensionState.chartHidden[r.fund.name] = ds.hidden;
+      btn.classList.toggle('active', !ds.hidden);
+      pensionState.chart.update();
+    };
+    container.insertBefore(btn, anchor);
+  });
+
+  pensionState.chartLoaded = true;
+  loading.classList.add('hidden');
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
