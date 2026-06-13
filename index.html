@@ -243,6 +243,46 @@
   .senti-read b{font-family:var(--sans)}
   .senti-tactic{font-size:10px;color:var(--text2);line-height:1.6;margin-top:6px;padding:8px 10px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2)}
 
+  /* SCORE EXPLANATION */
+  .score-guide{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .sg-block{padding:18px;border-bottom:1px solid var(--border)}
+  .sg-block:last-child{border-bottom:none}
+  .sg-title{font-family:var(--sans);font-size:14px;font-weight:700;margin-bottom:8px}
+  .sg-formula{font-family:var(--mono);font-size:11px;padding:8px 12px;border-radius:3px;background:var(--bg);border:1px solid var(--border2);display:inline-block;color:var(--accent);margin:8px 0}
+  .sg-text{font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+  .sg-text b{color:var(--text)}
+  .sg-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:10.5px}
+  .sg-table th{text-align:left;padding:6px 10px;background:var(--bg3);color:var(--text2);font-weight:700;letter-spacing:.5px;font-size:9px;text-transform:uppercase;border:1px solid var(--border)}
+  .sg-table td{padding:6px 10px;border:1px solid var(--border);color:var(--text2)}
+  .sg-table td:last-child{font-family:var(--mono);font-weight:700;color:var(--text)}
+  .sg-example{font-family:var(--mono);font-size:10.5px;padding:14px 16px;border-radius:4px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);line-height:1.9;white-space:pre-wrap;margin-top:10px}
+  .sg-example .lbl{color:var(--accent)}
+  .sg-readout{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .sg-readout-item{font-size:10px;padding:5px 12px;border-radius:3px;border:1px solid var(--border2)}
+
+  .sc-sent-cell{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle}
+
+  /* BACKTEST */
+  .backtest{border:1px solid var(--border);border-radius:6px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .bt-controls{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--bg3)}
+  .bt-info{padding:14px 18px;font-size:11px;color:var(--text2);line-height:1.6;border-bottom:1px solid var(--border)}
+  .bt-loading{padding:30px;text-align:center;font-size:11px;color:var(--text2)}
+  .bt-empty{padding:30px;text-align:center;font-size:11px;color:var(--text3)}
+  .bt-result{padding:18px}
+  .bt-metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:16px}
+  .bt-metric{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:11px 13px}
+  .bt-metric-label{font-size:9px;color:var(--text2);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+  .bt-metric-value{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .bt-metric-sub{font-size:9px;color:var(--text3);margin-top:3px}
+  .bt-chart-wrap{height:380px;position:relative;margin-bottom:16px}
+  .bt-chart-wrap canvas{width:100%!important;height:100%!important}
+  .bt-table{width:100%;border-collapse:collapse;font-size:10.5px}
+  .bt-table th{text-align:right;padding:7px 9px;background:var(--bg3);color:var(--text2);font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+  .bt-table th:first-child{text-align:left}
+  .bt-table td{padding:6px 9px;border-bottom:1px solid var(--border);color:var(--text2);text-align:right;font-variant-numeric:tabular-nums}
+  .bt-table td:first-child{text-align:left;color:var(--text)}
+  .bt-warn{padding:10px 14px;border-radius:4px;background:var(--yellow-dim);border:1px solid var(--yellow-border);color:var(--yellow);font-size:10px;line-height:1.6;margin-bottom:14px}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -568,7 +608,7 @@
       </table>
     </div>
     <div class="screener-meta">
-      <span>Score = Tendencia 25% + Momentum 25% + Retorno/Riesgo 20% + Encaje régimen 30% · Click en cabeceras para ordenar</span>
+      <span>Score = Tendencia 25% + Momentum 25% + Retorno/Riesgo 20% + Encaje régimen 30% · Sent. = sentimiento global (informativo, no afecta al Score) · Click en cabeceras para ordenar</span>
       <span id="screener-cache-info"></span>
     </div>
   </div>
@@ -815,6 +855,150 @@
         <li><b>WALCL expandiendo (&gt;+0.5% en 3m)</b> → sube la asignación BTC hacia el techo de su rango; contrayendo (&lt;-0.5%) → la baja hacia el suelo. En Recesión deflacionaria, su giro al alza es la señal de acumulación de BTC</li>
       </ul>
     </div>
+  </div>
+
+  <!-- SCORE GUIDE -->
+  <div class="section-title">Cómo se calcula el Score de cada activo</div>
+  <div class="score-guide">
+
+    <div class="sg-block">
+      <div class="sg-title">📐 Fórmula global</div>
+      <div class="sg-formula">Score = 25% Tendencia + 25% Momentum + 20% Retorno/Volatilidad + 30% Encaje régimen</div>
+      <div class="sg-text">Los cuatro componentes se calculan independientemente, cada uno se normaliza a una escala 0–100, y luego se combinan con sus pesos. El componente de régimen es el de mayor peso porque el contexto macro debe condicionar fuerte la decisión.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">1️⃣ Tendencia · peso 25%</div>
+      <div class="sg-text">Distancia del precio actual a su <b>media móvil de 200 días</b> (aproximada con 40 semanas). Por encima = tendencia alcista estructural; por debajo = tendencia bajista.</div>
+      <div class="sg-formula">Componente = 50 + (distancia % a MA200) × 4 · saturado 0–100</div>
+      <table class="sg-table">
+        <tr><th>Distancia a MA200</th><th>Componente</th></tr>
+        <tr><td>+15% sobre MA200</td><td>100 (saturado)</td></tr>
+        <tr><td>+10% sobre MA200</td><td>90</td></tr>
+        <tr><td>+5% sobre MA200</td><td>70</td></tr>
+        <tr><td>En la MA200</td><td>50</td></tr>
+        <tr><td>-5% bajo MA200</td><td>30</td></tr>
+        <tr><td>-10% bajo MA200</td><td>10</td></tr>
+        <tr><td>-15% bajo MA200</td><td>0 (saturado)</td></tr>
+      </table>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">2️⃣ Momentum · peso 25%</div>
+      <div class="sg-text">Promedio ponderado de tres ventanas: el <b>12m manda</b> porque captura la tendencia de fondo, pero el 1m da el pulso reciente.</div>
+      <div class="sg-formula">Promedio = r1m × 0.20 + r3m × 0.35 + r12m × 0.45</div>
+      <div class="sg-formula">Componente = 50 + Promedio × 1.5 · saturado 0–100</div>
+      <table class="sg-table">
+        <tr><th>Retornos 1m / 3m / 12m</th><th>Promedio ponderado</th><th>Componente</th></tr>
+        <tr><td>+5% / +15% / +35%</td><td>+21.0</td><td>82</td></tr>
+        <tr><td>+2% / +8% / +20%</td><td>+12.3</td><td>68</td></tr>
+        <tr><td>0% / 0% / +10%</td><td>+4.5</td><td>57</td></tr>
+        <tr><td>0% / 0% / 0%</td><td>0</td><td>50</td></tr>
+        <tr><td>-2% / -5% / -8%</td><td>-5.7</td><td>41</td></tr>
+        <tr><td>-5% / -15% / -25%</td><td>-17.5</td><td>24</td></tr>
+        <tr><td>-10% / -25% / -40%</td><td>-28.8</td><td>7</td></tr>
+      </table>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">3️⃣ Retorno / Volatilidad · peso 20%</div>
+      <div class="sg-text">Cociente entre retorno 12m y volatilidad anualizada. Premia subidas sostenidas; penaliza subidas erráticas o caídas con poca volatilidad (que indica que aún puede caer más).</div>
+      <div class="sg-formula">Componente = 50 + (retorno 12m / volatilidad anual) × 25 · saturado 0–100</div>
+      <table class="sg-table">
+        <tr><th>Retorno 12m</th><th>Volatilidad anual</th><th>Ratio</th><th>Componente</th></tr>
+        <tr><td>+30%</td><td>15%</td><td>2.00</td><td>100 (saturado)</td></tr>
+        <tr><td>+20%</td><td>20%</td><td>1.00</td><td>75</td></tr>
+        <tr><td>+15%</td><td>25%</td><td>0.60</td><td>65</td></tr>
+        <tr><td>+10%</td><td>25%</td><td>0.40</td><td>60</td></tr>
+        <tr><td>0%</td><td>20%</td><td>0.00</td><td>50</td></tr>
+        <tr><td>-10%</td><td>25%</td><td>-0.40</td><td>40</td></tr>
+        <tr><td>-20%</td><td>30%</td><td>-0.67</td><td>33</td></tr>
+        <tr><td>-30%</td><td>40%</td><td>-0.75</td><td>31</td></tr>
+      </table>
+      <div class="sg-text">Un activo que sube 20% con volatilidad 15% (ratio 1.33 → 83) puntúa muy por encima del que sube lo mismo con volatilidad 40% (ratio 0.5 → 62). Calidad de la subida.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">4️⃣ Encaje de régimen · peso 30% (el mayor)</div>
+      <div class="sg-text">Cada activo tiene un <b>mapa de 0–100 para cada uno de los 4 regímenes</b>, basado en su comportamiento histórico. El régimen activo del panel principal decide qué valor del mapa se aplica.</div>
+      <table class="sg-table">
+        <tr><th>Activo</th><th>🟢 Expansión</th><th>🟠 Sobrecalentamiento</th><th>🔴 Estanflación</th><th>🔵 Recesión defl.</th></tr>
+        <tr><td>Nasdaq 100</td><td><b style="color:var(--green);">95</b></td><td>45</td><td>15</td><td>30</td></tr>
+        <tr><td>S&P 500</td><td><b style="color:var(--green);">85</b></td><td>55</td><td>25</td><td>30</td></tr>
+        <tr><td>BTC</td><td><b style="color:var(--green);">90</b></td><td>50</td><td>15</td><td>20</td></tr>
+        <tr><td>Tech (XLK)</td><td><b style="color:var(--green);">95</b></td><td>40</td><td>15</td><td>30</td></tr>
+        <tr><td>Energía (XLE)</td><td>50</td><td><b style="color:var(--orange);">95</b></td><td>70</td><td>15</td></tr>
+        <tr><td>Cobre</td><td>70</td><td><b style="color:var(--orange);">95</b></td><td>45</td><td>10</td></tr>
+        <tr><td>Materiales (XLB)</td><td>65</td><td><b style="color:var(--orange);">90</b></td><td>45</td><td>15</td></tr>
+        <tr><td>Oro</td><td>35</td><td>60</td><td><b style="color:var(--red);">95</b></td><td>60</td></tr>
+        <tr><td>Mineras oro (GDX)</td><td>35</td><td>65</td><td><b style="color:var(--red);">90</b></td><td>45</td></tr>
+        <tr><td>Plata</td><td>45</td><td>75</td><td><b style="color:var(--red);">85</b></td><td>40</td></tr>
+        <tr><td>Utilities (XLU)</td><td>40</td><td>30</td><td>50</td><td><b style="color:var(--blue);">75</b></td></tr>
+        <tr><td>TLT (RF larga)</td><td>35</td><td>5</td><td>15</td><td><b style="color:var(--blue);">95</b></td></tr>
+        <tr><td>IEF (RF media)</td><td>40</td><td>10</td><td>25</td><td><b style="color:var(--blue);">90</b></td></tr>
+        <tr><td>Cash (SGOV)</td><td>30</td><td>45</td><td>80</td><td><b style="color:var(--blue);">85</b></td></tr>
+        <tr><td>DXY</td><td>30</td><td>35</td><td>60</td><td><b style="color:var(--blue);">70</b></td></tr>
+      </table>
+      <div class="sg-text">El mapeo completo cubre los 28 activos del universo. Activos analizados con ticker libre (fuera del universo) reciben encaje <b>50 neutro</b> y el Score lo marca con asterisco.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🧮 Ejemplo completo · Oro en régimen de Estanflación</div>
+      <div class="sg-example"><span class="lbl">Precio actual = 3300, MA200 = 3000</span>  →  distancia +10%
+  Tendencia        = 50 + (10 × 4)         = <b style="color:var(--green);">90</b>
+
+<span class="lbl">Retornos 1m/3m/12m = +3% / +12% / +28%</span>
+  Promedio ponderado = 0.6 + 4.2 + 12.6   = +17.4
+  Momentum         = 50 + (17.4 × 1.5)    = <b style="color:var(--green);">76</b>
+
+<span class="lbl">Retorno 12m = 28%, Volatilidad anual = 18%</span>  →  ratio 1.56
+  Ret/Vol          = 50 + (1.56 × 25)     = <b style="color:var(--green);">89</b>
+
+<span class="lbl">Encaje en Estanflación</span> = <b style="color:var(--red);">95</b> (del mapa)
+
+Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
+      = 22.5 + 19.0 + 17.8 + 28.5
+      = <b style="color:var(--accent);">87.8</b> → <b style="color:var(--accent);">88/100</b></div>
+      <div class="sg-text" style="margin-top:14px;">El mismo Oro con las mismas métricas técnicas pero en régimen de <b>Expansión</b>:</div>
+      <div class="sg-example">Score = 0.25×90 + 0.25×76 + 0.20×89 + <b style="color:var(--text3);">0.30×35</b>
+      = 22.5 + 19.0 + 17.8 + 10.5
+      = <b style="color:var(--accent);">69.8</b> → <b style="color:var(--accent);">70/100</b></div>
+      <div class="sg-text" style="margin-top:10px;">Mismo activo, mismas métricas, <b>régimen distinto → Score baja 18 puntos</b>. Esto es exactamente lo que queremos: el contexto macro pondera fuerte la decisión, pero los técnicos siguen importando.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">📊 Lecturas del Score final</div>
+      <div class="sg-readout">
+        <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">65–100 · Alineación fuerte de técnicos + macro</div>
+        <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">45–65 · Zona neutral, sin convicción clara</div>
+        <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">0–45 · Técnicos débiles o macro adverso</div>
+      </div>
+      <div class="sg-text" style="margin-top:12px;"><b>Lo que el Score NO incluye</b> (deliberadamente): fundamentales (PER, márgenes, deuda — requeriría API de pago) ni sentimiento de mercado (que es global, no específico del activo; se muestra como columna informativa aparte para que lo veas mientras lees la tabla).</div>
+    </div>
+  </div>
+
+  <!-- BACKTEST -->
+  <div class="section-title">Backtest histórico del sistema</div>
+  <div class="backtest">
+    <div class="bt-info">
+      Reconstruye la asignación que el sistema habría dictado <b>cada mes hacia atrás</b> y la compara con un benchmark buy & hold del S&P 500. Para cada mes, calcula el régimen macro vigente (con datos públicos en esa fecha) y el Score de cada activo, después aplica la regla de la variante elegida. Periodo disponible: ~2007 hasta hoy.
+    </div>
+    <div class="bt-controls">
+      <span class="ctrl-label">Variante:</span>
+      <button class="range-btn active" data-strat="top1" onclick="setBtStrat(this)">Top-1 Score</button>
+      <button class="range-btn" data-strat="top3" onclick="setBtStrat(this)">Top-3 equiponderado</button>
+      <button class="range-btn" data-strat="regime" onclick="setBtStrat(this)">Activo del régimen (sin técnicos)</button>
+      <button class="range-btn" data-strat="6040" onclick="setBtStrat(this)">60/40 estático</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Desde:</span>
+      <button class="range-btn" data-bt-start="2007" onclick="setBtStart(this)">2007</button>
+      <button class="range-btn active" data-bt-start="2010" onclick="setBtStart(this)">2010</button>
+      <button class="range-btn" data-bt-start="2015" onclick="setBtStart(this)">2015</button>
+      <button class="range-btn" data-bt-start="2020" onclick="setBtStart(this)">2020</button>
+      <span class="ctrl-divider"></span>
+      <button class="analyzer-btn" onclick="runBacktest()">Ejecutar backtest</button>
+    </div>
+    <div id="bt-output"><div class="bt-empty">Pulsa "Ejecutar backtest" — la primera vez descarga ~30 series históricas (~40s); después queda cacheado en localStorage.</div></div>
   </div>
 
   <!-- FOOTER -->
@@ -1835,6 +2019,7 @@ const SCREENER_COLS = [
   { key: 'beta',   label: 'Beta' },
   { key: 'retVol', label: 'Ret/Vol' },
   { key: 'fit',    label: 'Régimen' },
+  { key: 'sent',   label: 'Sent.' },
   { key: 'score',  label: 'Score' },
 ];
 
@@ -1910,6 +2095,7 @@ function setCat(btn) {
 }
 
 function sortScreener(key) {
+  if (key === 'sent') return; // sentiment is global, no per-row sort
   if (screenerSort.key === key) screenerSort.dir *= -1;
   else screenerSort = { key, dir: -1 };
   renderScreener();
@@ -1940,6 +2126,19 @@ function renderScreener() {
   const catLabels = { indices: 'ÍNDICE', sectores: 'SECTOR', rf: 'RF', commodities: 'CMDTY', crypto: 'CRYPTO', fx: 'FX' };
   const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'sc-pos' : 'sc-neg'}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
 
+  // Global sentiment cell (same value for all rows — informative, not part of score)
+  const sentCell = () => {
+    const s = sentiment.score;
+    if (s == null) return '<span style="color:var(--text3);">—</span>';
+    let color = 'var(--yellow)';
+    if (s < 25) color = 'var(--red)';
+    else if (s > 75) color = 'var(--yellow)';
+    else if (s >= 40 && s <= 60) color = 'var(--text2)';
+    else if (s >= 25) color = 'var(--green)';
+    const label = sentimentLabel(s);
+    return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="${label} (${s.toFixed(0)}/100)"></span>`;
+  };
+
   body.innerHTML = rows.map(r => {
     const col = scoreColor(r.score);
     return `<tr>
@@ -1955,9 +2154,379 @@ function renderScreener() {
       <td>${r.beta == null ? '—' : r.beta.toFixed(2)}</td>
       <td>${r.retVol == null ? '—' : r.retVol.toFixed(2)}</td>
       <td>${r.fit}/100</td>
+      <td>${sentCell()}</td>
       <td><span class="score-pill" style="background:${col.bg};color:${col.fg};border:1px solid ${col.bd};">${r.score.toFixed(0)}</span></td>
     </tr>`;
   }).join('');
+}
+
+// ─── BACKTEST ────────────────────────────────────────────────────────────────
+const btState = { strat: 'top1', startYear: 2010, chart: null };
+
+function setBtStrat(btn) {
+  btState.strat = btn.dataset.strat;
+  document.querySelectorAll('.bt-controls [data-strat]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setBtStart(btn) {
+  btState.startYear = parseInt(btn.dataset.btStart);
+  document.querySelectorAll('.bt-controls [data-bt-start]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Get last value on or before a given month (ym = 'YYYY-MM')
+function valAt(series, ym) {
+  if (!series || !series.length) return null;
+  // series is asc ordered [{x, y}]
+  const target = new Date(ym + '-15').getTime();
+  let last = null;
+  for (const p of series) {
+    if (p.x <= target) last = p.y;
+    else break;
+  }
+  return last;
+}
+
+// Compute KPI snapshot at a given month using only data up to that month
+function kpiAt(series, ym, spxSeries) {
+  if (!series || series.length < 30) return null;
+  const target = new Date(ym + '-15').getTime();
+  // Slice to data up to target
+  const cut = series.filter(p => p.x <= target);
+  if (cut.length < 30) return null;
+  const px = cut.map(p => p.y);
+  const n = px.length;
+  const last = px[n-1];
+  const periodBack = months => {
+    // approx: monthly data → months index back
+    const idx = Math.max(0, n - 1 - months);
+    return idx < n ? (last / px[idx] - 1) * 100 : null;
+  };
+  const r1m = periodBack(1), r3m = periodBack(3), r12m = periodBack(12);
+  const maWin = Math.min(12, n);
+  const ma = px.slice(-maWin).reduce((a,b) => a+b, 0) / maWin; // 12m MA on monthly = MA200d approx
+  const distMA = (last / ma - 1) * 100;
+  // 12m vol (monthly returns annualized)
+  const rets = [];
+  for (let i = Math.max(1, n-12); i < n; i++) rets.push(px[i]/px[i-1] - 1);
+  const mean = rets.reduce((a,b) => a+b, 0) / Math.max(1, rets.length);
+  const variance = rets.reduce((a,b) => a + (b-mean)**2, 0) / Math.max(1, rets.length);
+  const annVol = Math.sqrt(variance) * Math.sqrt(12) * 100;
+  const retVol = (r12m != null && annVol > 0) ? r12m / annVol : null;
+  return { last, r1m, r3m, r12m, distMA, annVol, retVol };
+}
+
+// Detect regime at a given month using historical FRED/Yahoo data
+function regimeAt(ym, macroSeries) {
+  // Growth axis
+  let growth = 0;
+  const ism = valAt(macroSeries.ism, ym);
+  if (ism != null) growth += ism > 52 ? 1 : ism < 49 ? -1 : 0;
+  const yc = valAt(macroSeries.yield, ym);
+  if (yc != null) growth += yc > 0.5 ? 1 : yc < -0.2 ? -1 : 0;
+  // Copper/Gold from price series
+  const copper = valAt(macroSeries.copperPx, ym);
+  const gold = valAt(macroSeries.goldPx, ym);
+  if (copper && gold) {
+    const cg = (copper * 100) / gold;
+    growth += cg > 0.18 ? 1 : cg < 0.13 ? -1 : 0;
+  }
+  // Inflation axis (YoY)
+  let inflation = 0;
+  const pceYoY = yoyAt(macroSeries.pce, ym);
+  if (pceYoY != null) inflation += pceYoY > 3 ? 1 : pceYoY < 2 ? -1 : 0;
+  const cpiYoY = yoyAt(macroSeries.cpi, ym);
+  if (cpiYoY != null) inflation += cpiYoY > 4 ? 1 : cpiYoY < 2.5 ? -1 : 0;
+  const be = valAt(macroSeries.breakevens, ym);
+  if (be != null) inflation += be > 2.8 ? 1 : be < 2.3 ? -1 : 0;
+
+  if (growth >= 1 && inflation <= 0) return 'expansion';
+  if (growth >= 1 && inflation >= 1) return 'overheat';
+  if (growth <= -1 && inflation >= 1) return 'stagflation';
+  if (growth <= -1 && inflation <= 0) return 'deflation';
+  return 'neutral';
+}
+
+function yoyAt(series, ym) {
+  if (!series) return null;
+  const target = new Date(ym + '-15').getTime();
+  const yearAgo = new Date(ym + '-15');
+  yearAgo.setFullYear(yearAgo.getFullYear() - 1);
+  const yAgoMs = yearAgo.getTime();
+  let cur = null, prev = null;
+  for (const p of series) {
+    if (p.x <= target) cur = p.y;
+    if (p.x <= yAgoMs) prev = p.y;
+  }
+  if (cur == null || prev == null || !prev) return null;
+  return (cur / prev - 1) * 100;
+}
+
+// "Activo del régimen" — single asset by regime
+const REGIME_ASSET = {
+  expansion: '^GSPC',     // S&P 500
+  overheat:  'DBC',       // Commodities
+  stagflation: 'GC=F',    // Gold
+  deflation: 'TLT',       // Long-term bonds
+  neutral:   '^GSPC',
+};
+
+// Universe scoring at a given month, returns sorted array
+function scoreUniverseAt(ym, priceSeries, spxSeries, regime) {
+  const out = [];
+  for (const u of UNIVERSE) {
+    const k = kpiAt(priceSeries[u.sym], ym, spxSeries);
+    if (!k) continue;
+    const fit = regime === 'neutral' ? 50 : u.fit[regime];
+    const sc = scoreComponents(k, fit).total;
+    out.push({ sym: u.sym, score: sc, last: k.last });
+  }
+  out.sort((a, b) => b.score - a.score);
+  return out;
+}
+
+async function fetchHistory(symbol, startYear) {
+  // Try max range to ensure coverage
+  return await yahooRange(symbol, 25, 'm');
+}
+
+async function runBacktest() {
+  const out = document.getElementById('bt-output');
+  out.innerHTML = '<div class="bt-loading"><span class="spinner"></span> Descargando series históricas...</div>';
+
+  // Build cache key
+  const cacheKey = 'bt_data_v1';
+  let cached = null;
+  try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+  let priceSeries, macroSeries, spxSeries;
+
+  if (cached && Date.now() - cached.ts < 7 * 24 * 3600 * 1000) {
+    priceSeries = cached.priceSeries;
+    macroSeries = cached.macroSeries;
+    spxSeries = priceSeries['^GSPC'];
+  } else {
+    priceSeries = {};
+    macroSeries = {};
+    let done = 0, total = UNIVERSE.length + 6;
+    const updateLoading = (label) => {
+      out.innerHTML = `<div class="bt-loading"><span class="spinner"></span> Descargando ${done}/${total} — ${label}...</div>`;
+    };
+
+    // Macro series
+    try { macroSeries.pce = await fetchFRED25('PCEPILFE'); } catch(e) {}
+    done++; updateLoading('PCE');
+    try { macroSeries.cpi = await fetchFRED25('CPIAUCSL'); } catch(e) {}
+    done++; updateLoading('CPI');
+    try { macroSeries.breakevens = await fetchFRED25('T5YIFR', 'm'); } catch(e) {}
+    done++; updateLoading('Breakevens');
+    try { macroSeries.yield = await fetchFRED25('T10Y2Y', 'm'); } catch(e) {}
+    done++; updateLoading('Yield curve');
+    try { macroSeries.ism = await fetchFRED25('MANEMP'); } catch(e) {} // fallback proxy for ISM; ISM not on FRED
+    done++; updateLoading('ISM proxy');
+    // ISM proxy: use FRED's NAPM (ISM PMI) if available; many regions on FRED have it as 'NAPM' or 'CSCICP03USM665S'
+    try { const ism2 = await fetchFRED25('NAPM'); if (ism2 && ism2.length) macroSeries.ism = ism2; } catch(e) {}
+    // Copper & gold prices for copper/gold
+    try { macroSeries.copperPx = await fetchHistory('HG=F'); } catch(e) {}
+    try { macroSeries.goldPx = await fetchHistory('GC=F'); } catch(e) {}
+    done++; updateLoading('Macro completo');
+
+    // Universe
+    for (const u of UNIVERSE) {
+      try { priceSeries[u.sym] = await fetchHistory(u.sym); } catch(e) { priceSeries[u.sym] = []; }
+      done++;
+      updateLoading(u.name);
+      await delay(80);
+    }
+    spxSeries = priceSeries['^GSPC'];
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), priceSeries, macroSeries })); } catch(e) {}
+  }
+
+  out.innerHTML = '<div class="bt-loading"><span class="spinner"></span> Calculando estrategia...</div>';
+  await delay(50);
+
+  // Build month list from startYear to now
+  const months = [];
+  const startMs = new Date(btState.startYear + '-01-15').getTime();
+  const now = new Date();
+  for (let y = btState.startYear; y <= now.getFullYear(); y++) {
+    for (let m = 1; m <= 12; m++) {
+      if (y === now.getFullYear() && m > now.getMonth() + 1) break;
+      months.push(y + '-' + String(m).padStart(2,'0'));
+    }
+  }
+
+  // Simulate
+  const equity = { strat: [], bench: [] };
+  let stratVal = 100, benchVal = 100;
+  let lastHoldings = null; // [{sym, weight}]
+  let lastPrices = {};
+  const regimeHistory = [];
+  const holdingsLog = [];
+
+  for (let i = 0; i < months.length; i++) {
+    const ym = months[i];
+    const regime = regimeAt(ym, macroSeries);
+    regimeHistory.push({ ym, regime });
+
+    // Calculate returns from last month to this month based on previous holdings
+    if (lastHoldings && i > 0) {
+      let stratRet = 0;
+      for (const h of lastHoldings) {
+        const px = valAt(priceSeries[h.sym], ym);
+        const pxPrev = lastPrices[h.sym];
+        if (px && pxPrev) stratRet += h.weight * (px / pxPrev - 1);
+      }
+      stratVal *= (1 + stratRet);
+    }
+    // Benchmark = S&P
+    const spxNow = valAt(spxSeries, ym);
+    const spxPrev = i > 0 ? valAt(spxSeries, months[i-1]) : null;
+    if (spxNow && spxPrev) benchVal *= (spxNow / spxPrev);
+
+    equity.strat.push({ x: new Date(ym + '-15').getTime(), y: stratVal });
+    equity.bench.push({ x: new Date(ym + '-15').getTime(), y: benchVal });
+
+    // Decide holdings for next period
+    let newHoldings = null;
+    if (btState.strat === 'top1') {
+      const ranked = scoreUniverseAt(ym, priceSeries, spxSeries, regime);
+      if (ranked.length) newHoldings = [{ sym: ranked[0].sym, weight: 1 }];
+    } else if (btState.strat === 'top3') {
+      const ranked = scoreUniverseAt(ym, priceSeries, spxSeries, regime);
+      const top = ranked.slice(0, 3);
+      if (top.length) newHoldings = top.map(r => ({ sym: r.sym, weight: 1 / top.length }));
+    } else if (btState.strat === 'regime') {
+      const sym = REGIME_ASSET[regime];
+      newHoldings = [{ sym, weight: 1 }];
+    } else if (btState.strat === '6040') {
+      newHoldings = [{ sym: '^GSPC', weight: 0.6 }, { sym: 'TLT', weight: 0.4 }];
+    }
+
+    if (newHoldings) {
+      lastHoldings = newHoldings;
+      lastPrices = {};
+      for (const h of newHoldings) lastPrices[h.sym] = valAt(priceSeries[h.sym], ym);
+      holdingsLog.push({ ym, regime, holdings: newHoldings.map(h => h.sym).join(', ') });
+    }
+  }
+
+  // Metrics
+  const totalReturn = (stratVal / 100 - 1) * 100;
+  const totalReturnB = (benchVal / 100 - 1) * 100;
+  const years = months.length / 12;
+  const cagr = (Math.pow(stratVal / 100, 1/years) - 1) * 100;
+  const cagrB = (Math.pow(benchVal / 100, 1/years) - 1) * 100;
+
+  // Max drawdown of strat
+  let peak = 100, maxDD = 0;
+  for (const p of equity.strat) {
+    if (p.y > peak) peak = p.y;
+    const dd = (p.y / peak - 1) * 100;
+    if (dd < maxDD) maxDD = dd;
+  }
+  let peakB = 100, maxDDB = 0;
+  for (const p of equity.bench) {
+    if (p.y > peakB) peakB = p.y;
+    const dd = (p.y / peakB - 1) * 100;
+    if (dd < maxDDB) maxDDB = dd;
+  }
+
+  // Monthly returns for vol/Sharpe
+  const monthlyRets = [];
+  for (let i = 1; i < equity.strat.length; i++) {
+    monthlyRets.push(equity.strat[i].y / equity.strat[i-1].y - 1);
+  }
+  const meanR = monthlyRets.reduce((a,b)=>a+b,0)/monthlyRets.length;
+  const varR = monthlyRets.reduce((a,b)=>a+(b-meanR)**2,0)/monthlyRets.length;
+  const volAnn = Math.sqrt(varR) * Math.sqrt(12) * 100;
+  const sharpe = volAnn > 0 ? (cagr / volAnn) : 0;
+
+  // Regime distribution
+  const regCounts = {};
+  regimeHistory.forEach(r => { regCounts[r.regime] = (regCounts[r.regime] || 0) + 1; });
+
+  // Render
+  renderBacktest({ stratVal, benchVal, totalReturn, totalReturnB, cagr, cagrB, maxDD, maxDDB, volAnn, sharpe, equity, regCounts, holdingsLog, years });
+}
+
+// FRED 25Y helper (asc)
+async function fetchFRED25(seriesId, freq) {
+  let url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=asc&observation_start=2000-01-01`;
+  if (freq) url += `&frequency=${freq}&aggregation_method=avg`;
+  const data = await proxyFetch(url);
+  if (!data.observations) return [];
+  return data.observations
+    .filter(o => o.value !== '.' && !isNaN(parseFloat(o.value)))
+    .map(o => ({ x: new Date(o.date).getTime(), y: parseFloat(o.value) }));
+}
+
+function renderBacktest(r) {
+  const fmt = (v, dec=1, suf='%') => (v >= 0 && suf === '%' ? '+' : '') + v.toFixed(dec) + suf;
+  const cls = v => v >= 0 ? 'sc-pos' : 'sc-neg';
+
+  const out = document.getElementById('bt-output');
+  const strategyLabels = {
+    top1: 'Top-1 Score',
+    top3: 'Top-3 equiponderado',
+    regime: 'Activo del régimen',
+    '6040': '60/40 estático'
+  };
+
+  out.innerHTML = `
+    <div class="bt-result">
+      <div class="bt-warn">
+        ⚠ Backtest con sesgo retrospectivo: el mapeo de "qué activo va en qué régimen" se diseñó conociendo la historia. No incluye comisiones, spreads ni impuestos. Útil para verificar coherencia del sistema, no como predicción.
+      </div>
+      <div class="bt-metrics">
+        <div class="bt-metric"><div class="bt-metric-label">Estrategia · Total</div><div class="bt-metric-value ${cls(r.totalReturn)}">${fmt(r.totalReturn)}</div><div class="bt-metric-sub">${strategyLabels[btState.strat]}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Benchmark · Total</div><div class="bt-metric-value ${cls(r.totalReturnB)}">${fmt(r.totalReturnB)}</div><div class="bt-metric-sub">S&P 500 buy & hold</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">CAGR Estrategia</div><div class="bt-metric-value ${cls(r.cagr)}">${fmt(r.cagr)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">CAGR Benchmark</div><div class="bt-metric-value ${cls(r.cagrB)}">${fmt(r.cagrB)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Max DD Estrategia</div><div class="bt-metric-value sc-neg">${r.maxDD.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Max DD Benchmark</div><div class="bt-metric-value sc-neg">${r.maxDDB.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Volatilidad anual</div><div class="bt-metric-value">${r.volAnn.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Sharpe (CAGR/Vol)</div><div class="bt-metric-value">${r.sharpe.toFixed(2)}</div></div>
+      </div>
+      <div class="bt-chart-wrap"><canvas id="bt-canvas"></canvas></div>
+      <div style="font-size:10px;color:var(--text2);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">Distribución de regímenes detectados</div>
+      <table class="bt-table">
+        <tr><th>Régimen</th><th>Meses</th><th>% periodo</th></tr>
+        ${Object.entries(r.regCounts).sort((a,b) => b[1]-a[1]).map(([k,v]) =>
+          `<tr><td>${REGIME_LABELS[k] || k}</td><td>${v}</td><td>${(v/(r.years*12)*100).toFixed(1)}%</td></tr>`
+        ).join('')}
+      </table>
+      <div style="font-size:10px;color:var(--text2);margin:18px 0 8px;letter-spacing:1px;text-transform:uppercase;">Últimas 12 decisiones del sistema</div>
+      <table class="bt-table">
+        <tr><th>Mes</th><th>Régimen</th><th>Holdings</th></tr>
+        ${r.holdingsLog.slice(-12).reverse().map(h =>
+          `<tr><td>${h.ym}</td><td>${REGIME_LABELS[h.regime] || h.regime}</td><td>${h.holdings}</td></tr>`
+        ).join('')}
+      </table>
+    </div>
+  `;
+
+  if (btState.chart) btState.chart.destroy();
+  const ctx = document.getElementById('bt-canvas').getContext('2d');
+  const opts = baseOptions('Equity (base 100)');
+  opts.scales.y.type = 'logarithmic';
+  opts.scales.y.ticks.callback = v => {
+    const log = Math.log10(v);
+    if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
+      return v >= 1000 ? (v/1000) + 'k' : v;
+    }
+    return null;
+  };
+  opts.plugins.legend = { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 10 } } };
+  btState.chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        { label: strategyLabels[btState.strat], data: r.equity.strat, borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.2 },
+        { label: 'S&P 500 buy & hold', data: r.equity.bench, borderColor: '#7e93ab', backgroundColor: '#7e93ab', borderWidth: 1.5, pointRadius: 0, tension: 0.2, borderDash: [4, 4] },
+      ]
+    },
+    options: opts
+  });
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
