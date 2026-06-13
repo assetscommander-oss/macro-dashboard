@@ -364,6 +364,7 @@
   <div class="tab-nav">
     <button class="tab-btn active" data-tab="macro" onclick="switchTab('macro')">🌐 Macro Dashboard</button>
     <button class="tab-btn" data-tab="pension" onclick="switchTab('pension')">🇬🇧 Pensión L&G</button>
+    <button class="tab-btn" data-tab="info" onclick="switchTab('info')">📚 Información</button>
   </div>
 
   <!-- TAB: MACRO -->
@@ -409,11 +410,15 @@
         <div class="regime-desc" id="regime-desc">Cargando indicadores para determinar el régimen macro actual...</div>
         <div class="alloc-title">Asignación orientativa</div>
         <div class="reco-alloc" id="reco-alloc"></div>
-        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado</div>
+        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado RV US</div>
         <div class="senti-bar"><div class="senti-marker" id="senti-marker"></div></div>
         <div class="senti-labels"><span>Pánico</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Euforia</span></div>
         <div class="senti-read" id="senti-read">Cargando sentimiento...</div>
         <div class="senti-tactic" id="senti-tactic" style="display:none;"></div>
+        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado cripto</div>
+        <div class="senti-bar"><div class="senti-marker" id="senti-marker-crypto"></div></div>
+        <div class="senti-labels"><span>Miedo extr.</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Codicia extr.</span></div>
+        <div class="senti-read" id="senti-read-crypto">Cargando sentimiento cripto...</div>
       </div>
     </div>
     <div class="mod-strip" id="mod-strip"></div>
@@ -705,6 +710,245 @@
       <div class="etf-item"><div class="etf-name">iShares 7-10 Treasury <span class="ticker">IEF</span></div><div class="etf-meta">RF duración intermedia · menos volátil</div></div>
       <div class="etf-item"><div class="etf-name">iShares 0-3M Treasury <span class="ticker">SGOV</span></div><div class="etf-meta">Cash remunerado · pólvora seca</div></div>
       <div class="etf-item"><div class="etf-name">iShares Bitcoin Trust <span class="ticker">IBIT</span></div><div class="etf-meta">BTC 0% → acumular cuando Liquidez Fed gire al alza</div></div>
+    </div>
+  </div>
+
+  <!-- BACKTEST -->
+  <div class="section-title">Backtest histórico del sistema</div>
+  <div class="backtest">
+    <div class="bt-info">
+      Reconstruye la asignación que el sistema habría dictado <b>cada mes hacia atrás</b> y la compara con un benchmark buy & hold del S&P 500. Para cada mes, calcula el régimen macro vigente (con datos públicos en esa fecha) y el Score de cada activo, después aplica la regla de la variante elegida. Periodo disponible: ~2007 hasta hoy.
+    </div>
+    <div class="bt-controls">
+      <span class="ctrl-label">Variante:</span>
+      <button class="range-btn active" data-strat="top1" onclick="setBtStrat(this)">Top-1 Score</button>
+      <button class="range-btn" data-strat="top3" onclick="setBtStrat(this)">Top-3 equiponderado</button>
+      <button class="range-btn" data-strat="regime" onclick="setBtStrat(this)">Activo del régimen (sin técnicos)</button>
+      <button class="range-btn" data-strat="6040" onclick="setBtStrat(this)">60/40 estático</button>
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Desde:</span>
+      <button class="range-btn" data-bt-start="2007" onclick="setBtStart(this)">2007</button>
+      <button class="range-btn active" data-bt-start="2010" onclick="setBtStart(this)">2010</button>
+      <button class="range-btn" data-bt-start="2015" onclick="setBtStart(this)">2015</button>
+      <button class="range-btn" data-bt-start="2020" onclick="setBtStart(this)">2020</button>
+      <span class="ctrl-divider"></span>
+      <button class="analyzer-btn" onclick="runBacktest()">Ejecutar backtest</button>
+    </div>
+    <div id="bt-output"><div class="bt-empty">Pulsa "Ejecutar backtest" — la primera vez descarga ~30 series históricas (~40s); después queda cacheado en localStorage.</div></div>
+  </div>
+
+  <!-- ASSET BACKTEST -->
+  <div class="section-title">Backtest histórico de un activo · vs S&P 500</div>
+  <div class="backtest">
+    <div class="bt-info">
+      Compara el rendimiento buy & hold de cualquier ticker (BTC-USD, GLD, TLT, AAPL, ^GSPC...) con el S&P 500 en el periodo elegido. Útil para responder preguntas tipo "¿habría ganado más con oro que con SP500 desde 2010?". Sin decisiones del sistema — buy & hold puro.
+    </div>
+    <div class="bt-controls">
+      <span class="ctrl-label">Ticker:</span>
+      <input class="analyzer-input" id="abt-ticker" type="text" placeholder="GLD, BTC-USD, ^NDX, AAPL, TLT..." style="max-width:240px;" onkeydown="if(event.key==='Enter')runAssetBacktest()">
+      <span class="ctrl-divider"></span>
+      <span class="ctrl-label">Desde:</span>
+      <button class="range-btn" data-abt-start="2005" onclick="setAbtStart(this)">2005</button>
+      <button class="range-btn" data-abt-start="2010" onclick="setAbtStart(this)">2010</button>
+      <button class="range-btn active" data-abt-start="2015" onclick="setAbtStart(this)">2015</button>
+      <button class="range-btn" data-abt-start="2020" onclick="setAbtStart(this)">2020</button>
+      <span class="ctrl-divider"></span>
+      <button class="analyzer-btn" onclick="runAssetBacktest()">Ejecutar</button>
+    </div>
+    <div id="abt-output"><div class="bt-empty">Introduce un ticker y pulsa Ejecutar. Se compara con el S&P 500 (^GSPC) en el mismo periodo.</div></div>
+  </div>
+
+  </div>
+  <!-- END TAB MACRO -->
+
+  <!-- TAB: PENSIÓN L&G -->
+  <div class="tab-content" id="tab-pension">
+
+    <div class="pen-info">
+      Análisis específico de los <b>16 fondos disponibles</b> en tu plan de pensiones Airbus/Legal & General. Datos extraídos de los factsheets a 30 abril 2026 (Equity, Multi-asset, Property, Cash) y 31 marzo 2026 (Fixed interest, Airbus Growth). El régimen macro detectado en la otra pestaña determina el encaje y la asignación recomendada.
+      <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div class="pen-info-from-macro"><span class="lbl">Régimen vigente</span><span class="val" id="pen-current-regime" style="color:var(--text3);">Calculando...</span></div>
+        <div class="pen-info-from-macro"><span class="lbl">Sentimiento</span><span class="val" id="pen-current-senti" style="color:var(--text3);">—</span></div>
+      </div>
+    </div>
+
+    <div class="section-title">Recomendación específica L&G según régimen</div>
+    <div class="pen-reco">
+      <div class="pen-reco-title">📍 Asignación orientativa</div>
+      <div class="pen-reco-regime" id="pen-reco-regime" style="color:var(--text3);">Cargando...</div>
+      <div class="pen-reco-desc" id="pen-reco-desc">Los fondos se eligen combinando el régimen macro vigente con el encaje específico de cada fondo L&G, priorizando bajo FMC dentro de cada categoría.</div>
+      <div class="pen-reco-list" id="pen-reco-list"></div>
+    </div>
+
+    <div class="section-title">Tu universo de fondos · 16 opciones</div>
+    <div class="chart-section">
+      <div class="chart-controls">
+        <span class="ctrl-label">Categoría:</span>
+        <button class="cat-btn active" data-pcat="all" onclick="setPenCat(this)">Todas</button>
+        <button class="cat-btn" data-pcat="Equity" onclick="setPenCat(this)">Equity</button>
+        <button class="cat-btn" data-pcat="Multi-asset" onclick="setPenCat(this)">Multi-asset</button>
+        <button class="cat-btn" data-pcat="Fixed interest" onclick="setPenCat(this)">Fixed interest</button>
+        <button class="cat-btn" data-pcat="Property" onclick="setPenCat(this)">Property</button>
+        <button class="cat-btn" data-pcat="Cash" onclick="setPenCat(this)">Cash</button>
+      </div>
+      <div class="pen-table-wrap">
+        <table class="pen-table" id="pen-table">
+          <thead><tr id="pen-head"></tr></thead>
+          <tbody id="pen-body"></tbody>
+        </table>
+      </div>
+      <div class="screener-meta">
+        <span>Score = 30% rentabilidad histórica · 20% consistencia · 50% encaje régimen · FMC = comisión de gestión anual aplicada · Click en fila para ver detalles · Click en cabeceras para ordenar</span>
+      </div>
+    </div>
+
+    <div class="section-title">Rentabilidades anuales reales · datos del factsheet</div>
+    <div class="chart-section">
+      <div class="chart-controls" id="pen-chart-toggles">
+        <span class="ctrl-label">Fondos:</span>
+        <span class="ctrl-divider" id="pen-toggle-end"></span>
+        <button class="ctrl-btn-all" onclick="setPenChartAll(true)">Todos</button>
+        <button class="ctrl-btn-all" onclick="setPenChartAll(false)">Ninguno</button>
+      </div>
+      <div class="chart-controls">
+        <span class="ctrl-label">Vista:</span>
+        <button class="range-btn active" data-pen-view="annual" onclick="setPenChartView(this)">Rentabilidad anual</button>
+        <button class="range-btn" data-pen-view="cumulative" onclick="setPenChartView(this)">Beneficio acumulado</button>
+      </div>
+      <div class="pen-chart-wrap">
+        <canvas id="pen-chart-canvas"></canvas>
+      </div>
+      <div class="chart-note">Datos reales de los factsheets oficiales (12 meses a 31 marzo: 2022, 2023, 2024, 2025, 2026). En "Rentabilidad anual" cada año independiente con escala en %. En "Beneficio acumulado" partiendo de 0% en marzo 2021, mostrando cómo evolucionaría una inversión de £100 manteniendo el fondo todo el periodo. Algunos fondos no tienen 5 años de histórico — empezarán cuando sus datos estén disponibles.</div>
+    </div>
+
+    <!-- NOTES SECTION -->
+    <div class="section-title">Cómo se calcula el Score del fondo</div>
+    <div class="score-guide">
+
+      <div class="sg-block">
+        <div class="sg-title">📐 Fórmula global (pesos adaptados al universo L&G)</div>
+        <div class="sg-formula">Score = 30% Rentabilidad histórica + 20% Consistencia + 50% Encaje régimen</div>
+        <div class="sg-text">Los pesos difieren del Score del macro dashboard porque aquí no tenemos datos diarios para calcular momentum o tendencia vs MA200. Compensamos con consistencia (estabilidad año a año), y subimos el peso del régimen al 50% — para una pensión de largo plazo, el contexto macro pesa más que el último trimestre.</div>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">1️⃣ Rentabilidad histórica · peso 30%</div>
+        <div class="sg-text">Promedio ponderado de las rentabilidades acumuladas 1A, 3A y 5A del factsheet (con el peso del periodo más largo el mayor):</div>
+        <div class="sg-formula">Promedio = r1A × 0.20 + r3A × 0.35 + r5A × 0.45</div>
+        <div class="sg-formula">Componente = 50 + Promedio × 2 · saturado 0–100</div>
+        <table class="sg-table">
+          <tr><th>Rentabilidad 1A / 3A / 5A</th><th>Promedio ponderado</th><th>Componente</th></tr>
+          <tr><td>+25% / +15% / +10%</td><td>+14.75</td><td>79</td></tr>
+          <tr><td>+15% / +10% / +8%</td><td>+10.10</td><td>70</td></tr>
+          <tr><td>+10% / +5% / +5%</td><td>+6.00</td><td>62</td></tr>
+          <tr><td>+5% / +3% / +2%</td><td>+2.95</td><td>56</td></tr>
+          <tr><td>0% / 0% / 0%</td><td>0</td><td>50</td></tr>
+          <tr><td>-5% / -3% / -2%</td><td>-2.95</td><td>44</td></tr>
+          <tr><td>-15% / -10% / -5%</td><td>-8.75</td><td>33</td></tr>
+        </table>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">2️⃣ Consistencia · peso 20%</div>
+        <div class="sg-text">Mide la <b>estabilidad año a año</b>: cuanto menor sea la desviación entre las rentabilidades anuales 2022-2026, mayor el Score. Un fondo que da +8%, +9%, +7% es más consistente (y más predecible) que uno que da +30%, -25%, +15%, aunque tengan la misma rentabilidad media.</div>
+        <div class="sg-formula">Componente = 100 - desviación_estándar × 5 · saturado 0–100</div>
+        <table class="sg-table">
+          <tr><th>Desviación entre años</th><th>Tipo de fondo</th><th>Componente</th></tr>
+          <tr><td>SD &lt; 3%</td><td>Cash, Short Dated Credit</td><td>85–100</td></tr>
+          <tr><td>SD 3–7%</td><td>Multi-asset, fondos defensivos</td><td>65–85</td></tr>
+          <tr><td>SD 7–12%</td><td>RV global, UK Equity</td><td>40–65</td></tr>
+          <tr><td>SD 12–18%</td><td>Tech, growth, emergentes</td><td>10–40</td></tr>
+          <tr><td>SD &gt; 18%</td><td>Gilts largos en periodo turbulento, Property</td><td>0–10</td></tr>
+        </table>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">3️⃣ Encaje de régimen · peso 50% (el mayor)</div>
+        <div class="sg-text">Para una pensión de largo plazo el contexto macro pesa el doble que la rentabilidad reciente. Cada fondo tiene mapeado 0–100 su encaje en los 4 regímenes:</div>
+        <table class="sg-table">
+          <tr><th>Fondo</th><th>🟢 Expansión</th><th>🟠 Sobrecalent.</th><th>🔴 Estanflación</th><th>🔵 Recesión defl.</th></tr>
+          <tr><td>World ex UK Equity</td><td><b style="color:var(--green);">92</b></td><td>50</td><td>22</td><td>28</td></tr>
+          <tr><td>Airbus Growth</td><td><b style="color:var(--green);">90</b></td><td>45</td><td>18</td><td>28</td></tr>
+          <tr><td>HSBC Islamic Global</td><td><b style="color:var(--green);">95</b></td><td>40</td><td>15</td><td>30</td></tr>
+          <tr><td>Emerging Markets</td><td><b style="color:var(--green);">88</b></td><td>70</td><td>25</td><td>12</td></tr>
+          <tr><td>UK Equity Index</td><td>75</td><td><b style="color:var(--orange);">75</b></td><td>35</td><td>22</td></tr>
+          <tr><td>Index Linked Gilts</td><td>45</td><td>70</td><td><b style="color:var(--red);">78</b></td><td>55</td></tr>
+          <tr><td>Property Fund</td><td>65</td><td><b style="color:var(--orange);">75</b></td><td>50</td><td>35</td></tr>
+          <tr><td>Diversified Fund</td><td>70</td><td>55</td><td>45</td><td>60</td></tr>
+          <tr><td>Over 15Y Gilts</td><td>35</td><td>5</td><td>18</td><td><b style="color:var(--blue);">95</b></td></tr>
+          <tr><td>Corp Bond 15Y+</td><td>40</td><td>10</td><td>20</td><td><b style="color:var(--blue);">88</b></td></tr>
+          <tr><td>Short Dated Credit</td><td>40</td><td>40</td><td>65</td><td><b style="color:var(--blue);">70</b></td></tr>
+          <tr><td>Cash Fund</td><td>25</td><td>40</td><td><b style="color:var(--red);">75</b></td><td>80</td></tr>
+        </table>
+        <div class="sg-text" style="margin-top:14px;"><b>Lecturas del Score final:</b></div>
+        <div class="sg-readout">
+          <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">65–100 · Buen encaje y rentabilidad sólida</div>
+          <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">45–65 · Zona neutral</div>
+          <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">0–45 · Desfavorable en este régimen</div>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">🎯 Del Score a la recomendación</div>
+        <div class="sg-text">El panel de asignación recomendada combina el régimen vigente con dos criterios: <b>(1) el rol que cada fondo debe cumplir</b> en ese régimen (RV core, protección inflación, duración larga, cash, etc.) y <b>(2) dentro de cada rol, el fondo con menor FMC</b> que cumple el match.</div>
+        <div class="sg-text">Por eso en Expansión el sistema elige Airbus Growth (FMC 0.06%) en vez de World ex UK (FMC 0.12%) aunque sean roles muy similares — la comisión es 2× menor. En cambio, fondos con FMC alto como Veritas o CT Responsible (0.74%) raramente aparecen como recomendación principal: tendrían que demostrar un encaje superior muy claro para compensar el extra-coste anual.</div>
+      </div>
+    </div>
+
+    <div class="section-title">¿En qué invierte cada fondo? · Composición real de los factsheets</div>
+    <div class="score-guide" id="pen-holdings-notes">
+      <!-- Generated by JS -->
+    </div>
+
+  </div>
+  <!-- END TAB PENSIÓN -->
+
+  <!-- TAB: INFORMACIÓN -->
+  <div class="tab-content" id="tab-info">
+
+  <!-- SENTIMIENTO EXPLAINER -->
+  <div class="section-title">El indicador de sentimiento — de dónde sale cada uno</div>
+  <div class="score-guide">
+    <div class="sg-block">
+      <div class="sg-title">🇺🇸 Sentimiento de mercado RV US</div>
+      <div class="sg-text">El termómetro principal mide el clima emocional de la renta variable estadounidense (que es el mercado bursátil global por excelencia y donde existen los mejores indicadores gratuitos de sentimiento). Es un agregado de hasta <b>6 componentes</b>, cada uno con su propia fuente:</div>
+      <table class="sg-table">
+        <tr><th>Componente</th><th>Qué mide</th><th>Fuente</th></tr>
+        <tr><td><b>VIX</b></td><td>Volatilidad implícita del S&P 500 a 30 días. Sube con miedo, baja con calma.</td><td>Yahoo · ^VIX</td></tr>
+        <tr><td><b>Estructura VIX/VIX3M</b></td><td>Cociente VIX corto / VIX 3 meses. Cuando se invierte (>1), el mercado paga más por protección inmediata = estrés agudo.</td><td>Yahoo · ^VIX/^VIX3M</td></tr>
+        <tr><td><b>Spreads High Yield</b></td><td>Lo que paga de extra la deuda basura sobre Treasury. El crédito huele los problemas antes que la bolsa.</td><td>FRED · BAMLH0A0HYM2</td></tr>
+        <tr><td><b>CNN Fear & Greed</b></td><td>Agregado de 7 sub-indicadores propios de CNN (momentum, breadth, put/call, junk bond demand, etc.)</td><td>CNN dataviz API</td></tr>
+        <tr><td><b>Put/Call SPY</b></td><td>Ratio de open interest puts/calls del vencimiento más cercano del SPY. Alto = cobertura alta = miedo.</td><td>Yahoo options · SPY</td></tr>
+        <tr><td><b>Crypto F&G</b></td><td>Sí, también entra aquí — la cripto se ha correlacionado con risk-on tradicional. Pero solo cuenta como 1/6 del agregado.</td><td>alternative.me</td></tr>
+      </table>
+      <div class="sg-text"><b>Fórmula de agregación:</b> cada componente se normaliza a una escala 0–100 (0 = pánico extremo, 100 = euforia) y se promedia. Si CNN o Put/Call bloquean su endpoint en una recarga, se calcula con los componentes que sí estén disponibles. Por eso a veces verás un termómetro con 5 de 6 ingredientes.</div>
+      <div class="sg-text"><b>A qué activos se aplica este termómetro:</b> en el screener, lo verás solo en activos de las categorías <b>Índices RV</b> (S&P, Nasdaq, Russell, etc.) y <b>Sectores</b> (XLK, XLE, etc.) — porque son los activos donde estos componentes son realmente relevantes. Para RF, commodities, FX, etc. aparece <b>N/A</b>: no existe un indicador gratuito que mida específicamente el sentimiento de esos mercados, y aplicar el de RV US sería engañoso.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">₿ Sentimiento de mercado cripto</div>
+      <div class="sg-text">El <b>Crypto Fear & Greed Index</b> de alternative.me es un indicador propio del mercado de criptomonedas. Combina <b>6 ingredientes específicamente cripto</b>:</div>
+      <table class="sg-table">
+        <tr><th>Componente</th><th>Peso</th><th>Qué mide</th></tr>
+        <tr><td>Volatilidad</td><td>25%</td><td>Volatilidad actual + max drawdown de BTC vs 30/90 días</td></tr>
+        <tr><td>Momentum/Volumen</td><td>25%</td><td>Volumen de mercado actual vs medias 30/90 días</td></tr>
+        <tr><td>Redes sociales</td><td>15%</td><td>Análisis de hashtags y volumen de menciones BTC en X/Twitter, Reddit</td></tr>
+        <tr><td>Encuestas</td><td>15%</td><td>strawpoll.com encuestas semanales (actualmente pausado)</td></tr>
+        <tr><td>Dominancia BTC</td><td>10%</td><td>Cuota de mercado de BTC vs altcoins. Dominancia subiendo = miedo migrando a "seguro"</td></tr>
+        <tr><td>Tendencias Google</td><td>10%</td><td>Volumen de búsquedas "Bitcoin", "crypto crash", etc.</td></tr>
+      </table>
+      <div class="sg-text"><b>Escala:</b> 0–100, donde 0–24 = miedo extremo, 25–44 = miedo, 45–55 = neutral, 56–75 = codicia, 76–100 = codicia extrema.</div>
+      <div class="sg-text"><b>A qué se aplica:</b> al panel de régimen (barra separada para mercado cripto) y a los activos de la categoría <b>Crypto</b> del screener (BTC, ETH).</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">📊 Cómo usar el sentimiento</div>
+      <div class="sg-text">El sentimiento <b>NO determina el régimen</b> y <b>NO afecta al Score</b> de los activos. Es una capa de timing táctico que se interpreta en clave <b>contrarian</b> en los extremos:</div>
+      <ul class="rg-list" style="margin-top:8px;">
+        <li><b>Pánico extremo + régimen favorable al riesgo</b> → señal de entrada históricamente. "Be greedy when others are fearful."</li>
+        <li><b>Pánico + régimen defensivo</b> → coherente, no es señal de compra; esperar confirmación macro.</li>
+        <li><b>Euforia extrema + régimen tardío</b> (sobrecalentamiento o estanflación) → recorte/recogida de beneficios.</li>
+        <li><b>Zona media (25–75)</b> → el sentimiento no aporta señal accionable. Se ignora.</li>
+        <li><b>Para BTC específicamente</b>: el Crypto F&G afina el tamaño de la posición dentro del rango que dicta el régimen (miedo extremo → techo del rango; codicia extrema → suelo del rango).</li>
+      </ul>
     </div>
   </div>
 
@@ -1039,174 +1283,10 @@ Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
     </div>
   </div>
 
-  <!-- BACKTEST -->
-  <div class="section-title">Backtest histórico del sistema</div>
-  <div class="backtest">
-    <div class="bt-info">
-      Reconstruye la asignación que el sistema habría dictado <b>cada mes hacia atrás</b> y la compara con un benchmark buy & hold del S&P 500. Para cada mes, calcula el régimen macro vigente (con datos públicos en esa fecha) y el Score de cada activo, después aplica la regla de la variante elegida. Periodo disponible: ~2007 hasta hoy.
-    </div>
-    <div class="bt-controls">
-      <span class="ctrl-label">Variante:</span>
-      <button class="range-btn active" data-strat="top1" onclick="setBtStrat(this)">Top-1 Score</button>
-      <button class="range-btn" data-strat="top3" onclick="setBtStrat(this)">Top-3 equiponderado</button>
-      <button class="range-btn" data-strat="regime" onclick="setBtStrat(this)">Activo del régimen (sin técnicos)</button>
-      <button class="range-btn" data-strat="6040" onclick="setBtStrat(this)">60/40 estático</button>
-      <span class="ctrl-divider"></span>
-      <span class="ctrl-label">Desde:</span>
-      <button class="range-btn" data-bt-start="2007" onclick="setBtStart(this)">2007</button>
-      <button class="range-btn active" data-bt-start="2010" onclick="setBtStart(this)">2010</button>
-      <button class="range-btn" data-bt-start="2015" onclick="setBtStart(this)">2015</button>
-      <button class="range-btn" data-bt-start="2020" onclick="setBtStart(this)">2020</button>
-      <span class="ctrl-divider"></span>
-      <button class="analyzer-btn" onclick="runBacktest()">Ejecutar backtest</button>
-    </div>
-    <div id="bt-output"><div class="bt-empty">Pulsa "Ejecutar backtest" — la primera vez descarga ~30 series históricas (~40s); después queda cacheado en localStorage.</div></div>
-  </div>
 
   </div>
-  <!-- END TAB MACRO -->
+  <!-- END TAB INFORMACIÓN -->
 
-  <!-- TAB: PENSIÓN L&G -->
-  <div class="tab-content" id="tab-pension">
-
-    <div class="pen-info">
-      Análisis específico de los <b>16 fondos disponibles</b> en tu plan de pensiones Airbus/Legal & General. Datos extraídos de los factsheets a 30 abril 2026 (Equity, Multi-asset, Property, Cash) y 31 marzo 2026 (Fixed interest, Airbus Growth). El régimen macro detectado en la otra pestaña determina el encaje y la asignación recomendada.
-      <div style="margin-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <div class="pen-info-from-macro"><span class="lbl">Régimen vigente</span><span class="val" id="pen-current-regime" style="color:var(--text3);">Calculando...</span></div>
-        <div class="pen-info-from-macro"><span class="lbl">Sentimiento</span><span class="val" id="pen-current-senti" style="color:var(--text3);">—</span></div>
-      </div>
-    </div>
-
-    <div class="section-title">Recomendación específica L&G según régimen</div>
-    <div class="pen-reco">
-      <div class="pen-reco-title">📍 Asignación orientativa</div>
-      <div class="pen-reco-regime" id="pen-reco-regime" style="color:var(--text3);">Cargando...</div>
-      <div class="pen-reco-desc" id="pen-reco-desc">Los fondos se eligen combinando el régimen macro vigente con el encaje específico de cada fondo L&G, priorizando bajo FMC dentro de cada categoría.</div>
-      <div class="pen-reco-list" id="pen-reco-list"></div>
-    </div>
-
-    <div class="section-title">Tu universo de fondos · 16 opciones</div>
-    <div class="chart-section">
-      <div class="chart-controls">
-        <span class="ctrl-label">Categoría:</span>
-        <button class="cat-btn active" data-pcat="all" onclick="setPenCat(this)">Todas</button>
-        <button class="cat-btn" data-pcat="Equity" onclick="setPenCat(this)">Equity</button>
-        <button class="cat-btn" data-pcat="Multi-asset" onclick="setPenCat(this)">Multi-asset</button>
-        <button class="cat-btn" data-pcat="Fixed interest" onclick="setPenCat(this)">Fixed interest</button>
-        <button class="cat-btn" data-pcat="Property" onclick="setPenCat(this)">Property</button>
-        <button class="cat-btn" data-pcat="Cash" onclick="setPenCat(this)">Cash</button>
-      </div>
-      <div class="pen-table-wrap">
-        <table class="pen-table" id="pen-table">
-          <thead><tr id="pen-head"></tr></thead>
-          <tbody id="pen-body"></tbody>
-        </table>
-      </div>
-      <div class="screener-meta">
-        <span>Score = 30% rentabilidad histórica · 20% consistencia · 50% encaje régimen · FMC = comisión de gestión anual aplicada · Click en fila para ver detalles · Click en cabeceras para ordenar</span>
-      </div>
-    </div>
-
-    <div class="section-title">Rentabilidades anuales reales · datos del factsheet</div>
-    <div class="chart-section">
-      <div class="chart-controls" id="pen-chart-toggles">
-        <span class="ctrl-label">Fondos:</span>
-        <span class="ctrl-divider" id="pen-toggle-end"></span>
-        <button class="ctrl-btn-all" onclick="setPenChartAll(true)">Todos</button>
-        <button class="ctrl-btn-all" onclick="setPenChartAll(false)">Ninguno</button>
-      </div>
-      <div class="chart-controls">
-        <span class="ctrl-label">Vista:</span>
-        <button class="range-btn active" data-pen-view="annual" onclick="setPenChartView(this)">Rentabilidad anual</button>
-        <button class="range-btn" data-pen-view="cumulative" onclick="setPenChartView(this)">Beneficio acumulado</button>
-      </div>
-      <div class="pen-chart-wrap">
-        <canvas id="pen-chart-canvas"></canvas>
-      </div>
-      <div class="chart-note">Datos reales de los factsheets oficiales (12 meses a 31 marzo: 2022, 2023, 2024, 2025, 2026). En "Rentabilidad anual" cada año independiente con escala en %. En "Beneficio acumulado" partiendo de 0% en marzo 2021, mostrando cómo evolucionaría una inversión de £100 manteniendo el fondo todo el periodo. Algunos fondos no tienen 5 años de histórico — empezarán cuando sus datos estén disponibles.</div>
-    </div>
-
-    <!-- NOTES SECTION -->
-    <div class="section-title">Cómo se calcula el Score del fondo</div>
-    <div class="score-guide">
-
-      <div class="sg-block">
-        <div class="sg-title">📐 Fórmula global (pesos adaptados al universo L&G)</div>
-        <div class="sg-formula">Score = 30% Rentabilidad histórica + 20% Consistencia + 50% Encaje régimen</div>
-        <div class="sg-text">Los pesos difieren del Score del macro dashboard porque aquí no tenemos datos diarios para calcular momentum o tendencia vs MA200. Compensamos con consistencia (estabilidad año a año), y subimos el peso del régimen al 50% — para una pensión de largo plazo, el contexto macro pesa más que el último trimestre.</div>
-      </div>
-
-      <div class="sg-block">
-        <div class="sg-title">1️⃣ Rentabilidad histórica · peso 30%</div>
-        <div class="sg-text">Promedio ponderado de las rentabilidades acumuladas 1A, 3A y 5A del factsheet (con el peso del periodo más largo el mayor):</div>
-        <div class="sg-formula">Promedio = r1A × 0.20 + r3A × 0.35 + r5A × 0.45</div>
-        <div class="sg-formula">Componente = 50 + Promedio × 2 · saturado 0–100</div>
-        <table class="sg-table">
-          <tr><th>Rentabilidad 1A / 3A / 5A</th><th>Promedio ponderado</th><th>Componente</th></tr>
-          <tr><td>+25% / +15% / +10%</td><td>+14.75</td><td>79</td></tr>
-          <tr><td>+15% / +10% / +8%</td><td>+10.10</td><td>70</td></tr>
-          <tr><td>+10% / +5% / +5%</td><td>+6.00</td><td>62</td></tr>
-          <tr><td>+5% / +3% / +2%</td><td>+2.95</td><td>56</td></tr>
-          <tr><td>0% / 0% / 0%</td><td>0</td><td>50</td></tr>
-          <tr><td>-5% / -3% / -2%</td><td>-2.95</td><td>44</td></tr>
-          <tr><td>-15% / -10% / -5%</td><td>-8.75</td><td>33</td></tr>
-        </table>
-      </div>
-
-      <div class="sg-block">
-        <div class="sg-title">2️⃣ Consistencia · peso 20%</div>
-        <div class="sg-text">Mide la <b>estabilidad año a año</b>: cuanto menor sea la desviación entre las rentabilidades anuales 2022-2026, mayor el Score. Un fondo que da +8%, +9%, +7% es más consistente (y más predecible) que uno que da +30%, -25%, +15%, aunque tengan la misma rentabilidad media.</div>
-        <div class="sg-formula">Componente = 100 - desviación_estándar × 5 · saturado 0–100</div>
-        <table class="sg-table">
-          <tr><th>Desviación entre años</th><th>Tipo de fondo</th><th>Componente</th></tr>
-          <tr><td>SD &lt; 3%</td><td>Cash, Short Dated Credit</td><td>85–100</td></tr>
-          <tr><td>SD 3–7%</td><td>Multi-asset, fondos defensivos</td><td>65–85</td></tr>
-          <tr><td>SD 7–12%</td><td>RV global, UK Equity</td><td>40–65</td></tr>
-          <tr><td>SD 12–18%</td><td>Tech, growth, emergentes</td><td>10–40</td></tr>
-          <tr><td>SD &gt; 18%</td><td>Gilts largos en periodo turbulento, Property</td><td>0–10</td></tr>
-        </table>
-      </div>
-
-      <div class="sg-block">
-        <div class="sg-title">3️⃣ Encaje de régimen · peso 50% (el mayor)</div>
-        <div class="sg-text">Para una pensión de largo plazo el contexto macro pesa el doble que la rentabilidad reciente. Cada fondo tiene mapeado 0–100 su encaje en los 4 regímenes:</div>
-        <table class="sg-table">
-          <tr><th>Fondo</th><th>🟢 Expansión</th><th>🟠 Sobrecalent.</th><th>🔴 Estanflación</th><th>🔵 Recesión defl.</th></tr>
-          <tr><td>World ex UK Equity</td><td><b style="color:var(--green);">92</b></td><td>50</td><td>22</td><td>28</td></tr>
-          <tr><td>Airbus Growth</td><td><b style="color:var(--green);">90</b></td><td>45</td><td>18</td><td>28</td></tr>
-          <tr><td>HSBC Islamic Global</td><td><b style="color:var(--green);">95</b></td><td>40</td><td>15</td><td>30</td></tr>
-          <tr><td>Emerging Markets</td><td><b style="color:var(--green);">88</b></td><td>70</td><td>25</td><td>12</td></tr>
-          <tr><td>UK Equity Index</td><td>75</td><td><b style="color:var(--orange);">75</b></td><td>35</td><td>22</td></tr>
-          <tr><td>Index Linked Gilts</td><td>45</td><td>70</td><td><b style="color:var(--red);">78</b></td><td>55</td></tr>
-          <tr><td>Property Fund</td><td>65</td><td><b style="color:var(--orange);">75</b></td><td>50</td><td>35</td></tr>
-          <tr><td>Diversified Fund</td><td>70</td><td>55</td><td>45</td><td>60</td></tr>
-          <tr><td>Over 15Y Gilts</td><td>35</td><td>5</td><td>18</td><td><b style="color:var(--blue);">95</b></td></tr>
-          <tr><td>Corp Bond 15Y+</td><td>40</td><td>10</td><td>20</td><td><b style="color:var(--blue);">88</b></td></tr>
-          <tr><td>Short Dated Credit</td><td>40</td><td>40</td><td>65</td><td><b style="color:var(--blue);">70</b></td></tr>
-          <tr><td>Cash Fund</td><td>25</td><td>40</td><td><b style="color:var(--red);">75</b></td><td>80</td></tr>
-        </table>
-        <div class="sg-text" style="margin-top:14px;"><b>Lecturas del Score final:</b></div>
-        <div class="sg-readout">
-          <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">65–100 · Buen encaje y rentabilidad sólida</div>
-          <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">45–65 · Zona neutral</div>
-          <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">0–45 · Desfavorable en este régimen</div>
-        </div>
-      </div>
-
-      <div class="sg-block">
-        <div class="sg-title">🎯 Del Score a la recomendación</div>
-        <div class="sg-text">El panel de asignación recomendada combina el régimen vigente con dos criterios: <b>(1) el rol que cada fondo debe cumplir</b> en ese régimen (RV core, protección inflación, duración larga, cash, etc.) y <b>(2) dentro de cada rol, el fondo con menor FMC</b> que cumple el match.</div>
-        <div class="sg-text">Por eso en Expansión el sistema elige Airbus Growth (FMC 0.06%) en vez de World ex UK (FMC 0.12%) aunque sean roles muy similares — la comisión es 2× menor. En cambio, fondos con FMC alto como Veritas o CT Responsible (0.74%) raramente aparecen como recomendación principal: tendrían que demostrar un encaje superior muy claro para compensar el extra-coste anual.</div>
-      </div>
-    </div>
-
-    <div class="section-title">¿En qué invierte cada fondo? · Composición real de los factsheets</div>
-    <div class="score-guide" id="pen-holdings-notes">
-      <!-- Generated by JS -->
-    </div>
-
-  </div>
-  <!-- END TAB PENSIÓN -->
 
   <!-- FOOTER -->
   <div class="footer">
@@ -1895,14 +1975,39 @@ function renderSentiment() {
   const marker = document.getElementById('senti-marker');
   const read = document.getElementById('senti-read');
   const tactic = document.getElementById('senti-tactic');
-  if (s == null) { read.textContent = 'Sentimiento no disponible'; return; }
+  if (marker && read) {
+    if (s == null) {
+      read.textContent = 'Sentimiento no disponible';
+    } else {
+      marker.style.left = `calc(${s}% - 2px)`;
+      const label = sentimentLabel(s);
+      const color = s < 25 ? 'var(--red)' : s > 75 ? 'var(--yellow)' : s < 40 ? 'var(--orange)' : 'var(--text)';
+      read.innerHTML = `<b style="color:${color};">${label}</b> · ${s.toFixed(0)}/100`;
+    }
+  }
 
-  marker.style.left = `calc(${s}% - 2px)`;
-  const label = sentimentLabel(s);
-  const color = s < 25 ? 'var(--red)' : s > 75 ? 'var(--yellow)' : s < 40 ? 'var(--orange)' : 'var(--text)';
-  read.innerHTML = `<b style="color:${color};">${label}</b> · ${s.toFixed(0)}/100`;
+  // Crypto sentiment bar (separate)
+  const markerC = document.getElementById('senti-marker-crypto');
+  const readC = document.getElementById('senti-read-crypto');
+  if (markerC && readC) {
+    if (sentiment.cfg == null) {
+      readC.textContent = 'Crypto F&G no disponible';
+    } else {
+      const c = sentiment.cfg;
+      markerC.style.left = `calc(${c}% - 2px)`;
+      let cLabel, cColor;
+      if (c < 25) { cLabel = 'Miedo extremo'; cColor = 'var(--red)'; }
+      else if (c < 45) { cLabel = 'Miedo'; cColor = 'var(--orange)'; }
+      else if (c <= 55) { cLabel = 'Neutral'; cColor = 'var(--text)'; }
+      else if (c <= 75) { cLabel = 'Codicia'; cColor = 'var(--green)'; }
+      else { cLabel = 'Codicia extrema'; cColor = 'var(--yellow)'; }
+      readC.innerHTML = `<b style="color:${cColor};">${cLabel}</b> · ${c}/100`;
+    }
+  }
 
-  // Tactical message: contrarian at extremes, conditioned on regime
+  // Tactical message (uses RV US sentiment, with crypto refinement for BTC)
+  if (!tactic) return;
+  if (s == null) { tactic.style.display = 'none'; return; }
   const riskOn = ['expansion', 'overheat'].includes(currentRegimeKey);
   let msg = null;
   if (s <= 25 && riskOn) {
@@ -1914,7 +2019,6 @@ function renderSentiment() {
   } else if (s >= 75) {
     msg = '🔔 Euforia — no añadir riesgo a estos niveles; mantener posiciones con disciplina de salida.';
   }
-  // BTC refinement via crypto F&G
   if (sentiment.cfg != null) {
     if (sentiment.cfg <= 20 && riskOn) msg = (msg ? msg + ' ' : '') + '₿ Crypto F&G en miedo extremo + régimen favorable: acumular BTC hacia el techo de su rango.';
     else if (sentiment.cfg >= 80) msg = (msg ? msg + ' ' : '') + '₿ Crypto F&G en codicia extrema: recortar BTC hacia el suelo de su rango.';
@@ -2356,29 +2460,35 @@ function renderScreener() {
   const catLabels = { indices: 'ÍNDICE', sectores: 'SECTOR', rf: 'RF', commodities: 'CMDTY', crypto: 'CRYPTO', fx: 'FX' };
   const fmtPct = v => v == null ? '—' : `<span class="${v >= 0 ? 'sc-pos' : 'sc-neg'}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
 
-  // Sentiment cell — Crypto F&G for BTC/ETH, global thermometer for the rest
+  // Sentiment cell:
+  //   - Crypto: Crypto Fear & Greed (own indicator)
+  //   - Índices RV USA + Sectores: termómetro global (VIX, F&G, etc. son de RV US)
+  //   - Resto (RF, commodities, FX): N/A — no existe sentimiento gratuito específico
   const sentCell = (cat) => {
-    const isCrypto = cat === 'crypto';
-    const s = isCrypto ? sentiment.cfg : sentiment.score;
-    if (s == null) return '<span style="color:var(--text3);">—</span>';
-    let color, label;
-    if (isCrypto) {
-      // Crypto F&G: <25 fear (good for entries), >75 greed (caution), middle = neutral green
+    if (cat === 'crypto') {
+      const s = sentiment.cfg;
+      if (s == null) return '<span style="color:var(--text3);">—</span>';
+      let color, label;
       if (s < 25) { color = 'var(--red)'; label = 'Miedo extremo cripto'; }
       else if (s < 45) { color = 'var(--orange)'; label = 'Miedo cripto'; }
       else if (s <= 55) { color = 'var(--text2)'; label = 'Neutral cripto'; }
       else if (s <= 75) { color = 'var(--green)'; label = 'Codicia cripto'; }
       else { color = 'var(--yellow)'; label = 'Codicia extrema cripto'; }
       return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="₿ ${label} (${s}/100)"></span>`;
-    } else {
+    }
+    if (cat === 'indices' || cat === 'sectores') {
+      const s = sentiment.score;
+      if (s == null) return '<span style="color:var(--text3);">—</span>';
+      let color;
       if (s < 25) color = 'var(--red)';
       else if (s > 75) color = 'var(--yellow)';
       else if (s >= 40 && s <= 60) color = 'var(--text2)';
       else if (s >= 25 && s < 40) color = 'var(--orange)';
       else color = 'var(--green)';
-      label = sentimentLabel(s);
+      const label = sentimentLabel(s);
       return `<span class="sc-sent-cell" style="background:${color};box-shadow:0 0 6px ${color};" title="${label} (${s.toFixed(0)}/100)"></span>`;
     }
+    return '<span style="color:var(--text3);font-size:9px;" title="No existe indicador de sentimiento gratuito específico para esta categoría">N/A</span>';
   };
 
   body.innerHTML = rows.map(r => {
@@ -2768,6 +2878,151 @@ function renderBacktest(r) {
       datasets: [
         { label: strategyLabels[btState.strat], data: stratPct, borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.2 },
         { label: 'S&P 500 buy & hold', data: benchPct, borderColor: '#7e93ab', backgroundColor: '#7e93ab', borderWidth: 1.5, pointRadius: 0, tension: 0.2, borderDash: [4, 4] },
+      ]
+    },
+    options: opts
+  });
+}
+
+// ─── ASSET BACKTEST (single ticker vs S&P) ───────────────────────────────────
+const abtState = { startYear: 2015, chart: null };
+
+function setAbtStart(btn) {
+  abtState.startYear = parseInt(btn.dataset.abtStart);
+  document.querySelectorAll('[data-abt-start]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+async function runAssetBacktest() {
+  const tickerEl = document.getElementById('abt-ticker');
+  const out = document.getElementById('abt-output');
+  const sym = (tickerEl.value || '').trim().toUpperCase();
+  if (!sym) { out.innerHTML = '<div class="bt-empty">Introduce un ticker primero</div>'; return; }
+  out.innerHTML = '<div class="bt-loading"><span class="spinner"></span> Descargando histórico de ' + sym + '...</div>';
+
+  const yearsBack = new Date().getFullYear() - abtState.startYear + 1;
+  let assetData, spxData;
+  try {
+    [assetData, spxData] = await Promise.all([
+      yahooRange(sym, yearsBack, 'm'),
+      yahooRange('^GSPC', yearsBack, 'm'),
+    ]);
+  } catch(e) {
+    out.innerHTML = '<div class="bt-empty">Error: ' + e.message + '. Verifica que el ticker existe en Yahoo (ej: GLD, BTC-USD, AAPL, ^NDX, TLT, GC=F, TEF.MC).</div>';
+    return;
+  }
+
+  if (!assetData.length || !spxData.length) {
+    out.innerHTML = '<div class="bt-empty">No hay datos suficientes para ese ticker en el periodo elegido</div>';
+    return;
+  }
+
+  // Align to common start (whichever started later)
+  const assetStart = assetData[0].x;
+  const spxStart = spxData[0].x;
+  const commonStart = Math.max(assetStart, spxStart);
+  const assetAligned = assetData.filter(p => p.x >= commonStart);
+  const spxAligned = spxData.filter(p => p.x >= commonStart);
+  if (assetAligned.length < 6) {
+    out.innerHTML = '<div class="bt-empty">No hay suficiente histórico para ' + sym + ' en el periodo elegido (mínimo 6 meses)</div>';
+    return;
+  }
+
+  // Normalize both to base 100 and convert to % profit
+  const aBase = assetAligned[0].y;
+  const sBase = spxAligned[0].y;
+  const aPct = assetAligned.map(p => ({ x: p.x, y: (p.y / aBase - 1) * 100 }));
+  const sPct = spxAligned.map(p => ({ x: p.x, y: (p.y / sBase - 1) * 100 }));
+
+  // Metrics
+  const aFinal = aPct[aPct.length - 1].y;
+  const sFinal = sPct[sPct.length - 1].y;
+  const years = (aPct[aPct.length - 1].x - aPct[0].x) / (365.25 * 24 * 3600 * 1000);
+  const aCAGR = (Math.pow(1 + aFinal / 100, 1 / years) - 1) * 100;
+  const sCAGR = (Math.pow(1 + sFinal / 100, 1 / years) - 1) * 100;
+
+  // Max DD
+  const maxDD = (series) => {
+    let peak = 100, maxD = 0;
+    for (const p of series) {
+      const v = 100 + p.y;
+      if (v > peak) peak = v;
+      const dd = (v / peak - 1) * 100;
+      if (dd < maxD) maxD = dd;
+    }
+    return maxD;
+  };
+  const aDD = maxDD(aPct);
+  const sDD = maxDD(sPct);
+
+  // Vol & Sharpe (monthly returns)
+  const monthlyVol = (series) => {
+    const rets = [];
+    for (let i = 1; i < series.length; i++) {
+      const cur = 100 + series[i].y, prev = 100 + series[i-1].y;
+      rets.push(cur / prev - 1);
+    }
+    const m = rets.reduce((a,b)=>a+b,0)/rets.length;
+    const v = rets.reduce((a,b)=>a+(b-m)**2,0)/rets.length;
+    return Math.sqrt(v) * Math.sqrt(12) * 100;
+  };
+  const aVol = monthlyVol(aPct);
+  const sVol = monthlyVol(sPct);
+  const aSharpe = aVol > 0 ? aCAGR / aVol : 0;
+  const sSharpe = sVol > 0 ? sCAGR / sVol : 0;
+
+  // Correlation
+  const aRets = [], sRets = [];
+  for (let i = 1; i < aPct.length && i < sPct.length; i++) {
+    aRets.push((100 + aPct[i].y) / (100 + aPct[i-1].y) - 1);
+    sRets.push((100 + sPct[i].y) / (100 + sPct[i-1].y) - 1);
+  }
+  const ma = aRets.reduce((a,b)=>a+b,0)/aRets.length;
+  const ms = sRets.reduce((a,b)=>a+b,0)/sRets.length;
+  let cov = 0, va = 0, vs = 0;
+  for (let i = 0; i < aRets.length; i++) {
+    cov += (aRets[i]-ma)*(sRets[i]-ms);
+    va += (aRets[i]-ma)**2;
+    vs += (sRets[i]-ms)**2;
+  }
+  const correl = (va > 0 && vs > 0) ? cov / Math.sqrt(va * vs) : 0;
+
+  const fmt = (v, dec=1, suf='%') => (v >= 0 && suf === '%' ? '+' : '') + v.toFixed(dec) + suf;
+  const cls = v => v >= 0 ? 'sc-pos' : 'sc-neg';
+  const winnerCls = (a, b, higherBetter = true) => higherBetter ? (a > b ? 'sc-pos' : '') : (a > b ? '' : 'sc-pos');
+
+  out.innerHTML = `
+    <div class="bt-result">
+      <div class="bt-metrics">
+        <div class="bt-metric"><div class="bt-metric-label">${sym} · Total</div><div class="bt-metric-value ${cls(aFinal)} ${winnerCls(aFinal, sFinal)}">${fmt(aFinal)}</div><div class="bt-metric-sub">Buy & hold</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">S&P 500 · Total</div><div class="bt-metric-value ${cls(sFinal)} ${winnerCls(sFinal, aFinal)}">${fmt(sFinal)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">${sym} · CAGR</div><div class="bt-metric-value ${cls(aCAGR)} ${winnerCls(aCAGR, sCAGR)}">${fmt(aCAGR)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">S&P 500 · CAGR</div><div class="bt-metric-value ${cls(sCAGR)} ${winnerCls(sCAGR, aCAGR)}">${fmt(sCAGR)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">${sym} · Max DD</div><div class="bt-metric-value sc-neg ${winnerCls(aDD, sDD)}">${aDD.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">S&P 500 · Max DD</div><div class="bt-metric-value sc-neg ${winnerCls(sDD, aDD)}">${sDD.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">${sym} · Vol anual</div><div class="bt-metric-value">${aVol.toFixed(1)}%</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">${sym} · Sharpe</div><div class="bt-metric-value ${winnerCls(aSharpe, sSharpe)}">${aSharpe.toFixed(2)}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Correlación vs S&P</div><div class="bt-metric-value">${correl.toFixed(2)}</div><div class="bt-metric-sub">${correl > 0.7 ? 'Movimiento similar' : correl > 0.3 ? 'Movimiento parcial' : correl > -0.3 ? 'Descorrelacionado' : 'Inverso al SP'}</div></div>
+        <div class="bt-metric"><div class="bt-metric-label">Periodo analizado</div><div class="bt-metric-value">${years.toFixed(1)} años</div><div class="bt-metric-sub">${new Date(commonStart).toISOString().slice(0,7)} → hoy</div></div>
+      </div>
+      <div class="bt-chart-wrap"><canvas id="abt-canvas"></canvas></div>
+    </div>
+  `;
+
+  if (abtState.chart) abtState.chart.destroy();
+  const ctx = document.getElementById('abt-canvas').getContext('2d');
+  const opts = baseOptions('Beneficio acumulado (%)');
+  opts.scales.y.ticks.callback = v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%';
+  opts.plugins.tooltip.callbacks = {
+    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`
+  };
+  opts.plugins.legend = { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 10 } } };
+  abtState.chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        { label: sym, data: aPct, borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.2 },
+        { label: 'S&P 500', data: sPct, borderColor: '#7e93ab', backgroundColor: '#7e93ab', borderWidth: 1.5, pointRadius: 0, tension: 0.2, borderDash: [4, 4] },
       ]
     },
     options: opts
