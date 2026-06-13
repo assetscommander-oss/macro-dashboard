@@ -1107,7 +1107,7 @@ Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
       </div>
     </div>
 
-    <div class="section-title">Chart en tiempo real (benchmark proxy)</div>
+    <div class="section-title">Rentabilidades anuales reales · datos del factsheet</div>
     <div class="chart-section">
       <div class="chart-controls" id="pen-chart-toggles">
         <span class="ctrl-label">Fondos:</span>
@@ -1116,27 +1116,93 @@ Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
         <button class="ctrl-btn-all" onclick="setPenChartAll(false)">Ninguno</button>
       </div>
       <div class="chart-controls">
-        <span class="ctrl-label">Histórico:</span>
-        <button class="range-btn" data-pen-years="1" onclick="setPenChartRange(this)">1A</button>
-        <button class="range-btn active" data-pen-years="2" onclick="setPenChartRange(this)">2A</button>
-        <button class="range-btn" data-pen-years="5" onclick="setPenChartRange(this)">5A</button>
-        <button class="range-btn" data-pen-years="10" onclick="setPenChartRange(this)">10A</button>
-        <button class="range-btn" data-pen-years="25" onclick="setPenChartRange(this)">25A</button>
-        <span class="ctrl-divider"></span>
         <span class="ctrl-label">Vista:</span>
-        <button class="freq-btn" data-pen-freq="d" onclick="setPenChartFreq(this)">Diaria</button>
-        <button class="freq-btn" data-pen-freq="w" onclick="setPenChartFreq(this)">Semanal</button>
-        <button class="freq-btn active" data-pen-freq="m" onclick="setPenChartFreq(this)">Mensual</button>
-        <span class="ctrl-divider"></span>
-        <span class="ctrl-label">Escala:</span>
-        <button class="range-btn" data-pen-scale="linear" onclick="setPenChartScale(this)">Lineal</button>
-        <button class="range-btn active" data-pen-scale="log" onclick="setPenChartScale(this)">Log</button>
+        <button class="range-btn active" data-pen-view="annual" onclick="setPenChartView(this)">Rentabilidad anual</button>
+        <button class="range-btn" data-pen-view="cumulative" onclick="setPenChartView(this)">Beneficio acumulado</button>
       </div>
       <div class="pen-chart-wrap">
-        <div class="pen-chart-loading hidden" id="pen-chart-loading"><span class="spinner"></span> Cargando datos...</div>
         <canvas id="pen-chart-canvas"></canvas>
       </div>
-      <div class="chart-note">Cada fondo se representa con el <b>precio de su benchmark proxy</b> (ETF cotizado equivalente) ya que los fondos PMC institucionales no cotizan en Yahoo. Los precios reales del fondo siguen al benchmark con una pequeña tracking difference (~0.1-0.5%/año por FMC). Para fondos activos (CT Responsible, Veritas, Airbus Growth) el proxy es menos preciso pero da la dirección. Normalizado a base 100 al inicio del periodo.</div>
+      <div class="chart-note">Datos reales de los factsheets oficiales (12 meses a 31 marzo: 2022, 2023, 2024, 2025, 2026). En "Rentabilidad anual" cada año independiente con escala en %. En "Beneficio acumulado" partiendo de 0% en marzo 2021, mostrando cómo evolucionaría una inversión de £100 manteniendo el fondo todo el periodo. Algunos fondos no tienen 5 años de histórico — empezarán cuando sus datos estén disponibles.</div>
+    </div>
+
+    <!-- NOTES SECTION -->
+    <div class="section-title">Cómo se calcula el Score del fondo</div>
+    <div class="score-guide">
+
+      <div class="sg-block">
+        <div class="sg-title">📐 Fórmula global (pesos adaptados al universo L&G)</div>
+        <div class="sg-formula">Score = 30% Rentabilidad histórica + 20% Consistencia + 50% Encaje régimen</div>
+        <div class="sg-text">Los pesos difieren del Score del macro dashboard porque aquí no tenemos datos diarios para calcular momentum o tendencia vs MA200. Compensamos con consistencia (estabilidad año a año), y subimos el peso del régimen al 50% — para una pensión de largo plazo, el contexto macro pesa más que el último trimestre.</div>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">1️⃣ Rentabilidad histórica · peso 30%</div>
+        <div class="sg-text">Promedio ponderado de las rentabilidades acumuladas 1A, 3A y 5A del factsheet (con el peso del periodo más largo el mayor):</div>
+        <div class="sg-formula">Promedio = r1A × 0.20 + r3A × 0.35 + r5A × 0.45</div>
+        <div class="sg-formula">Componente = 50 + Promedio × 2 · saturado 0–100</div>
+        <table class="sg-table">
+          <tr><th>Rentabilidad 1A / 3A / 5A</th><th>Promedio ponderado</th><th>Componente</th></tr>
+          <tr><td>+25% / +15% / +10%</td><td>+14.75</td><td>79</td></tr>
+          <tr><td>+15% / +10% / +8%</td><td>+10.10</td><td>70</td></tr>
+          <tr><td>+10% / +5% / +5%</td><td>+6.00</td><td>62</td></tr>
+          <tr><td>+5% / +3% / +2%</td><td>+2.95</td><td>56</td></tr>
+          <tr><td>0% / 0% / 0%</td><td>0</td><td>50</td></tr>
+          <tr><td>-5% / -3% / -2%</td><td>-2.95</td><td>44</td></tr>
+          <tr><td>-15% / -10% / -5%</td><td>-8.75</td><td>33</td></tr>
+        </table>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">2️⃣ Consistencia · peso 20%</div>
+        <div class="sg-text">Mide la <b>estabilidad año a año</b>: cuanto menor sea la desviación entre las rentabilidades anuales 2022-2026, mayor el Score. Un fondo que da +8%, +9%, +7% es más consistente (y más predecible) que uno que da +30%, -25%, +15%, aunque tengan la misma rentabilidad media.</div>
+        <div class="sg-formula">Componente = 100 - desviación_estándar × 5 · saturado 0–100</div>
+        <table class="sg-table">
+          <tr><th>Desviación entre años</th><th>Tipo de fondo</th><th>Componente</th></tr>
+          <tr><td>SD &lt; 3%</td><td>Cash, Short Dated Credit</td><td>85–100</td></tr>
+          <tr><td>SD 3–7%</td><td>Multi-asset, fondos defensivos</td><td>65–85</td></tr>
+          <tr><td>SD 7–12%</td><td>RV global, UK Equity</td><td>40–65</td></tr>
+          <tr><td>SD 12–18%</td><td>Tech, growth, emergentes</td><td>10–40</td></tr>
+          <tr><td>SD &gt; 18%</td><td>Gilts largos en periodo turbulento, Property</td><td>0–10</td></tr>
+        </table>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">3️⃣ Encaje de régimen · peso 50% (el mayor)</div>
+        <div class="sg-text">Para una pensión de largo plazo el contexto macro pesa el doble que la rentabilidad reciente. Cada fondo tiene mapeado 0–100 su encaje en los 4 regímenes:</div>
+        <table class="sg-table">
+          <tr><th>Fondo</th><th>🟢 Expansión</th><th>🟠 Sobrecalent.</th><th>🔴 Estanflación</th><th>🔵 Recesión defl.</th></tr>
+          <tr><td>World ex UK Equity</td><td><b style="color:var(--green);">92</b></td><td>50</td><td>22</td><td>28</td></tr>
+          <tr><td>Airbus Growth</td><td><b style="color:var(--green);">90</b></td><td>45</td><td>18</td><td>28</td></tr>
+          <tr><td>HSBC Islamic Global</td><td><b style="color:var(--green);">95</b></td><td>40</td><td>15</td><td>30</td></tr>
+          <tr><td>Emerging Markets</td><td><b style="color:var(--green);">88</b></td><td>70</td><td>25</td><td>12</td></tr>
+          <tr><td>UK Equity Index</td><td>75</td><td><b style="color:var(--orange);">75</b></td><td>35</td><td>22</td></tr>
+          <tr><td>Index Linked Gilts</td><td>45</td><td>70</td><td><b style="color:var(--red);">78</b></td><td>55</td></tr>
+          <tr><td>Property Fund</td><td>65</td><td><b style="color:var(--orange);">75</b></td><td>50</td><td>35</td></tr>
+          <tr><td>Diversified Fund</td><td>70</td><td>55</td><td>45</td><td>60</td></tr>
+          <tr><td>Over 15Y Gilts</td><td>35</td><td>5</td><td>18</td><td><b style="color:var(--blue);">95</b></td></tr>
+          <tr><td>Corp Bond 15Y+</td><td>40</td><td>10</td><td>20</td><td><b style="color:var(--blue);">88</b></td></tr>
+          <tr><td>Short Dated Credit</td><td>40</td><td>40</td><td>65</td><td><b style="color:var(--blue);">70</b></td></tr>
+          <tr><td>Cash Fund</td><td>25</td><td>40</td><td><b style="color:var(--red);">75</b></td><td>80</td></tr>
+        </table>
+        <div class="sg-text" style="margin-top:14px;"><b>Lecturas del Score final:</b></div>
+        <div class="sg-readout">
+          <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">65–100 · Buen encaje y rentabilidad sólida</div>
+          <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">45–65 · Zona neutral</div>
+          <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">0–45 · Desfavorable en este régimen</div>
+        </div>
+      </div>
+
+      <div class="sg-block">
+        <div class="sg-title">🎯 Del Score a la recomendación</div>
+        <div class="sg-text">El panel de asignación recomendada combina el régimen vigente con dos criterios: <b>(1) el rol que cada fondo debe cumplir</b> en ese régimen (RV core, protección inflación, duración larga, cash, etc.) y <b>(2) dentro de cada rol, el fondo con menor FMC</b> que cumple el match.</div>
+        <div class="sg-text">Por eso en Expansión el sistema elige Airbus Growth (FMC 0.06%) en vez de World ex UK (FMC 0.12%) aunque sean roles muy similares — la comisión es 2× menor. En cambio, fondos con FMC alto como Veritas o CT Responsible (0.74%) raramente aparecen como recomendación principal: tendrían que demostrar un encaje superior muy claro para compensar el extra-coste anual.</div>
+      </div>
+    </div>
+
+    <div class="section-title">¿En qué invierte cada fondo? · Composición real de los factsheets</div>
+    <div class="score-guide" id="pen-holdings-notes">
+      <!-- Generated by JS -->
     </div>
 
   </div>
@@ -2715,6 +2781,7 @@ function switchTab(tab) {
   if (tab === 'pension') {
     syncPensionFromMacro();
     if (!pensionState.chartLoaded) loadPenChart();
+    renderHoldingsNotes();
   }
 }
 
@@ -2723,27 +2790,78 @@ function switchTab(tab) {
 // fit = encaje por régimen (0-100). proxy = Yahoo ticker for benchmark.
 const LG_FUNDS = [
   // Equity (10)
-  { name: 'L&G World (ex UK) Equity Index', cat: 'Equity', fmc: 0.12, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QBYH95', code: 'NED3', benchmark: 'FTSE World ex UK Index', launch: '14 May 2004', size: '£1,907m', aim: 'Tracks FTSE World (ex UK) Index dentro de ±0.50%. Core de RV global desarrollada — 68% USA, large/mid cap.', perf: { y1: 30.30, y3: 17.54, y5: 11.99 }, annual: [17.03, 3.37, 24.23, -3.63, 16.33], fit: { expansion: 92, overheat: 50, stagflation: 22, deflation: 28 } },
-  { name: 'Airbus Growth Fund', cat: 'Equity', fmc: 0.06, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPM3', benchmark: 'Composite global growth', launch: 'Mar 2021', size: '£284m', aim: 'Fondo gestor del esquema Airbus. Mix global growth, 61% USA, peso tech alto. FMC ultra-bajo (0.06%) por economías de escala del esquema.', perf: { y1: 15.18, y3: 14.01, y5: 10.40 }, annual: [15.18, 4.73, 22.87, -3.20, 14.31], fit: { expansion: 90, overheat: 45, stagflation: 18, deflation: 28 } },
-  { name: 'L&G UK Equity Index', cat: 'Equity', fmc: 0.10, proxy: 'ISF.L', proxyName: 'iShares Core FTSE 100 UCITS', isin: 'GB00B4MV7743', code: 'NBC3', benchmark: 'FTSE All-Share Index', launch: '14 May 2004', size: '£588m', aim: 'Tracks FTSE All-Share. Solo UK (incluye small/mid caps). Sesgo a value, dividendo, energía y financiero.', perf: { y1: 24.69, y3: 13.13, y5: 10.78 }, annual: [22.84, 9.92, 7.73, 2.34, null], fit: { expansion: 75, overheat: 75, stagflation: 35, deflation: 22 } },
-  { name: 'L&G Global Equity 50-50', cat: 'Equity', fmc: 0.10, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QVNX86', code: 'NDZ3', benchmark: '50% UK / 50% World ex UK', launch: '14 May 2004', size: '£718m', aim: '50% UK + 50% global desarrollados. Sesgo UK más fuerte que el World ex UK puro.', perf: { y1: 27.51, y3: null, y5: null }, annual: [21.57, 5.64, 13.58, 1, null], fit: { expansion: 82, overheat: 60, stagflation: 28, deflation: 25 } },
-  { name: 'L&G Global Fossil Fuel Exclusions', cat: 'Equity', fmc: 0.16, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPX3', benchmark: 'Solactive L&G ESG Developed', launch: 'Mar 2021', size: '£75m', aim: 'Replica RV global desarrollada excluyendo combustibles fósiles. Underperforma cuando energía lidera (Sobrecalentamiento).', perf: { y1: 13.88, y3: 13.06, y5: 10.17 }, annual: [null, null, null, null, null], fit: { expansion: 88, overheat: 30, stagflation: 18, deflation: 28 } },
-  { name: 'L&G HSBC Islamic Global Equity', cat: 'Equity', fmc: 0.20, proxy: 'ISDE.L', proxyName: 'iShares MSCI World Islamic UCITS', isin: 'GB00BD1JRG10', code: 'BB43', benchmark: 'Dow Jones Islamic Market Titans 100', launch: '23 Sep 2011', size: '£612m', aim: 'Sharia: excluye bancos, alcohol, juego, cerdo, armas. Concentra en tech y salud → behavior estructural más cercano a Nasdaq que a MSCI World.', perf: { y1: 36.70, y3: 21.03, y5: null }, annual: [17.33, 3.57, 32.15, -5.85, null], fit: { expansion: 95, overheat: 40, stagflation: 15, deflation: 30 } },
-  { name: 'L&G World Emerging Markets', cat: 'Equity', fmc: 0.26, proxy: 'EEM', proxyName: 'iShares MSCI Emerging Markets', isin: 'GB00B4XB7L79', code: 'NQM3', benchmark: 'FTSE Emerging Index', launch: '15 Mar 2010', size: '£169m', aim: 'Tracks FTSE Emerging. Beta alta al ciclo global, sensible a USD débil y commodities.', perf: { y1: 29.01, y3: 13.52, y5: 5.29 }, annual: [17.41, 8.14, 5.72, -4.90, -3.46], fit: { expansion: 88, overheat: 70, stagflation: 25, deflation: 12 } },
-  { name: 'L&G Ethical Global Equity Index', cat: 'Equity', fmc: 0.30, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4LNM547', code: 'NEB3', benchmark: 'FTSE4Good Developed Index', launch: '14 May 2004', size: '£491m', aim: 'Tracks FTSE4Good (exclusiones éticas). FMC 3× más alto que el World ex UK por el filtro ético.', perf: { y1: 31.49, y3: 17, y5: null }, annual: [17.22, 2.46, 23.52, -1, null], fit: { expansion: 88, overheat: 45, stagflation: 20, deflation: 28 } },
-  { name: 'L&G Veritas Global Focus', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB00BD1JSW43', code: 'BN73', benchmark: 'Composite', launch: '28 Sep 2017', size: '£5m', aim: 'GESTIÓN ACTIVA. Cartera concentrada de empresas globales. FMC 0.74% — 6× el de un índice. Underperformance reciente vs benchmark (-7.09% 2026 vs +17% del MSCI World).', perf: { y1: 0.39, y3: 4.77, y5: null }, annual: [-7.09, 2.72, 17.44, null, null], fit: { expansion: 70, overheat: 45, stagflation: 30, deflation: 35 } },
-  { name: 'L&G CT Responsible Global Equity', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB0033145045', code: 'B4M3', benchmark: 'MSCI ACWI ESG focus', launch: '26 Oct 2018', size: '£29m', aim: 'GESTIÓN ACTIVA ESG. FMC 0.74%. Underperformance reciente vs benchmark MSCI World (+14.60% vs +27%).', perf: { y1: 14.60, y3: 7, y5: null }, annual: [2.88, -4.12, 16.31, -5.38, 9.84], fit: { expansion: 80, overheat: 40, stagflation: 25, deflation: 32 } },
+  { name: 'L&G World (ex UK) Equity Index', cat: 'Equity', fmc: 0.12, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QBYH95', code: 'NED3', benchmark: 'FTSE World ex UK Index', launch: '14 May 2004', size: '£1,907m',
+    aim: 'Tracks FTSE World (ex UK) Index dentro de ±0.50%. Core de RV global desarrollada — 68% USA, large/mid cap.',
+    holdings: { geo: 'USA 67.8% · Japón 6.4% · Canadá 3.4% · Taiwán 3.3%', sectors: 'Tech 34.6% · Financieros 14.0% · Industriales 13.1% · Consumo discrecional 11.9% · Salud 7.6% · Energía 4.1%', top10: 'Nvidia 5.1% · Apple 4.3% · Microsoft 3.3% · Amazon 2.8% · Alphabet 4.5% · Broadcom 2.1% · TSMC 1.8% · Meta 1.5% · Tesla 1.2%', cap: 'Large 79.6% · Mid 20.4%' },
+    perf: { y1: 30.30, y3: 17.54, y5: 11.99 }, annual: [17.03, 3.37, 24.23, -3.63, 16.33], fit: { expansion: 92, overheat: 50, stagflation: 22, deflation: 28 } },
+  { name: 'Airbus Growth Fund', cat: 'Equity', fmc: 0.06, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPM3', benchmark: 'Composite global growth', launch: 'Mar 2021', size: '£284m',
+    aim: 'Fondo gestor del esquema Airbus. Mix global growth, 61% USA, peso tech alto. FMC ultra-bajo (0.06%) por economías de escala del esquema.',
+    holdings: { geo: 'USA 61.0% · Japón 5.6% · UK 3.4% · Taiwán 3.0% · Canadá 2.8% · Suiza 2.3% · Alemania 2.0%', sectors: 'Comunicaciones y Tech 39.5% · Consumo no cíclico 15.9% · Consumo cíclico 10.2% · Bancos 9.8% · Industriales 9.5%', top10: 'Nvidia 4.9% · Apple 4.8% · Microsoft 3.3% · Amazon 2.4% · Alphabet 3.7% · TSMC 1.9% · Tesla 1.9% · Broadcom 1.7% · Meta 1.5%', cap: 'Large 86.0% · Mid 12.5% · Small 1.6%' },
+    perf: { y1: 15.18, y3: 14.01, y5: 10.40 }, annual: [15.18, 4.73, 22.87, -3.20, 14.31], fit: { expansion: 90, overheat: 45, stagflation: 18, deflation: 28 } },
+  { name: 'L&G UK Equity Index', cat: 'Equity', fmc: 0.10, proxy: 'ISF.L', proxyName: 'iShares Core FTSE 100 UCITS', isin: 'GB00B4MV7743', code: 'NBC3', benchmark: 'FTSE All-Share Index', launch: '14 May 2004', size: '£588m',
+    aim: 'Tracks FTSE All-Share. Solo UK (incluye small/mid caps). Sesgo a value, dividendo, energía y financiero.',
+    holdings: { geo: 'UK 100%', sectors: 'Financieros 29.0% · Consumo staples 12.5% · Salud 12.0% · Industriales 11.9% · Energía 10.2% · Materiales 7.8% · Consumo discrecional 6.1% · Utilities 4.8% · Tech 2.5%', top10: '43.5% del fondo concentrado en 10 (sin desglose individual en factsheet)', cap: 'Large 73.7% · Mid 16.6% · Small 9.6%' },
+    perf: { y1: 24.69, y3: 13.13, y5: 10.78 }, annual: [22.84, 9.92, 7.73, 2.34, null], fit: { expansion: 75, overheat: 75, stagflation: 35, deflation: 22 } },
+  { name: 'L&G Global Equity 50-50', cat: 'Equity', fmc: 0.10, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4QVNX86', code: 'NDZ3', benchmark: '50% UK / 50% World ex UK', launch: '14 May 2004', size: '£718m',
+    aim: '50% UK + 50% global desarrollados con rebalanceo. Sesgo UK más fuerte que el World ex UK puro.',
+    holdings: { geo: 'UK ~50% + World ex UK ~50%', sectors: 'Consumo no cíclico 21.2% · Comunicaciones y Tech 16.1% · Bancos 13.0% · Industriales 11.7% · Consumo cíclico 8.9% · Energía 7.0% · Financieros 6.4% · Commodities 5.8%', top10: '21.9% del fondo en top 10 (no se desglosa individualmente). 2.612 holdings totales', cap: 'Large 77.2% · Mid 17.8% · Small 4.9%' },
+    perf: { y1: 27.51, y3: null, y5: null }, annual: [21.57, 5.64, 13.58, 1, null], fit: { expansion: 82, overheat: 60, stagflation: 28, deflation: 25 } },
+  { name: 'L&G Global Fossil Fuel Exclusions', cat: 'Equity', fmc: 0.16, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: null, code: 'BPX3', benchmark: 'Solactive L&G ESG Developed', launch: 'Mar 2021', size: '£75m',
+    aim: 'Replica RV global desarrollada excluyendo combustibles fósiles. Underperforma cuando energía lidera (Sobrecalentamiento).',
+    holdings: { geo: 'USA 66.4% · Japón 5.5% · Taiwán 3.3% · UK 2.9% · Francia 2.7% · Alemania 2.6%', sectors: 'Tech 36.4% · Financieros 14.4% · Consumo discrecional 14.0% · Industriales 12.8% · Salud 8.9% · Consumo staples 4.1% · Telecom 3.0% · Materiales 2.9% · Real Estate 2.3%', top10: 'Apple 6.8% · Microsoft 5.7% · Amazon 4.4% · Nvidia 3.8% · Alphabet A 3.5% · Alphabet C 2.9% · TSMC 2.2% · Broadcom 1.3% · Meta 1.0% · S&P500 fut. 1.0%', cap: 'Large 85.1% · Mid 14.9%' },
+    perf: { y1: 13.88, y3: 13.06, y5: 10.17 }, annual: [null, null, null, null, null], fit: { expansion: 88, overheat: 30, stagflation: 18, deflation: 28 } },
+  { name: 'L&G HSBC Islamic Global Equity', cat: 'Equity', fmc: 0.20, proxy: 'ISDE.L', proxyName: 'iShares MSCI World Islamic UCITS', isin: 'GB00BD1JRG10', code: 'BB43', benchmark: 'Dow Jones Islamic Market Titans 100', launch: '23 Sep 2011', size: '£612m',
+    aim: 'Sharia: excluye bancos, alcohol, juego, cerdo, armas, tabaco, entretenimiento adulto. Concentra en tech y salud.',
+    holdings: { geo: 'USA 77.3% · Japón 3.5% · Taiwán 3.4% · UK 2.5% · Korea 2.2% · Suiza 2.1%', sectors: 'TECH 50.2% · Industriales 13.0% · Consumo discrecional 11.1% · Salud 10.4% · Energía 3.7% · Consumo staples 3.5%', top10: 'No desglose individual en factsheet — composición pesada en mega-caps tech globales', cap: 'No reportado en factsheet' },
+    perf: { y1: 36.70, y3: 21.03, y5: null }, annual: [17.33, 3.57, 32.15, -5.85, null], fit: { expansion: 95, overheat: 40, stagflation: 15, deflation: 30 } },
+  { name: 'L&G World Emerging Markets', cat: 'Equity', fmc: 0.26, proxy: 'EEM', proxyName: 'iShares MSCI Emerging Markets', isin: 'GB00B4XB7L79', code: 'NQM3', benchmark: 'FTSE Emerging Index', launch: '15 Mar 2010', size: '£169m',
+    aim: 'Tracks FTSE Emerging. Beta alta al ciclo global, sensible a USD débil y commodities.',
+    holdings: { geo: 'EM globales (FTSE Emerging cubre Taiwán, China, India, Brasil, México principalmente)', sectors: 'Tech 32.5% · Financieros 20.9% · Consumo discrecional 9.7% · Industriales 8.6% · Materiales 7.0% · Energía 5.2% · Telecom 4.1%', top10: 'TSMC 15.8% (concentración muy alta) · Tencent 3.6% · Alibaba 2.8% · Delta Electronics 1.3% · MediaTek 1.2% · Reliance 1.0% · China Construction Bank 1.0%', cap: 'Large 88.5% · Mid 11.5%' },
+    perf: { y1: 29.01, y3: 13.52, y5: 5.29 }, annual: [17.41, 8.14, 5.72, -4.90, -3.46], fit: { expansion: 88, overheat: 70, stagflation: 25, deflation: 12 } },
+  { name: 'L&G Ethical Global Equity Index', cat: 'Equity', fmc: 0.30, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS', isin: 'GB00B4LNM547', code: 'NEB3', benchmark: 'FTSE4Good Developed Index', launch: '14 May 2004', size: '£491m',
+    aim: 'Tracks FTSE4Good (exclusiones éticas: armas, tabaco, controversias graves). FMC 3× más alto que el World ex UK por el filtro.',
+    holdings: { geo: 'USA 63.7% · Japón 7.5% · UK 4.4% · Canadá 3.1% · Suiza 3.0% · Francia 3.0% · Alemania 2.7%', sectors: 'Tech 41.4% · Financieros 15.9% · Industriales 11.2% · Salud 9.2% · Consumo discrecional 5.8% · Energía 3.8%', top10: 'Nvidia 7.9% · Apple 6.6% · Microsoft 5.1% · Alphabet A 3.8% · Broadcom 3.3% · Alphabet C 3.1% · Eli Lilly 1.3% · Micron 1.0% · Visa 0.9% · J&J 0.9%', cap: 'Large 82.9% · Mid 17.1%' },
+    perf: { y1: 31.49, y3: 17, y5: null }, annual: [17.22, 2.46, 23.52, -1, null], fit: { expansion: 88, overheat: 45, stagflation: 20, deflation: 28 } },
+  { name: 'L&G Veritas Global Focus', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB00BD1JSW43', code: 'BN73', benchmark: 'Composite', launch: '28 Sep 2017', size: '£5m',
+    aim: 'GESTIÓN ACTIVA. Cartera concentrada (25-30 empresas). FMC 0.74% — 6× el de un índice. Underperformance reciente significativa.',
+    holdings: { geo: 'USA 51.1% · Francia 16.5% · UK 14.9% · Canadá 4.9% · España 3.3% · Holanda 2.5% · Alemania 2.2% · Cash 4.5%', sectors: 'Industriales 21.4% · Salud 19.7% · Financieros 18.2% · Consumo discrecional 14.5% · Tech 14.1% · Consumo staples 7.5% · Cash 4.5%', top10: 'Amazon 6.1% · UnitedHealth 5.6% · Vinci 5.4% · London Stock Exchange 5.2% · Canadian Pacific Kansas City 4.9% · Airbus 4.7% · Microsoft 4.5% · Safran 4.5% · Mastercard 4.1% · Thermo Fisher 4.1% (Top 10 = 48.9% del fondo, muy concentrado)', cap: 'No reportado en factsheet' },
+    perf: { y1: 0.39, y3: 4.77, y5: null }, annual: [-7.09, 2.72, 17.44, null, null], fit: { expansion: 70, overheat: 45, stagflation: 30, deflation: 35 } },
+  { name: 'L&G CT Responsible Global Equity', cat: 'Equity', fmc: 0.74, proxy: 'IWRD.L', proxyName: 'iShares MSCI World UCITS (proxy)', isin: 'GB0033145045', code: 'B4M3', benchmark: 'MSCI ACWI ESG focus', launch: '26 Oct 2018', size: '£29m',
+    aim: 'GESTIÓN ACTIVA ESG. Cartera de empresas con impacto positivo. FMC 0.74%. Underperformance vs MSCI World.',
+    holdings: { geo: 'USA 66.3% · UK 8.3% · Japón 7.1% · Francia 3.8% · Taiwán 3.0% · Holanda 2.5% · Canadá 2.4% · China/HK 1.5% · Cash 1.9%', sectors: 'Information Technology 37.8% · Industriales 17.3% · Financieros 13.8% · Salud 13.6% · Materiales 4.9% · Comunicaciones 4.7% · Consumo discrecional 3.0% · Cash 1.9%', top10: 'Nvidia 8.6% · Microsoft 5.2% · Apple 4.8% · Alphabet 4.7% · Mastercard 3.4% · Linde 3.4% · Broadcom 3.2% (Top 10 = 41.4% del fondo)', cap: 'No reportado en factsheet' },
+    perf: { y1: 14.60, y3: 7, y5: null }, annual: [2.88, -4.12, 16.31, -5.38, 9.84], fit: { expansion: 80, overheat: 40, stagflation: 25, deflation: 32 } },
   // Multi-asset (1)
-  { name: 'L&G Diversified Fund', cat: 'Multi-asset', fmc: 0.26, propExp: 0.05, proxy: 'AOM', proxyName: 'iShares Moderate Allocation (40/60 RV/RF)', isin: 'GB00B8KLQD32', code: 'NWW3', benchmark: 'Mixed Investment 20-60% Shares', launch: '18 Oct 2012', size: '£226m', aim: 'Multi-activo 20-60% RV. Diseñado para crecimiento moderado con menor volatilidad que RV pura.', perf: { y1: 16.09, y3: 9.23, y5: 5.02 }, annual: [11.33, 4.47, 8.76, -5.69, 6.16], fit: { expansion: 70, overheat: 55, stagflation: 45, deflation: 60 } },
+  { name: 'L&G Diversified Fund', cat: 'Multi-asset', fmc: 0.26, propExp: 0.05, proxy: 'AOM', proxyName: 'iShares Moderate Allocation', isin: 'GB00B8KLQD32', code: 'NWW3', benchmark: 'Mixed Investment 20-60% Shares', launch: '18 Oct 2012', size: '£226m',
+    aim: 'Multi-activo 20-60% RV. Diseñado para crecimiento moderado con menor volatilidad que RV pura. Estructura muy diversificada.',
+    holdings: { geo: 'Cartera multi-activo global', sectors: 'RV 36.6% (USA 6.8% · EM 6.4% · Europa ex UK 6.2% · Japón 5.2% · Small Cap 4.0% · UK 4.0% · Asia 2.7%) · Corporate Bonds 13.4% (GBP/EUR/USD) · Govt Bonds 7.0% (incl. 1.5% Index-Linked Gilts y 1.0% TIPS) · Alternativos 26.3% (Private markets 8.8% · Real Estate 6.0% · Infrastructure 5.4% · Commodities 2.0%) · Alt Credit 16.8% (EM Debt 8.8% · High Yield 6.1%)', top10: 'Estructura ultra-diversificada sin top 10 dominante. Diseño "todo terreno" pero compleja', cap: 'Multi-clase de activo' },
+    perf: { y1: 16.09, y3: 9.23, y5: 5.02 }, annual: [11.33, 4.47, 8.76, -5.69, 6.16], fit: { expansion: 70, overheat: 55, stagflation: 45, deflation: 60 } },
   // Fixed interest (4)
-  { name: 'L&G Over 15 Year Gilts Index', cat: 'Fixed interest', fmc: 0.08, proxy: 'IGLT.L', proxyName: 'iShares Core UK Gilts UCITS', isin: 'GB00B4NH9G49', code: 'NBR3', benchmark: 'FTSE A Gov Over 15Y', launch: '14 May 2004', size: '£58m', aim: 'Gilts UK larga duración. Equivalente UK del TLT. Sufre con tipos al alza; explota cuando los recortan.', perf: { y1: -3.46, y3: -3.63, y5: -11.06 }, annual: [-0.23, -7.33, -4.82, -29.88, -7.92], fit: { expansion: 35, overheat: 5, stagflation: 18, deflation: 95 } },
-  { name: 'L&G AAA-AA-A Corp Bond Over 15Y', cat: 'Fixed interest', fmc: 0.12, proxy: 'SLXX.L', proxyName: 'iShares Core £ Corp Bond UCITS', isin: 'GB00B4NHFN30', code: 'NEK3', benchmark: 'iBoxx £ Non-Gilts ex-BBB Over 15Y', launch: '14 May 2004', size: '£20m', aim: 'Bonos corporativos UK calidad alta, duración larga. Mezcla riesgo de tipos (negativo) + crédito (positivo en expansión).', perf: { y1: -0.16, y3: -0.32, y5: -7.91 }, annual: [0.59, -4.78, 3.31, -25.44, -9.80], fit: { expansion: 40, overheat: 10, stagflation: 20, deflation: 88 } },
-  { name: 'L&G Over 5 Year Index Linked Gilts', cat: 'Fixed interest', fmc: 0.08, proxy: 'INXG.L', proxyName: 'iShares £ Index-Linked Gilts UCITS', isin: 'GB00B3RQR779', code: 'NEC3', benchmark: 'FTSE A Index-Linked Over 5Y', launch: '14 May 2004', size: '£35m', aim: 'Gilts UK ligados a inflación (linkers). Combina duración + protección inflación. Equivalente UK de los TIPS.', perf: { y1: 1.11, y3: null, y5: null }, annual: [2.61, -9.33, -7.89, -29.46, null], fit: { expansion: 45, overheat: 70, stagflation: 78, deflation: 55 } },
-  { name: 'Airbus Short Dated Credit', cat: 'Fixed interest', fmc: 0.16, proxy: 'IS15.L', proxyName: 'iShares £ Corp Bond 0-5yr UCITS', isin: null, code: 'BPN3', benchmark: 'SONIA 3-month + 1.5%', launch: 'Mar 2021', size: '£0.2m', aim: 'Crédito corto plazo (1-3 años). Defensivo: poco riesgo de tipos y poco crédito. Alternativa a Cash con algo más de yield.', perf: { y1: 4.27, y3: 5.41, y5: 2.30 }, annual: [4.27, 5.54, 6.43, -2.42, -1], fit: { expansion: 40, overheat: 40, stagflation: 65, deflation: 70 } },
+  { name: 'L&G Over 15 Year Gilts Index', cat: 'Fixed interest', fmc: 0.08, proxy: 'IGLT.L', proxyName: 'iShares Core UK Gilts UCITS', isin: 'GB00B4NH9G49', code: 'NBR3', benchmark: 'FTSE A Gov Over 15Y', launch: '14 May 2004', size: '£58m',
+    aim: 'Gilts UK larga duración. Equivalente UK del TLT. Sufre con tipos al alza; explota cuando los recortan.',
+    holdings: { geo: 'UK 100%', sectors: 'Deuda soberana UK Gilts', top10: '27 emisiones (Top 10 = 54.1% del fondo). Gilts con vencimiento >15 años', cap: 'Duración modificada muy alta (~15-20 años)' },
+    perf: { y1: -3.46, y3: -3.63, y5: -11.06 }, annual: [-0.23, -7.33, -4.82, -29.88, -7.92], fit: { expansion: 35, overheat: 5, stagflation: 18, deflation: 95 } },
+  { name: 'L&G AAA-AA-A Corp Bond Over 15Y', cat: 'Fixed interest', fmc: 0.12, proxy: 'SLXX.L', proxyName: 'iShares Core £ Corp Bond UCITS', isin: 'GB00B4NHFN30', code: 'NEK3', benchmark: 'iBoxx £ Non-Gilts ex-BBB Over 15Y', launch: '14 May 2004', size: '£20m',
+    aim: 'Bonos corporativos UK calidad alta (AAA-AA-A), duración larga. Mezcla riesgo de tipos (negativo) + crédito (positivo en expansión).',
+    holdings: { geo: 'UK 66.5% · USA 14.8% · Francia 2.8% · Supranacional 2.8% · Alemania 2.7% · Japón 2.0% · Australia 1.9%', sectors: 'Housing Associations 35.9% · Tech 8.6% · Financial Services 8.5% · Non-financials 7.8% · Consumer Services 6.3% · Utilities 5.1% · Salud 4.2% · Real Estate 3.4%', top10: 'Alphabet 5.5%/13Nov41 2.8% · Alphabet 5.875%/13Feb58 2.8% · LCR Finance 5.1%/07Mar51 2.3% · THFC 5.2%/11Oct43 2.2% · Alphabet 6.125%/13Feb26 2.2% · Pfizer 2.735%/15Jun43 2.1% · BHP Billiton 4.3%/25Sep42 1.9% · Affordable Housing 2.893%/11Aug43 1.8%', cap: '82 emisores, calidad investment grade alto' },
+    perf: { y1: -0.16, y3: -0.32, y5: -7.91 }, annual: [0.59, -4.78, 3.31, -25.44, -9.80], fit: { expansion: 40, overheat: 10, stagflation: 20, deflation: 88 } },
+  { name: 'L&G Over 5 Year Index Linked Gilts', cat: 'Fixed interest', fmc: 0.08, proxy: 'INXG.L', proxyName: 'iShares £ Index-Linked Gilts UCITS', isin: 'GB00B3RQR779', code: 'NEC3', benchmark: 'FTSE A Index-Linked Over 5Y', launch: '14 May 2004', size: '£35m',
+    aim: 'Gilts UK ligados a inflación RPI (linkers). Combina duración + protección inflación. Equivalente UK de los TIPS.',
+    holdings: { geo: 'UK 100%', sectors: 'Gilts UK index-linked (RPI)', top10: '30 emisiones (Top 10 = 48.9% del fondo). Vencimientos >5 años', cap: 'Duración real muy alta' },
+    perf: { y1: 1.11, y3: null, y5: null }, annual: [2.61, -9.33, -7.89, -29.46, null], fit: { expansion: 45, overheat: 70, stagflation: 78, deflation: 55 } },
+  { name: 'Airbus Short Dated Credit', cat: 'Fixed interest', fmc: 0.16, proxy: 'IS15.L', proxyName: 'iShares £ Corp Bond 0-5yr UCITS', isin: null, code: 'BPN3', benchmark: 'SONIA 3-month + 1.5%', launch: 'Mar 2021', size: '£0.2m',
+    aim: 'Crédito corto plazo (1-3 años). Defensivo: poco riesgo de tipos y poco crédito. Alternativa a Cash con más yield.',
+    holdings: { geo: 'UK 77.8% · Francia 9.7% · USA 9.6% · España 8.4% · Holanda 4.7% · Italia 4.6% · Alemania 4.0%', sectors: 'Financieros 49.9% · Utilities 14.0% · Comunicaciones 3.6% · Real Estate 2.7% · Energía 2.4% · Industriales 2.1% · Materiales 1.6%', top10: 'UK Gov 4.1% · Heathrow Funding 1.5% · Banco Sabadell 1.4% · Anglian Water 1.4% · ENGIE 1.4% · Northumbrian Water 1.4% · Yorkshire Water 1.4% · EDF 1.4% · Bank of Ireland 1.4% · ABN Amro 1.3%', cap: 'Vencimientos cortos 1-3 años' },
+    perf: { y1: 4.27, y3: 5.41, y5: 2.30 }, annual: [4.27, 5.54, 6.43, -2.42, -1], fit: { expansion: 40, overheat: 40, stagflation: 65, deflation: 70 } },
   // Property (1)
-  { name: 'L&G Sustainable Property Fund', cat: 'Property', fmc: 0.55, propExp: 1.14, proxy: 'IPRP.L', proxyName: 'iShares European Property UCITS', isin: 'GB00BGYBWM68', code: 'B5N3', benchmark: 'ABI Property sector', launch: '26 Oct 2018', size: '£40m', aim: 'Inmobiliario directo UK + REITs globales. COSTE TOTAL ≈ 1.69% (FMC 0.55% + Property Expense 1.14%). El más caro del lote.', perf: { y1: 5.42, y3: 5.97, y5: 2.76 }, annual: [5.63, 4.74, 1.42, -13.93, 11.51], fit: { expansion: 65, overheat: 75, stagflation: 50, deflation: 35 } },
+  { name: 'L&G Sustainable Property Fund', cat: 'Property', fmc: 0.55, propExp: 1.14, proxy: 'IPRP.L', proxyName: 'iShares European Property UCITS', isin: 'GB00BGYBWM68', code: 'B5N3', benchmark: 'ABI Property sector', launch: '26 Oct 2018', size: '£40m',
+    aim: 'Inmobiliario directo UK + REITs globales. COSTE TOTAL ≈ 1.69% (FMC 0.55% + Property Expense 1.14%). El más caro del lote.',
+    holdings: { geo: 'UK predominantemente (propiedades físicas)', sectors: 'Industrial 36.5% · Retail Warehouse 20.5% · Oficinas 19.2% · Ocio 16.4% · Comercio 6.9% · Suelo 0.6%', top10: 'Compass West Industrial Estate London £20-30M · White Hart St High Wycombe £10-20M · Heliport Retail Park Penzance £10-20M · Castlewood Business Park Sutton £10-20M · Eagle Street London £5-10M · Chippenham Bath Road Retail Park £5-10M · Dudley House London £5-10M · 390 Strand London £5-10M · Llandudno Junction Leisure Park £5-10M · Clerkenwell Road London £5-10M', cap: 'Direct Property 77.2% · Cash 18.4% · GREIT 3.3% · Indirect Property 1.1%' },
+    perf: { y1: 5.42, y3: 5.97, y5: 2.76 }, annual: [5.63, 4.74, 1.42, -13.93, 11.51], fit: { expansion: 65, overheat: 75, stagflation: 50, deflation: 35 } },
   // Cash (1)
-  { name: 'L&G PMC Cash Fund', cat: 'Cash', fmc: 0.09, proxy: 'IGLS.L', proxyName: 'iShares £ Gilts 0-5yr UCITS', isin: 'GB00B4VD0B60', code: 'EAB3', benchmark: 'SONIA', launch: '21 Dec 1977', size: '£1,069m', aim: 'Monetario UK. Preserva capital con yield acorde a tipos cortos. FMC mínimo. Defensivo absoluto.', perf: { y1: 4.03, y3: 4.77, y5: null }, annual: [4.09, 5.10, 5.12, 2.23, 0.05], fit: { expansion: 25, overheat: 40, stagflation: 75, deflation: 80 } },
+  { name: 'L&G PMC Cash Fund', cat: 'Cash', fmc: 0.09, proxy: 'IGLS.L', proxyName: 'iShares £ Gilts 0-5yr UCITS', isin: 'GB00B4VD0B60', code: 'EAB3', benchmark: 'SONIA', launch: '21 Dec 1977', size: '£1,069m',
+    aim: 'Monetario UK. Preserva capital con yield acorde a tipos cortos. FMC mínimo. Defensivo absoluto.',
+    holdings: { geo: 'Canadá 18.0% · Holanda 16.8% · UK 11.7% · Japón 10.7% · Francia 9.5% · USA 9.1% · Australia 9.1% · Bélgica 3.6% · Singapur 2.8%', sectors: 'Diversificación bancaria internacional para minimizar riesgo contraparte', top10: 'No desglose individual (papel comercial diversificado de bancos AAA/AA)', cap: 'Vencimientos muy cortos (<3 meses típicamente)' },
+    perf: { y1: 4.03, y3: 4.77, y5: null }, annual: [4.09, 5.10, 5.12, 2.23, 0.05], fit: { expansion: 25, overheat: 40, stagflation: 75, deflation: 80 } },
 ];
 
 const pensionState = {
@@ -3032,22 +3150,10 @@ function renderPensionReco() {
   }).join('');
 }
 
-// ─── PENSION CHART (benchmark proxies) ───────────────────────────────────────
-function setPenChartRange(btn) {
-  pensionState.chartYears = parseInt(btn.dataset.penYears);
-  document.querySelectorAll('[data-pen-years]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  loadPenChart();
-}
-function setPenChartFreq(btn) {
-  pensionState.chartFreq = btn.dataset.penFreq;
-  document.querySelectorAll('[data-pen-freq]').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  loadPenChart();
-}
-function setPenChartScale(btn) {
-  pensionState.chartScale = btn.dataset.penScale;
-  document.querySelectorAll('[data-pen-scale]').forEach(b => b.classList.remove('active'));
+// ─── PENSION CHART (annual returns from factsheet) ───────────────────────────
+function setPenChartView(btn) {
+  pensionState.chartView = btn.dataset.penView;
+  document.querySelectorAll('[data-pen-view]').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadPenChart();
 }
@@ -3061,81 +3167,120 @@ function setPenChartAll(visible) {
 // Distinct colors for funds
 const PEN_COLORS = ['#60a5fa','#a78bfa','#f59e0b','#fcd34d','#cbd5e1','#fb923c','#4ade80','#f472b6','#38bdf8','#e599f7','#22d3ee','#94a3b8','#ff6b6b','#69db7c','#ffd43b','#f97316'];
 
-async function loadPenChart() {
-  const loading = document.getElementById('pen-chart-loading');
-  loading.classList.remove('hidden');
+const ANNUAL_YEARS = ['Mar 2022', 'Mar 2023', 'Mar 2024', 'Mar 2025', 'Mar 2026']; // matches annual array [2026, 2025, 2024, 2023, 2022]
 
-  // Default hidden state: only first 4 visible to avoid clutter on first load
+function loadPenChart() {
+  if (!pensionState.chartView) pensionState.chartView = 'annual';
+
+  // Initial visibility: first 5 funds visible only (avoid clutter)
   if (!pensionState.chartLoaded) {
-    LG_FUNDS.forEach((f, i) => { pensionState.chartHidden[f.name] = i >= 4; });
+    LG_FUNDS.forEach((f, i) => { pensionState.chartHidden[f.name] = i >= 5; });
   }
 
-  // Fetch each fund's proxy (with simple dedup since several use IWRD.L)
-  const proxyCache = {};
-  const results = [];
-  for (let i = 0; i < LG_FUNDS.length; i++) {
-    const f = LG_FUNDS[i];
-    let data;
-    if (proxyCache[f.proxy]) {
-      data = proxyCache[f.proxy];
-    } else {
-      try {
-        data = await yahooRange(f.proxy, pensionState.chartYears, pensionState.chartFreq);
-        proxyCache[f.proxy] = data;
-      } catch(e) {
-        console.warn('pen proxy', f.proxy, e.message);
-        data = [];
-      }
-      await delay(120);
-    }
-    results.push({ fund: f, data, color: PEN_COLORS[i % PEN_COLORS.length] });
-  }
-
-  // Normalize to base 100
-  const datasets = results.map(({ fund, data, color }) => {
-    const base = data.length ? data[0].y : 1;
-    return {
-      label: fund.name,
-      data: data.map(p => ({ x: p.x, y: parseFloat(((p.y / base) * 100).toFixed(2)) })),
-      borderColor: color, backgroundColor: color,
-      borderWidth: 1.7, pointRadius: 0, pointHoverRadius: 4,
-      tension: 0.2, spanGaps: true, yAxisID: 'y',
-      hidden: !!pensionState.chartHidden[fund.name], _key: fund.name,
-    };
-  });
-
-  if (pensionState.chart) pensionState.chart.destroy();
+  let datasets;
+  let chartType = 'line';
   const ctx = document.getElementById('pen-chart-canvas').getContext('2d');
-  const opts = baseOptions('Base 100 · proxy de benchmark');
-  if (pensionState.chartScale === 'log') {
-    opts.scales.y.type = 'logarithmic';
-    opts.scales.y.ticks.callback = v => {
-      const log = Math.log10(v);
-      if (Number.isInteger(log) || [2,3,5].includes(v / Math.pow(10, Math.floor(log)))) {
-        return v >= 1000 ? (v/1000) + 'k' : v;
+  if (pensionState.chart) pensionState.chart.destroy();
+
+  if (pensionState.chartView === 'annual') {
+    // Bar chart: annual returns by year. Each fund a dataset.
+    chartType = 'bar';
+    datasets = LG_FUNDS.map((f, i) => {
+      // f.annual is [2026, 2025, 2024, 2023, 2022] descending
+      const dataInChronOrder = [f.annual[4], f.annual[3], f.annual[2], f.annual[1], f.annual[0]];
+      const color = PEN_COLORS[i % PEN_COLORS.length];
+      return {
+        label: f.name,
+        data: dataInChronOrder.map(v => (v == null || typeof v !== 'number') ? null : v),
+        backgroundColor: color,
+        borderColor: color,
+        borderWidth: 1,
+        hidden: !!pensionState.chartHidden[f.name],
+        _key: f.name,
+      };
+    });
+  } else {
+    // Cumulative profit line chart starting from 0% at Mar 2021
+    datasets = LG_FUNDS.map((f, i) => {
+      const color = PEN_COLORS[i % PEN_COLORS.length];
+      // Compound starting from 100 at Mar 2021; show value - 100 = cumulative %
+      let val = 100;
+      const points = [{ x: 'Mar 2021', y: 0 }];
+      const chron = [f.annual[4], f.annual[3], f.annual[2], f.annual[1], f.annual[0]];
+      for (let yi = 0; yi < 5; yi++) {
+        const yearReturn = chron[yi];
+        if (yearReturn != null && typeof yearReturn === 'number') {
+          val *= (1 + yearReturn / 100);
+          points.push({ x: ANNUAL_YEARS[yi], y: parseFloat((val - 100).toFixed(2)) });
+        } else {
+          points.push({ x: ANNUAL_YEARS[yi], y: null });
+        }
       }
-      return null;
-    };
+      return {
+        label: f.name,
+        data: points,
+        borderColor: color,
+        backgroundColor: color,
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        tension: 0.2,
+        spanGaps: false,
+        hidden: !!pensionState.chartHidden[f.name],
+        _key: f.name,
+      };
+    });
   }
-  opts.plugins.tooltip.callbacks = {
-    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`
+
+  const opts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    animation: { duration: 400 },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1,
+        titleColor: '#aebfd4', bodyColor: '#e8f0f8',
+        titleFont: { family: 'Space Mono', size: 10 }, bodyFont: { family: 'Space Mono', size: 10 },
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y == null ? 'N/D' : (ctx.parsed.y >= 0 ? '+' : '') + ctx.parsed.y.toFixed(2) + '%'}`
+        }
+      }
+    },
+    scales: {
+      x: {
+        type: 'category',
+        labels: pensionState.chartView === 'annual' ? ANNUAL_YEARS : ['Mar 2021', ...ANNUAL_YEARS],
+        ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 10 } },
+        grid: { color: 'rgba(126,147,171,0.18)' }
+      },
+      y: {
+        position: 'left',
+        title: { display: true, text: pensionState.chartView === 'annual' ? 'Rentabilidad anual (%)' : 'Beneficio acumulado (%)', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
+        ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 9 }, callback: v => (v >= 0 ? '+' : '') + v.toFixed(0) + '%' },
+        grid: { color: 'rgba(126,147,171,0.18)' }
+      }
+    }
   };
-  pensionState.chart = new Chart(ctx, { type: 'line', data: { datasets }, options: opts });
+
+  pensionState.chart = new Chart(ctx, { type: chartType, data: { datasets }, options: opts });
 
   // Build toggles
   const container = document.getElementById('pen-chart-toggles');
   container.querySelectorAll('.ind-toggle').forEach(el => el.remove());
   const anchor = document.getElementById('pen-toggle-end');
-  results.forEach((r, i) => {
+  LG_FUNDS.forEach((f, i) => {
     const btn = document.createElement('button');
-    btn.className = 'ind-toggle' + (pensionState.chartHidden[r.fund.name] ? '' : ' active');
-    btn.textContent = r.fund.name.replace('L&G PMC ', '').replace('L&G ', '').slice(0, 24);
-    btn.title = r.fund.name + ' (proxy: ' + r.fund.proxy + ')';
-    btn.style.setProperty('--ind-color', r.color);
+    btn.className = 'ind-toggle' + (pensionState.chartHidden[f.name] ? '' : ' active');
+    btn.textContent = f.name.replace('L&G PMC ', '').replace('L&G ', '').slice(0, 26);
+    btn.title = f.name;
+    const color = PEN_COLORS[i % PEN_COLORS.length];
+    btn.style.setProperty('--ind-color', color);
     btn.onclick = () => {
       const ds = pensionState.chart.data.datasets[i];
       ds.hidden = !ds.hidden;
-      pensionState.chartHidden[r.fund.name] = ds.hidden;
+      pensionState.chartHidden[f.name] = ds.hidden;
       btn.classList.toggle('active', !ds.hidden);
       pensionState.chart.update();
     };
@@ -3143,7 +3288,40 @@ async function loadPenChart() {
   });
 
   pensionState.chartLoaded = true;
-  loading.classList.add('hidden');
+}
+
+// ─── HOLDINGS NOTES ──────────────────────────────────────────────────────────
+function renderHoldingsNotes() {
+  const container = document.getElementById('pen-holdings-notes');
+  if (!container) return;
+  // Group by category
+  const cats = ['Equity', 'Multi-asset', 'Fixed interest', 'Property', 'Cash'];
+  const catIcons = { Equity: '📈', 'Multi-asset': '🧩', 'Fixed interest': '📊', Property: '🏢', Cash: '💵' };
+  container.innerHTML = cats.map(cat => {
+    const funds = LG_FUNDS.filter(f => f.cat === cat);
+    if (!funds.length) return '';
+    return `
+      <div class="sg-block">
+        <div class="sg-title">${catIcons[cat]} ${cat}</div>
+        ${funds.map(f => {
+          const totalCost = f.propExp ? `${f.fmc.toFixed(2)}% + ${f.propExp}% prop = <b style="color:var(--red);">${(f.fmc + f.propExp).toFixed(2)}% total</b>` : `${f.fmc.toFixed(2)}%`;
+          const h = f.holdings || {};
+          return `
+            <div style="margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+              <div style="font-family:var(--sans);font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">${f.name} <span style="font-size:10px;color:var(--text2);font-family:var(--mono);font-weight:400;margin-left:6px;">FMC ${totalCost} · ${f.code || ''}</span></div>
+              <div style="font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:8px;">${f.aim}</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-top:8px;">
+                ${h.geo ? `<div style="font-size:10.5px;color:var(--text2);"><b style="color:var(--text);">Geografía:</b> ${h.geo}</div>` : ''}
+                ${h.sectors ? `<div style="font-size:10.5px;color:var(--text2);"><b style="color:var(--text);">Sectores:</b> ${h.sectors}</div>` : ''}
+                ${h.cap ? `<div style="font-size:10.5px;color:var(--text2);"><b style="color:var(--text);">Capitalización:</b> ${h.cap}</div>` : ''}
+                ${h.top10 ? `<div style="font-size:10.5px;color:var(--text2);grid-column:1/-1;"><b style="color:var(--text);">Top holdings:</b> ${h.top10}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }).join('');
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
