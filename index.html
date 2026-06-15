@@ -336,6 +336,71 @@
   .pen-chart-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(8,12,18,.7);z-index:5;font-size:12px;color:var(--text2);gap:8px}
   .pen-chart-loading.hidden{display:none}
 
+  /* LIQUIDITY PANEL */
+  .liq-panel{border:1px solid var(--border);border-radius:8px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .liq-master{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+  .liq-master-main{flex:1;min-width:280px;padding:20px 22px;border-right:1px solid var(--border)}
+  .liq-master-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+  .liq-master-state{font-family:var(--sans);font-size:22px;font-weight:800;margin-bottom:6px;line-height:1.1}
+  .liq-master-desc{font-size:11px;color:var(--text2);line-height:1.6}
+  .liq-gauge{width:100%;height:10px;border-radius:5px;margin:12px 0 6px;background:linear-gradient(90deg,#00e676 0%,#ffd740 50%,#ff5252 100%);position:relative;opacity:.85}
+  body.light .liq-gauge{background:linear-gradient(90deg,#00913f 0%,#b07d00 50%,#d6336c 100%)}
+  .liq-gauge-marker{position:absolute;top:-4px;width:4px;height:18px;background:var(--text);border-radius:2px;box-shadow:0 0 6px rgba(0,0,0,.5);transition:left .6s}
+  .liq-gauge-labels{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+  .liq-hierarchy{flex:1;min-width:240px;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+  .liq-hier-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
+  .liq-hier-ladder{display:flex;flex-direction:column;gap:4px}
+  .liq-hier-rung{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:4px;font-size:10px;border:1px solid transparent;transition:all .3s}
+  .liq-hier-rung .rung-zone{flex:1;color:var(--text2)}
+  .liq-hier-rung .rung-tag{font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:2px;font-family:var(--mono)}
+  .liq-hier-rung.active{border-color:var(--accent);background:var(--bg3)}
+  .liq-hier-rung.active .rung-zone{color:var(--text);font-weight:700}
+  .liq-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--border)}
+  .liq-card{background:var(--bg2);padding:14px 16px}
+  .liq-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+  .liq-card-name{font-size:11px;font-weight:700;color:var(--text);font-family:var(--sans)}
+  .liq-card-src{font-size:8.5px;color:var(--text3);margin-top:2px}
+  .liq-card-value{font-family:var(--mono);font-size:17px;font-weight:700;margin:4px 0}
+  .liq-card-interp{font-size:9.5px;line-height:1.5;color:var(--text2)}
+  .liq-card-temporal{font-size:9px;color:var(--text3);margin-top:6px;line-height:1.5}
+  .liq-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+  .liq-chart-section{padding:18px 22px;border-top:1px solid var(--border)}
+  .liq-chart-wrap{height:340px;position:relative}
+  .liq-chart-wrap canvas{width:100%!important;height:100%!important}
+
+  /* VALUATION PANEL */
+  .val-panel{border:1px solid var(--border);border-radius:8px;background:var(--bg2);margin-bottom:28px;overflow:hidden}
+  .val-master{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+  .val-master-main{flex:1;min-width:280px;padding:20px 22px;border-right:1px solid var(--border)}
+  .val-master-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+  .val-master-state{font-family:var(--sans);font-size:22px;font-weight:800;margin-bottom:6px;line-height:1.1}
+  .val-master-desc{font-size:11px;color:var(--text2);line-height:1.6}
+  .val-gauge{width:100%;height:10px;border-radius:5px;margin:12px 0 6px;background:linear-gradient(90deg,#00e676 0%,#ffd740 40%,#fb923c 70%,#ff5252 100%);position:relative;opacity:.85}
+  body.light .val-gauge{background:linear-gradient(90deg,#00913f 0%,#b07d00 40%,#c95400 70%,#d6336c 100%)}
+  .val-gauge-marker{position:absolute;top:-4px;width:4px;height:18px;background:var(--text);border-radius:2px;box-shadow:0 0 6px rgba(0,0,0,.5);transition:left .6s}
+  .val-gauge-labels{display:flex;justify-content:space-between;font-size:8px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+  .val-sizing{flex:1;min-width:240px;padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+  .val-sizing-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
+  .val-sizing-ladder{display:flex;flex-direction:column;gap:4px}
+  .val-sizing-rung{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:4px;font-size:10px;border:1px solid transparent;transition:all .3s}
+  .val-sizing-rung .vrung-zone{flex:1;color:var(--text2)}
+  .val-sizing-rung .vrung-tag{font-size:8px;letter-spacing:.5px;text-transform:uppercase;padding:1px 6px;border-radius:2px;font-family:var(--mono);min-width:80px;text-align:center}
+  .val-sizing-rung.active{border-color:var(--accent);background:var(--bg3)}
+  .val-sizing-rung.active .vrung-zone{color:var(--text);font-weight:700}
+  .val-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--border)}
+  .val-card{background:var(--bg2);padding:14px 16px}
+  .val-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+  .val-card-name{font-size:11px;font-weight:700;color:var(--text);font-family:var(--sans)}
+  .val-card-src{font-size:8.5px;color:var(--text3);margin-top:2px}
+  .val-card-value{font-family:var(--mono);font-size:17px;font-weight:700;margin:4px 0}
+  .val-card-interp{font-size:9.5px;line-height:1.5;color:var(--text2)}
+  .val-card-temporal{font-size:9px;color:var(--text3);margin-top:6px;line-height:1.5}
+  .val-card-historic{font-size:8.5px;color:var(--text3);margin-top:4px;font-family:var(--mono)}
+  .val-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
+  .val-chart-section{padding:18px 22px;border-top:1px solid var(--border)}
+  .val-chart-wrap{height:340px;position:relative}
+  .val-chart-wrap canvas{width:100%!important;height:100%!important}
+
   .footer{border-top:1px solid var(--border);padding-top:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
   .footer-note{font-size:9px;color:var(--text2);letter-spacing:1px;line-height:1.6}
   .refresh-btn{font-family:var(--mono);font-size:10px;padding:8px 16px;background:transparent;border:1px solid var(--border2);color:var(--accent);border-radius:3px;cursor:pointer;letter-spacing:1px;text-transform:uppercase}
@@ -362,7 +427,7 @@
 
   <!-- TAB NAV -->
   <div class="tab-nav">
-    <button class="tab-btn active" data-tab="macro" onclick="switchTab('macro')">🌐 Macro Dashboard</button>
+    <button class="tab-btn active" data-tab="macro" onclick="switchTab('macro')">🌐 Macro &amp; Liquidez</button>
     <button class="tab-btn" data-tab="pension" onclick="switchTab('pension')">🇬🇧 Pensión L&G</button>
     <button class="tab-btn" data-tab="info" onclick="switchTab('info')">📚 Información</button>
   </div>
@@ -423,6 +488,76 @@
       </div>
     </div>
     <div class="mod-strip" id="mod-strip"></div>
+  </div>
+
+  <!-- LIQUIDITY & PLUMBING -->
+  <div class="section-title">Liquidez &amp; tuberías del sistema <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· la marea que mueve todos los activos</span></div>
+  <div class="liq-panel">
+    <div class="liq-master">
+      <div class="liq-master-main">
+        <div class="liq-master-label">Estado de las tuberías</div>
+        <div class="liq-master-state" id="liq-state" style="color:var(--text3);">Calculando...</div>
+        <div class="liq-gauge"><div class="liq-gauge-marker" id="liq-gauge-marker" style="left:50%;"></div></div>
+        <div class="liq-gauge-labels"><span>Fluida · risk-on</span><span>Tensión</span><span>Fricción · risk-off</span></div>
+        <div class="liq-master-desc" id="liq-desc" style="margin-top:10px;">El sistema combina el canario de reservas (EFFR−IORB), la tensión del repo (TGCR), la marea de colateral (RRP) y el estrés de crédito/dólar para medir si la liquidez fluye o se atasca.</div>
+      </div>
+      <div class="liq-hierarchy">
+        <div class="liq-hier-label">¿Dónde conviene estar en la jerarquía del dinero?</div>
+        <div class="liq-hier-ladder" id="liq-ladder">
+          <div class="liq-hier-rung" data-rung="core"><span class="rung-tag" style="background:var(--green-dim);color:var(--green);">CENTRO</span><span class="rung-zone">Reservas Fed · T-Bills · Treasuries</span></div>
+          <div class="liq-hier-rung" data-rung="mid"><span class="rung-tag" style="background:var(--yellow-dim);color:var(--yellow);">INTERMEDIO</span><span class="rung-zone">RV large cap · MBS · corp IG</span></div>
+          <div class="liq-hier-rung" data-rung="tail"><span class="rung-tag" style="background:var(--red-dim);color:var(--red);">COLA</span><span class="rung-zone">High yield · small caps · cripto</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="liq-cards" id="liq-cards"></div>
+    <div class="liq-chart-section">
+      <div class="chart-controls">
+        <span class="ctrl-label">Histórico:</span>
+        <button class="range-btn" data-liq-years="1" onclick="setLiqRange(this)">1A</button>
+        <button class="range-btn active" data-liq-years="2" onclick="setLiqRange(this)">2A</button>
+        <button class="range-btn" data-liq-years="5" onclick="setLiqRange(this)">5A</button>
+        <span class="ctrl-divider"></span>
+        <span class="ctrl-label" style="font-size:9px;">Liquidez neta (Fed−TGA−RRP) vs activos de la cola (BTC, HY)</span>
+      </div>
+      <div class="liq-chart-wrap"><canvas id="liq-canvas"></canvas></div>
+      <div class="chart-note">La <b>liquidez neta</b> (balance de la Fed − cuenta del Tesoro − reverse repo) es el mejor proxy de cuánto dinero hay disponible para activos de riesgo. Cuando sube, la marea empuja a la cola (cripto, HY); cuando baja, la cola sufre primero. El marco conceptual es la <i>money view</i> de Mehrling/Pozsar: la liquidez no es dinero, es colateral + financiación circulando por las tuberías de repo.</div>
+    </div>
+  </div>
+
+  <!-- VALUATION -->
+  <div class="section-title">Valoración del mercado <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· altura del agua de fondo · filtro de sizing, no de timing</span></div>
+  <div class="val-panel">
+    <div class="val-master">
+      <div class="val-master-main">
+        <div class="val-master-label">Estado de valoración</div>
+        <div class="val-master-state" id="val-state" style="color:var(--text3);">Calculando...</div>
+        <div class="val-gauge"><div class="val-gauge-marker" id="val-gauge-marker" style="left:50%;"></div></div>
+        <div class="val-gauge-labels"><span>Barato</span><span>Fair</span><span>Caro</span><span>Burbuja</span></div>
+        <div class="val-master-desc" id="val-desc" style="margin-top:10px;">Combina Shiller CAPE (50%), Buffett Indicator (30%) y Equity Risk Premium (20%). No es señal de timing — es contexto estructural. CAPE 40 puede mantenerse años, pero predice retornos a 10 años bajos.</div>
+      </div>
+      <div class="val-sizing">
+        <div class="val-sizing-label">Sizing recomendado del riesgo objetivo</div>
+        <div class="val-sizing-ladder" id="val-ladder">
+          <div class="val-sizing-rung" data-vrung="cheap"><span class="vrung-tag" style="background:var(--green-dim);color:var(--green);">100%</span><span class="vrung-zone">Barato · momento histórico de cargar</span></div>
+          <div class="val-sizing-rung" data-vrung="fair"><span class="vrung-tag" style="background:var(--yellow-dim);color:var(--yellow);">75-100%</span><span class="vrung-zone">Fair · riesgo objetivo completo</span></div>
+          <div class="val-sizing-rung" data-vrung="expensive"><span class="vrung-tag" style="background:#fb923c33;color:var(--orange);">50-75%</span><span class="vrung-zone">Caro · reducir sizing y vigilar</span></div>
+          <div class="val-sizing-rung" data-vrung="bubble"><span class="vrung-tag" style="background:var(--red-dim);color:var(--red);">25-50%</span><span class="vrung-zone">Burbuja · proteger con coberturas</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="val-cards" id="val-cards"></div>
+    <div class="val-chart-section">
+      <div class="chart-controls">
+        <span class="ctrl-label">Histórico CAPE:</span>
+        <button class="range-btn" data-val-years="10" onclick="setValRange(this)">10A</button>
+        <button class="range-btn" data-val-years="25" onclick="setValRange(this)">25A</button>
+        <button class="range-btn active" data-val-years="50" onclick="setValRange(this)">50A</button>
+        <button class="range-btn" data-val-years="150" onclick="setValRange(this)">MAX</button>
+      </div>
+      <div class="val-chart-wrap"><canvas id="val-canvas"></canvas></div>
+      <div class="chart-note">Las líneas horizontales marcan los picos históricos: <b>1929 (~33)</b>, <b>2007 (~27)</b>, <b>2021 (~38)</b> y el récord <b>1999 (~44)</b>. La media histórica del CAPE es ~17. Cuando el CAPE supera 30, los retornos a 10 años posteriores han sido históricamente bajos o negativos en términos reales.</div>
+    </div>
   </div>
 
   <!-- SEMÁFORO -->
@@ -1319,6 +1454,60 @@ Score = 0.25×90 + 0.25×76 + 0.20×89 + 0.30×95
   </div>
 
 
+  <!-- VALUATION NOTES -->
+  <div class="section-title">La capa de Valoración del mercado</div>
+  <div class="score-guide">
+    <div class="sg-block">
+      <div class="sg-title">🎯 Qué mide y por qué importa</div>
+      <div class="sg-text">La capa de valoración mide <b>cuánto pagas por cada dólar de beneficios</b> que produce el mercado, comparado con la media histórica. No es un indicador de timing — los mercados pueden estar caros durante años antes de corregir — pero es la mejor estimación de los <b>retornos esperados a 10 años</b>. Cuando el CAPE está en 40, históricamente los retornos posteriores a 10 años han sido CAGR 0-3%. Cuando el CAPE está en 15, han sido CAGR 10-15%.</div>
+      <div class="sg-text">Se usa como <b>filtro de sizing</b>, no como filtro de entrada/salida: cuando momentum y macro digan "compra" pero el CAPE diga 40+, no entras al 100% del riesgo objetivo — entras al 50-75% y reservas pólvora para cuando se corrija. Es la diferencia entre comprar caro y comprar caro <i>asumiendo el coste</i>.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">📊 Las tres métricas y sus pesos</div>
+      <table class="sg-table">
+        <tr><th>Métrica</th><th>Peso</th><th>Qué mide</th><th>Fuente</th></tr>
+        <tr><td><b>Shiller CAPE</b></td><td>50%</td><td>Precio S&P / media 10 años de beneficios ajustados a inflación. Suaviza ciclos. La referencia académica (Shiller, Nobel).</td><td>multpl.com</td></tr>
+        <tr><td><b>Buffett Indicator</b></td><td>30%</td><td>Capitalización Wilshire 5000 / PIB nominal USA. La métrica preferida de Warren Buffett ("probablemente la mejor medida de valoración").</td><td>Yahoo ^W5000 / FRED GDP</td></tr>
+        <tr><td><b>Equity Risk Premium</b></td><td>20%</td><td>Earnings yield S&P (1/PER) − Treasury 10Y. Lo que la bolsa rinde EXTRA sobre el bono sin riesgo. Incorpora los tipos.</td><td>multpl.com + FRED DGS10</td></tr>
+      </table>
+      <div class="sg-text">Cada métrica se convierte a una escala 0–100 (0 = barato extremo, 100 = burbuja) y se promedia con sus pesos. El CAPE pesa más porque es la métrica con mejor track record histórico y la menos afectada por los ciclos de corto plazo.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">📈 CAPE en momentos históricos clave</div>
+      <table class="sg-table">
+        <tr><th>Momento</th><th>CAPE</th><th>Retorno S&P 10 años después</th></tr>
+        <tr><td>Suelo 1932 (Gran Depresión)</td><td>5.5</td><td>+10.3% CAGR real</td></tr>
+        <tr><td>Suelo 1974 (estanflación)</td><td>8.3</td><td>+10.5% CAGR real</td></tr>
+        <tr><td>Suelo 1982 (post-Volcker)</td><td>7.4</td><td>+13.6% CAGR real</td></tr>
+        <tr><td>1995 (mitad rally dotcom)</td><td>22</td><td>+5.4% CAGR real</td></tr>
+        <tr><td>Pico 1929</td><td>33</td><td>-2.5% CAGR real</td></tr>
+        <tr><td><b>Pico 1999 (récord)</b></td><td><b>44</b></td><td><b>-1.4% CAGR real</b></td></tr>
+        <tr><td>Pico 2007</td><td>27</td><td>+5.1% CAGR real</td></tr>
+        <tr><td>Suelo 2009</td><td>13.3</td><td>+10.8% CAGR real</td></tr>
+        <tr><td>Pico 2021</td><td>38</td><td>(en curso)</td></tr>
+        <tr><td><b>Hoy (jun 2026)</b></td><td><b>~40</b></td><td><b>?</b></td></tr>
+      </table>
+      <div class="sg-text">La relación es clara: <b>CAPE alto → retornos pobres a 10 años</b>. Pero también: el CAPE pudo estar sobre 30 durante 4 años (1996-2000) antes de corregir. Por eso no es señal de timing.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">⚠️ ¿Estamos como en 1999?</div>
+      <div class="sg-text">Las <b>similitudes</b> son reales y preocupantes: CAPE en 40 (entonces 44), concentración en pocas mega-caps tech (entonces Cisco/Microsoft/Intel; ahora Nvidia/Microsoft/Apple/Alphabet/Meta), narrativa de "esta vez es diferente por la tecnología" (entonces Internet, ahora IA), tipos altos (entonces 6%, ahora 4-5%).</div>
+      <div class="sg-text">Las <b>diferencias</b> también son reales: las mega-caps de hoy generan beneficios enormes y crecientes (Nvidia PER 50 con beneficios a triple dígito vs Cisco PER 200 sin beneficios proporcionales), los márgenes corporativos están en máximos pero por concentración en empresas asset-light, y el ERP es bajo pero positivo (en 1999 estuvo casi negativo).</div>
+      <div class="sg-text"><b>Conclusión honesta:</b> la valoración absoluta es comparable; los fundamentales no. Puede ser que esta vez la corrección sea menos severa, o que tarde más en llegar. Pero pagar 40x beneficios suavizados nunca ha sido un buen punto de entrada a 10 años vista, sin excepciones en 150 años.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">🔧 Cómo integra con el resto del sistema</div>
+      <div class="sg-text">La valoración <b>NO afecta al régimen ni al momentum ni al Score</b>. Es una capa independiente que modula el <b>tamaño total de la exposición al riesgo</b>:</div>
+      <ul class="rg-list">
+        <li><b>Barato (score &lt; 30):</b> 100% del riesgo objetivo. Momento histórico para cargar.</li>
+        <li><b>Fair (30-60):</b> 75-100% del riesgo objetivo. Configuración normal.</li>
+        <li><b>Caro (60-85):</b> 50-75%. Reducir sizing y vigilar.</li>
+        <li><b>Burbuja (85+):</b> 25-50%. Usar coberturas, mantener cash táctico mayor.</li>
+      </ul>
+      <div class="sg-text">Si tu sistema te dice "comprar Nvidia" pero la valoración global está en 90/100, la decisión correcta no es ignorar a Nvidia — es comprar Nvidia con menos tamaño del que comprarías si CAPE estuviera en 20.</div>
+    </div>
+  </div>
+
   <!-- BACKTEST NOTES -->
   <div class="section-title">Cómo se ha diseñado el Backtest del sistema</div>
   <div class="score-guide">
@@ -1919,6 +2108,12 @@ async function loadCards() {
 
   // ── Sentiment layer
   await loadSentiment();
+
+  // ── Liquidity & plumbing layer
+  await loadLiquidity();
+
+  // ── Valuation layer
+  await loadValuation();
 
   updateRegime();
   renderSentiment(); // re-render tactic with final regime
@@ -3721,6 +3916,600 @@ function renderHoldingsNotes() {
       </div>
     `;
   }).join('');
+}
+
+// ─── LIQUIDITY & PLUMBING ────────────────────────────────────────────────────
+const liqState = { years: 2, chart: null, data: {} };
+
+function setLiqRange(btn) {
+  liqState.years = parseInt(btn.dataset.liqYears);
+  document.querySelectorAll('[data-liq-years]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadLiqChart();
+}
+
+// Latest valid value of a FRED series
+async function fredLatest(seriesId) {
+  const url = `${FRED_BASE}?series_id=${seriesId}&api_key=${FRED_KEY}&file_type=json&sort_order=desc&limit=10`;
+  const data = await proxyFetch(url);
+  if (!data.observations) return null;
+  for (const o of data.observations) {
+    if (o.value !== '.' && !isNaN(parseFloat(o.value))) return { value: parseFloat(o.value), date: o.date };
+  }
+  return null;
+}
+
+const liquidity = { effr:null, iorb:null, tgcr:null, tgcr99:null, sofr:null, rrp:null, rrpRate:null, hy:null, dxyMom:null, score:null, rung:null };
+
+async function loadLiquidity() {
+  const cards = document.getElementById('liq-cards');
+  cards.innerHTML = '<div class="liq-card"><span class="spinner"></span> Cargando tuberías...</div>';
+
+  // Fetch the plumbing series (latest values)
+  const safe = async (fn) => { try { return await fn(); } catch(e) { return null; } };
+  liquidity.effr   = await safe(() => fredLatest('EFFR'));    await delay(120);
+  liquidity.iorb   = await safe(() => fredLatest('IORB'));    await delay(120);
+  liquidity.tgcr   = await safe(() => fredLatest('TGCRRATE')); await delay(120);
+  liquidity.tgcr99 = await safe(() => fredLatest('TGCR99THPERCENTILE')); await delay(120);
+  liquidity.sofr   = await safe(() => fredLatest('SOFR'));    await delay(120);
+  liquidity.rrp    = await safe(() => fredLatest('RRPONTSYD')); await delay(120);  // volume $B
+  liquidity.srf    = await safe(() => fredLatest('SRFTSYD')); await delay(120);
+
+  // HY spreads (reuse sentiment.hy if present, else fetch)
+  if (sentiment.hy != null) liquidity.hy = { value: sentiment.hy };
+  else liquidity.hy = await safe(() => fredLatest('BAMLH0A0HYM2'));
+  await delay(120);
+
+  // DXY momentum (3-month change) as offshore-stress proxy
+  try {
+    const dxy = await yahooRange('DX-Y.NYB', 1, 'm');
+    if (dxy.length >= 4) {
+      const last = dxy[dxy.length-1].y, ago = dxy[dxy.length-4].y;
+      liquidity.dxyMom = (last / ago - 1) * 100;
+    }
+  } catch(e) {}
+
+  computeLiquidityScore();
+  renderLiquidityCards();
+  renderLiquidityMaster();
+  loadLiqChart();
+}
+
+function computeLiquidityScore() {
+  // Score 0 (fluida/risk-on) → 100 (fricción/risk-off). Higher = more stress.
+  const parts = [];
+
+  // 1. Canary: EFFR - IORB. Negative/low = healthy. Crossing above = scarcity.
+  if (liquidity.effr && liquidity.iorb) {
+    const spread = (liquidity.effr.value - liquidity.iorb.value) * 100; // bps
+    // -10bps or less = 0 stress; 0bps = 60; +5bps+ = 100
+    let s = (spread + 12) / 17 * 100;
+    parts.push({ w: 0.30, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 2. Repo tension: TGCR - IORB (bps). Above IORB = tight.
+  if (liquidity.tgcr && liquidity.iorb) {
+    const spread = (liquidity.tgcr.value - liquidity.iorb.value) * 100;
+    let s = (spread + 8) / 18 * 100;
+    parts.push({ w: 0.20, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 3. TGCR tail: 99th percentile vs median (spike = stress)
+  if (liquidity.tgcr99 && liquidity.tgcr) {
+    const tail = (liquidity.tgcr99.value - liquidity.tgcr.value) * 100;
+    let s = tail / 15 * 100;
+    parts.push({ w: 0.15, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 4. RRP drain direction: high RRP = excess liquidity parked (low stress on tail when draining)
+  //    We treat very low RRP as neutral-to-slightly-positive (liquidity already deployed)
+  //    and use it lightly; main signal is HY + DXY below.
+  // 5. HY spreads: credit stress propagates from the tail.
+  if (liquidity.hy) {
+    const hy = liquidity.hy.value;
+    let s = (hy - 3) / 4 * 100; // 3% = 0, 7% = 100
+    parts.push({ w: 0.20, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 6. DXY momentum: rising dollar = offshore funding stress.
+  if (liquidity.dxyMom != null) {
+    let s = (liquidity.dxyMom + 2) / 8 * 100; // -2% = 0, +6% = 100
+    parts.push({ w: 0.15, v: Math.max(0, Math.min(100, s)) });
+  }
+
+  if (!parts.length) { liquidity.score = null; return; }
+  const wSum = parts.reduce((a,b) => a + b.w, 0);
+  liquidity.score = parts.reduce((a,b) => a + b.v * b.w, 0) / wSum;
+
+  // Hierarchy rung recommendation
+  if (liquidity.score < 35) liquidity.rung = 'tail';
+  else if (liquidity.score < 65) liquidity.rung = 'mid';
+  else liquidity.rung = 'core';
+}
+
+function renderLiquidityMaster() {
+  const s = liquidity.score;
+  const stateEl = document.getElementById('liq-state');
+  const descEl = document.getElementById('liq-desc');
+  const marker = document.getElementById('liq-gauge-marker');
+  if (s == null) { stateEl.textContent = 'Datos no disponibles'; stateEl.style.color = 'var(--text3)'; return; }
+
+  marker.style.left = `calc(${s}% - 2px)`;
+  let label, color, desc;
+  if (s < 35) {
+    label = '🟢 Tuberías fluidas'; color = 'var(--green)';
+    desc = 'El colateral circula sin fricción y hay marea de liquidez. Entorno risk-on: la cola de la jerarquía (cripto, high yield, small caps) puede vivir y suele liderar. Es cuando el dinero fluye hacia los activos más alejados del centro.';
+  } else if (s < 65) {
+    label = '🟡 Tensión moderada'; color = 'var(--yellow)';
+    desc = 'Hay algo de fricción en las tuberías pero sin estrés sistémico. Zona de transición: conviene estar en el escalón intermedio (RV large cap, crédito IG) y vigilar si la tensión escala hacia la cola o se relaja hacia el centro.';
+  } else {
+    label = '🔴 Fricción / estrés'; color = 'var(--red)';
+    desc = 'Las tuberías se tensan: el repo se encarece, el crédito se estresa y/o el dólar se aprecia (estrés offshore). Risk-off. El dinero se repliega hacia el centro de la jerarquía (T-Bills, cash, Treasuries) y la cola colapsa primero — cripto es el primer eslabón en caer.';
+  }
+  stateEl.textContent = label; stateEl.style.color = color;
+  descEl.textContent = desc;
+
+  // Highlight hierarchy rung
+  document.querySelectorAll('#liq-ladder .liq-hier-rung').forEach(r => {
+    r.classList.toggle('active', r.dataset.rung === liquidity.rung);
+  });
+}
+
+function liqDot(stress) {
+  // stress 0-100 → color
+  const c = stress == null ? 'var(--text3)' : stress < 35 ? 'var(--green)' : stress < 65 ? 'var(--yellow)' : 'var(--red)';
+  return `<span class="liq-dot" style="background:${c};box-shadow:0 0 6px ${c};"></span>`;
+}
+
+function renderLiquidityCards() {
+  const cards = document.getElementById('liq-cards');
+  const fmt = (v, d=2, suf='') => v == null ? 'N/D' : v.toFixed(d) + suf;
+  const items = [];
+
+  // EFFR - IORB canary
+  if (liquidity.effr && liquidity.iorb) {
+    const sp = (liquidity.effr.value - liquidity.iorb.value) * 100;
+    const stress = sp > 0 ? 90 : sp > -5 ? 60 : 20;
+    items.push({ stress, name: 'Canario: EFFR − IORB', src: 'FRED · EFFR, IORB', value: (sp>=0?'+':'') + fmt(sp,1,' bps'),
+      interp: sp > 0 ? '⚠ EFFR por encima de IORB = escasez real de reservas (la señal de 2019)' : sp > -5 ? 'Acercándose al suelo de reservas — vigilar' : 'Reservas abundantes, sin escasez',
+      temporal: 'La señal más fiable de estrés de reservas según la money view' });
+  }
+  // TGCR - IORB
+  if (liquidity.tgcr && liquidity.iorb) {
+    const sp = (liquidity.tgcr.value - liquidity.iorb.value) * 100;
+    const stress = sp > 5 ? 85 : sp > 0 ? 55 : 25;
+    items.push({ stress, name: 'Repo tri-party (TGCR − IORB)', src: 'FRED · TGCRRATE', value: (sp>=0?'+':'') + fmt(sp,1,' bps'),
+      interp: sp > 5 ? '⚠ Repo tensionado sobre el suelo Fed — dealers constreñidos' : sp > 0 ? 'Ligera tensión de balance en repo' : 'Repo cómodo, financiación fluida',
+      temporal: 'El mejor termómetro de capacidad de balance de los dealers' });
+  }
+  // TGCR tail
+  if (liquidity.tgcr99 && liquidity.tgcr) {
+    const tail = (liquidity.tgcr99.value - liquidity.tgcr.value) * 100;
+    const stress = tail > 8 ? 80 : tail > 4 ? 50 : 20;
+    items.push({ stress, name: 'Cola del repo (P99 − mediana)', src: 'FRED · TGCR percentiles', value: '+' + fmt(tail,1,' bps'),
+      interp: tail > 8 ? '⚠ Los repos más caros se disparan — fricción de colateral' : tail > 4 ? 'Dispersión moderada en repo' : 'Repo homogéneo, sin tensión en la cola',
+      temporal: 'Cuando el percentil 99 se separa, algunos no encuentran financiación barata' });
+  }
+  // RRP
+  if (liquidity.rrp) {
+    items.push({ stress: null, name: 'Reverse Repo (RRP)', src: 'FRED · RRPONTSYD', value: '$' + fmt(liquidity.rrp.value,0) + 'B',
+      interp: liquidity.rrp.value > 500 ? 'Mucho efectivo aparcado en la Fed — liquidez sin desplegar' : liquidity.rrp.value > 100 ? 'RRP drenándose hacia el mercado — combustible para riesgo' : 'RRP casi vacío — la liquidez ya está desplegada',
+      temporal: 'Su vaciado 2023-24 alimentó el rally; nivel = colateral en reserva' });
+  }
+  // HY spreads
+  if (liquidity.hy) {
+    const hy = liquidity.hy.value;
+    const stress = hy > 5 ? 85 : hy > 3.5 ? 50 : 20;
+    items.push({ stress, name: 'Spreads High Yield', src: 'FRED · BAMLH0A0HYM2', value: fmt(hy,2,'%'),
+      interp: hy > 5 ? '⚠ Estrés de crédito — la cola empieza a sufrir' : hy > 3.5 ? 'Crédito algo tenso' : 'Crédito tranquilo, apetito de riesgo sano',
+      temporal: 'El crédito huele los problemas antes que la bolsa' });
+  }
+  // DXY momentum
+  if (liquidity.dxyMom != null) {
+    const stress = liquidity.dxyMom > 4 ? 80 : liquidity.dxyMom > 0 ? 45 : 20;
+    items.push({ stress, name: 'Momentum del dólar (DXY 3m)', src: 'Yahoo · DX-Y.NYB', value: (liquidity.dxyMom>=0?'+':'') + fmt(liquidity.dxyMom,1,'%'),
+      interp: liquidity.dxyMom > 4 ? '⚠ Dólar apreciándose con fuerza = estrés de financiación offshore' : liquidity.dxyMom > 0 ? 'Dólar firme — vigilar la periferia' : 'Dólar débil/estable — alivio para la periferia',
+      temporal: 'El dólar sube cuando el sistema global se estresa' });
+  }
+  // SRF usage
+  if (liquidity.srf) {
+    items.push({ stress: null, name: 'Standing Repo Facility', src: 'FRED · SRFTSYD', value: fmt(liquidity.srf.value,2,'%'),
+      interp: 'El uso del SRF NO es pánico: es gestión de balance. Existe desde 2021 y evita que tensiones puntuales escalen como en 2019.',
+      temporal: 'Backstop permanente — la Fed como dealer of last resort' });
+  }
+
+  cards.innerHTML = items.map(it => `
+    <div class="liq-card">
+      <div class="liq-card-top">
+        <div><div class="liq-card-name">${it.name}</div><div class="liq-card-src">${it.src}</div></div>
+        ${liqDot(it.stress)}
+      </div>
+      <div class="liq-card-value">${it.value}</div>
+      <div class="liq-card-interp">${it.interp}</div>
+      <div class="liq-card-temporal">${it.temporal}</div>
+    </div>
+  `).join('');
+}
+
+async function loadLiqChart() {
+  const ctx = document.getElementById('liq-canvas');
+  if (!ctx) return;
+
+  // Net liquidity = WALCL - TGA - RRP (all in $B, weekly/daily → monthly avg)
+  const safe = async (fn) => { try { return await fn(); } catch(e) { return []; } };
+  const [walcl, tga, rrp, btc, hy] = await Promise.all([
+    safe(() => fredRange('WALCL', liqState.years, 'm', 'w')),       // $millions
+    safe(() => fredRange('WTREGEN', liqState.years, 'm', 'w')),     // TGA $billions
+    safe(() => fredRange('RRPONTSYD', liqState.years, 'm', 'd')),   // $billions
+    safe(() => yahooRange('BTC-USD', liqState.years, 'm')),
+    safe(() => fredRange('BAMLH0A0HYM2', liqState.years, 'm', 'd')),
+  ]);
+
+  // Build net liquidity series aligned by month
+  const monthKey = ms => { const d = new Date(ms); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'); };
+  const walclM = {}; walcl.forEach(p => walclM[monthKey(p.x)] = p.y / 1000); // millions → billions
+  const tgaM = {}; tga.forEach(p => tgaM[monthKey(p.x)] = p.y);
+  const rrpM = {}; rrp.forEach(p => rrpM[monthKey(p.x)] = p.y);
+
+  const netLiq = [];
+  Object.keys(walclM).sort().forEach(k => {
+    const w = walclM[k], t = tgaM[k] ?? 0, r = rrpM[k] ?? 0;
+    if (w != null) netLiq.push({ x: new Date(k + '-15').getTime(), y: w - t - r });
+  });
+
+  if (liqState.chart) liqState.chart.destroy();
+  const opts = baseOptions('Liquidez neta ($B) · activos cola (base 100)');
+  // Two axes: net liquidity left ($B), tail assets right (normalized)
+  opts.scales.y.title = { display: true, text: 'Liquidez neta ($B)', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } };
+  opts.scales.y.ticks.callback = v => '$' + (v/1000).toFixed(1) + 'T';
+  opts.scales.y2 = {
+    position: 'right', title: { display: true, text: 'BTC / HY (base 100)', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } },
+    ticks: { color: '#7e93ab', font: { family: 'Space Mono', size: 9 } }, grid: { drawOnChartArea: false }
+  };
+
+  const norm = (series) => { if (!series.length) return []; const base = series[0].y; return series.map(p => ({ x: p.x, y: (p.y/base)*100 })); };
+
+  opts.plugins.legend = { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 10 } } };
+  liqState.chart = new Chart(ctx.getContext('2d'), {
+    type: 'line',
+    data: { datasets: [
+      { label: 'Liquidez neta (Fed−TGA−RRP)', data: netLiq, borderColor: '#00e5ff', backgroundColor: 'rgba(0,229,255,0.08)', borderWidth: 2.2, pointRadius: 0, tension: 0.3, fill: true, yAxisID: 'y' },
+      { label: 'BTC', data: norm(btc), borderColor: '#f59e0b', backgroundColor: '#f59e0b', borderWidth: 1.5, pointRadius: 0, tension: 0.2, yAxisID: 'y2' },
+      { label: 'HY spread (invertido)', data: norm(hy.map(p => ({ x: p.x, y: 10 - p.y }))), borderColor: '#f472b6', backgroundColor: '#f472b6', borderWidth: 1.2, pointRadius: 0, tension: 0.2, yAxisID: 'y2', borderDash: [4,3] },
+    ]},
+    options: opts
+  });
+}
+
+// ─── VALUATION ───────────────────────────────────────────────────────────────
+const valState = { years: 50, chart: null };
+const valuation = { cape:null, buffett:null, erp:null, per:null, score:null, sizing:null };
+
+// Recent CAPE values for fallback (updated periodically; multpl.com is the live source)
+// As of June 2026: CAPE ~40-41 per the public data sources
+const CAPE_RECENT_FALLBACK = { value: 40.5, date: '2026-06-01' };
+
+function setValRange(btn) {
+  valState.years = parseInt(btn.dataset.valYears);
+  document.querySelectorAll('[data-val-years]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadValChart();
+}
+
+async function loadValuation() {
+  const cards = document.getElementById('val-cards');
+  cards.innerHTML = '<div class="val-card"><span class="spinner"></span> Cargando valoración...</div>';
+  const safe = async (fn) => { try { return await fn(); } catch(e) { return null; } };
+
+  // 1. Shiller CAPE — try multpl.com (CSS-scrape) with fallback to recent value
+  try {
+    const html = await proxyFetchText('https://www.multpl.com/shiller-pe');
+    if (html) {
+      // Parse: looking for "Current Shiller PE Ratio is XX.XX"
+      const m = html.match(/Current Shiller PE Ratio is\s*([\d.]+)/i) || html.match(/<div id="current">\s*([\d.]+)/);
+      if (m) valuation.cape = { value: parseFloat(m[1]), date: 'live', source: 'multpl.com' };
+    }
+  } catch(e) {}
+  if (!valuation.cape || isNaN(valuation.cape.value)) {
+    valuation.cape = { ...CAPE_RECENT_FALLBACK, source: 'snapshot (multpl.com no accesible)' };
+  }
+  await delay(120);
+
+  // 2. Wilshire 5000 — Yahoo ^W5000
+  let wilshire = null;
+  try {
+    const data = await yahooRange('^W5000', 1, 'm');
+    if (data && data.length) wilshire = data[data.length-1].y;
+  } catch(e) {}
+  await delay(120);
+
+  // 3. GDP — FRED (quarterly, billions of dollars annualized)
+  const gdpData = await safe(() => fredLatest('GDP'));
+  // 4. Treasury 10Y — FRED DGS10
+  const tnx = await safe(() => fredLatest('DGS10'));
+  await delay(120);
+
+  // Buffett Indicator = Wilshire / GDP
+  if (wilshire && gdpData) {
+    // Wilshire ^W5000 is in points; multiply by ~1.2B to get rough market cap in millions
+    // Actually the convention: Buffett = (Wilshire 5000 in $B) / GDP. Yahoo ^W5000 is approx the index value in points.
+    // FRED's discontinued WILL5000PRFC was around 60000 = $60T market cap. Today ~76000 ≈ $76T.
+    // GDP is in $B, so for ratio: marketcap_T / GDP_T. GDP ~$29T (2026 estimate).
+    // Buffett = wilshire_points / GDP_billions * 100 → already a percentage
+    const ratio = (wilshire / gdpData.value) * 100;
+    valuation.buffett = { value: ratio, wilshire, gdp: gdpData.value, source: 'Wilshire ^W5000 / FRED GDP' };
+  }
+
+  // ERP: earnings yield (1/PER) − 10Y yield
+  // Need PER first. Pull it from multpl.com or use regular PE approximation.
+  try {
+    const html = await proxyFetchText('https://www.multpl.com/s-p-500-pe-ratio');
+    if (html) {
+      const m = html.match(/Current S&P 500 PE Ratio is\s*([\d.]+)/i) || html.match(/<div id="current">\s*([\d.]+)/);
+      if (m) valuation.per = { value: parseFloat(m[1]), source: 'multpl.com' };
+    }
+  } catch(e) {}
+  if (!valuation.per) valuation.per = { value: 25.3, source: 'snapshot' };
+  await delay(120);
+
+  if (valuation.per && tnx) {
+    const earningsYield = 100 / valuation.per.value;
+    valuation.erp = { value: earningsYield - tnx.value, earningsYield, tnx: tnx.value };
+  }
+
+  computeValuationScore();
+  renderValuationCards();
+  renderValuationMaster();
+  loadValChart();
+}
+
+// Helper: fetch as text (for HTML scraping)
+async function proxyFetchText(url) {
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  ];
+  for (const p of proxies) {
+    try {
+      const r = await fetch(p);
+      if (r.ok) return await r.text();
+    } catch(e) {}
+  }
+  return null;
+}
+
+function computeValuationScore() {
+  // 0 = barato; 100 = burbuja
+  const parts = [];
+  // 1. CAPE: 10 = 0, 17 = 30, 25 = 60, 35 = 80, 44 = 100
+  if (valuation.cape) {
+    const c = valuation.cape.value;
+    let s;
+    if (c <= 10) s = 0;
+    else if (c <= 17) s = (c - 10) / 7 * 30;
+    else if (c <= 25) s = 30 + (c - 17) / 8 * 30;
+    else if (c <= 35) s = 60 + (c - 25) / 10 * 20;
+    else if (c <= 44) s = 80 + (c - 35) / 9 * 20;
+    else s = 100;
+    parts.push({ w: 0.50, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 2. Buffett: 60% = 0, 80% = 30, 110% = 60, 150% = 80, 200% = 100
+  if (valuation.buffett) {
+    const b = valuation.buffett.value;
+    let s;
+    if (b <= 60) s = 0;
+    else if (b <= 80) s = (b - 60) / 20 * 30;
+    else if (b <= 110) s = 30 + (b - 80) / 30 * 30;
+    else if (b <= 150) s = 60 + (b - 110) / 40 * 20;
+    else if (b <= 220) s = 80 + (b - 150) / 70 * 20;
+    else s = 100;
+    parts.push({ w: 0.30, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 3. ERP: 6% = 0, 4% = 30, 2% = 60, 0% = 80, -2% = 100
+  if (valuation.erp) {
+    const e = valuation.erp.value;
+    let s;
+    if (e >= 6) s = 0;
+    else if (e >= 4) s = (6 - e) / 2 * 30;
+    else if (e >= 2) s = 30 + (4 - e) / 2 * 30;
+    else if (e >= 0) s = 60 + (2 - e) / 2 * 20;
+    else if (e >= -2) s = 80 + (0 - e) / 2 * 20;
+    else s = 100;
+    parts.push({ w: 0.20, v: Math.max(0, Math.min(100, s)) });
+  }
+  if (!parts.length) { valuation.score = null; return; }
+  const wSum = parts.reduce((a,b) => a + b.w, 0);
+  valuation.score = parts.reduce((a,b) => a + b.v * b.w, 0) / wSum;
+
+  if (valuation.score < 30) valuation.sizing = 'cheap';
+  else if (valuation.score < 60) valuation.sizing = 'fair';
+  else if (valuation.score < 85) valuation.sizing = 'expensive';
+  else valuation.sizing = 'bubble';
+}
+
+function renderValuationMaster() {
+  const s = valuation.score;
+  const stateEl = document.getElementById('val-state');
+  const descEl = document.getElementById('val-desc');
+  const marker = document.getElementById('val-gauge-marker');
+  if (s == null) { stateEl.textContent = 'Datos no disponibles'; stateEl.style.color = 'var(--text3)'; return; }
+
+  marker.style.left = `calc(${s}% - 2px)`;
+  let label, color, desc;
+  if (s < 30) {
+    label = '🟢 Barato'; color = 'var(--green)';
+    desc = 'Valoraciones por debajo de la media histórica. Es el tipo de zona donde se forjan retornos a 10 años excepcionales (CAGR 10-15%). Momento histórico para cargar riesgo. CAPE bajo + ERP alto = la bolsa compensa generosamente respecto a bonos.';
+  } else if (s < 60) {
+    label = '🟡 Fair value'; color = 'var(--yellow)';
+    desc = 'Valoraciones en línea con la media histórica de largo plazo. Riesgo objetivo completo es razonable. Los retornos esperados a 10 años son cercanos a la media histórica (CAGR ~7-9%).';
+  } else if (s < 85) {
+    label = '🟠 Caro'; color = 'var(--orange)';
+    desc = 'Valoraciones significativamente sobre la media. Reducir sizing del riesgo objetivo al 50-75%. Históricamente desde estos niveles los retornos a 10 años se quedan en CAGR 2-5%. Puede haber rallies adicionales, pero el cojín se reduce.';
+  } else {
+    label = '🔴 Burbuja'; color = 'var(--red)';
+    desc = 'Valoraciones en zona de burbuja, comparables a 1999 (CAPE 44) o 1929 (CAPE 33). Históricamente desde estos niveles los retornos a 10 años han sido negativos en términos reales. NO es señal de venta inmediata (las burbujas se mantienen años), pero sí de usar protecciones y reducir sizing al 25-50% del objetivo.';
+  }
+  stateEl.textContent = label; stateEl.style.color = color;
+  descEl.textContent = desc;
+
+  document.querySelectorAll('#val-ladder .val-sizing-rung').forEach(r => {
+    r.classList.toggle('active', r.dataset.vrung === valuation.sizing);
+  });
+}
+
+function valDot(stress) {
+  const c = stress == null ? 'var(--text3)' : stress < 30 ? 'var(--green)' : stress < 60 ? 'var(--yellow)' : stress < 85 ? 'var(--orange)' : 'var(--red)';
+  return `<span class="val-dot" style="background:${c};box-shadow:0 0 6px ${c};"></span>`;
+}
+
+function renderValuationCards() {
+  const cards = document.getElementById('val-cards');
+  const items = [];
+
+  // Shiller CAPE card
+  if (valuation.cape) {
+    const c = valuation.cape.value;
+    const pct = c > 44 ? 99 : c > 35 ? 95 : c > 30 ? 90 : c > 25 ? 80 : c > 20 ? 65 : c > 17 ? 50 : 30;
+    const stress = c > 35 ? 90 : c > 25 ? 65 : c > 20 ? 40 : c > 15 ? 25 : 10;
+    items.push({
+      stress, name: 'Shiller CAPE', src: valuation.cape.source || 'multpl.com',
+      value: c.toFixed(2),
+      interp: c > 38 ? '⚠ Zona burbuja, comparable a 1999 (44) y 2021 (38). Retornos a 10 años históricamente bajos o negativos.' :
+              c > 30 ? 'Muy caro. Comparable a 2007 (27) superado. Sizing reducido recomendado.' :
+              c > 22 ? 'Por encima de la media. Sobrevalorado pero no extremo.' :
+              c > 15 ? 'En línea con la media histórica.' :
+              'Barato vs media histórica. Zona de oportunidad.',
+      temporal: 'Precio / media 10A de beneficios ajustados a inflación. Métrica de Shiller (Nobel).',
+      historic: `Media 17 · 1929: 33 · 2007: 27 · 2021: 38 · Récord 1999: 44 · Hoy percentil ~${pct}`
+    });
+  }
+
+  // Buffett Indicator
+  if (valuation.buffett) {
+    const b = valuation.buffett.value;
+    const stress = b > 180 ? 90 : b > 140 ? 70 : b > 100 ? 50 : b > 80 ? 30 : 15;
+    items.push({
+      stress, name: 'Buffett Indicator', src: valuation.buffett.source,
+      value: b.toFixed(0) + '%',
+      interp: b > 180 ? '⚠ Capitalización vs PIB en zona burbuja extrema. Buffett: "vigilar muy de cerca a partir de 140%".' :
+              b > 140 ? 'Muy caro vs PIB. Niveles solo vistos en 1999 y post-2020.' :
+              b > 100 ? 'Por encima de la media histórica. Cara.' :
+              b > 80 ? 'En línea con la media histórica.' :
+              'Barato vs PIB. Oportunidad histórica.',
+      temporal: 'Capitalización Wilshire 5000 / PIB nominal. Métrica preferida de Buffett.',
+      historic: 'Media histórica ~80% · 1999: 140% · 2007: 105% · 2021: 200% · Hoy zona extrema'
+    });
+  }
+
+  // Equity Risk Premium
+  if (valuation.erp) {
+    const e = valuation.erp.value;
+    const stress = e < 0 ? 95 : e < 1 ? 75 : e < 2 ? 60 : e < 3 ? 40 : e < 5 ? 25 : 10;
+    items.push({
+      stress, name: 'Equity Risk Premium', src: 'multpl.com + FRED DGS10',
+      value: (e>=0?'+':'') + e.toFixed(2) + '%',
+      interp: e < 0 ? '⚠ ERP negativo: la bolsa rinde MENOS que el Treasury sin riesgo. Anomalía histórica.' :
+              e < 1 ? 'Casi sin prima por riesgo. La bolsa no compensa.' :
+              e < 2.5 ? 'Prima de riesgo baja vs media histórica.' :
+              e < 4 ? 'Prima de riesgo razonable.' :
+              'Prima de riesgo alta. La bolsa compensa generosamente.',
+      temporal: 'Earnings yield S&P (1/PER) − Treasury 10Y. Lo que la bolsa rinde EXTRA sobre el bono.',
+      historic: `EY S&P: ${valuation.erp.earningsYield.toFixed(2)}% · Treasury 10Y: ${valuation.erp.tnx.toFixed(2)}%`
+    });
+  }
+
+  // PER normal
+  if (valuation.per) {
+    const p = valuation.per.value;
+    const capeVal = valuation.cape ? valuation.cape.value : null;
+    const stress = p > 30 ? 80 : p > 22 ? 55 : p > 18 ? 35 : 15;
+    items.push({
+      stress, name: 'PER del S&P 500', src: valuation.per.source || 'multpl.com',
+      value: p.toFixed(1),
+      interp: capeVal && capeVal > p * 1.4 ? '⚠ CAPE >> PER → beneficios actuales inflados vs media 10A (márgenes en máximos).' :
+              p > 28 ? 'Muy caro en términos de beneficios actuales.' :
+              p > 20 ? 'Caro vs media histórica (~15-17).' :
+              p > 15 ? 'En línea con la media.' :
+              'Barato.',
+      temporal: 'PER normal: precio / beneficios 12 meses. Más volátil que CAPE.',
+      historic: 'Media histórica ~15-17 · Útil para comparar con CAPE'
+    });
+  }
+
+  cards.innerHTML = items.map(it => `
+    <div class="val-card">
+      <div class="val-card-top">
+        <div><div class="val-card-name">${it.name}</div><div class="val-card-src">${it.src}</div></div>
+        ${valDot(it.stress)}
+      </div>
+      <div class="val-card-value">${it.value}</div>
+      <div class="val-card-interp">${it.interp}</div>
+      <div class="val-card-temporal">${it.temporal}</div>
+      <div class="val-card-historic">${it.historic}</div>
+    </div>
+  `).join('');
+}
+
+// Historical CAPE chart. Source: Shiller's public data via multpl.com table.
+async function loadValChart() {
+  const ctx = document.getElementById('val-canvas');
+  if (!ctx) return;
+
+  // Fetch Shiller PE table from multpl
+  let series = [];
+  try {
+    const html = await proxyFetchText('https://www.multpl.com/shiller-pe/table/by-month');
+    if (html) {
+      // The table has rows like: <td>Jun 1, 2026</td> <td>40.51</td>
+      const re = /<td[^>]*>([A-Z][a-z]{2})\s+\d+,\s+(\d{4})<\/td>\s*<td[^>]*>([\d.]+)/g;
+      const monthMap = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+      let m;
+      while ((m = re.exec(html)) !== null) {
+        const month = monthMap[m[1]];
+        const year = parseInt(m[2]);
+        const v = parseFloat(m[3]);
+        if (!isNaN(v) && year >= 1871) {
+          series.push({ x: new Date(year, month, 15).getTime(), y: v });
+        }
+      }
+      series.sort((a,b) => a.x - b.x);
+    }
+  } catch(e) {}
+
+  // If scraping failed, build a minimal series from key historical anchor points
+  if (!series.length) {
+    const anchors = [
+      ['1881-01', 18.5], ['1900-01', 17.4], ['1921-06', 5.0], ['1929-09', 32.6], ['1932-06', 5.5],
+      ['1946-01', 14.0], ['1966-01', 24.1], ['1974-12', 8.3], ['1987-09', 18.3], ['1990-10', 14.8],
+      ['1999-12', 44.2], ['2002-09', 21.7], ['2007-10', 27.5], ['2009-03', 13.3], ['2015-01', 27.4],
+      ['2018-01', 33.3], ['2020-03', 24.8], ['2021-11', 38.6], ['2022-09', 27.3], ['2023-12', 31.0],
+      ['2024-12', 36.5], ['2025-06', 37.8], ['2026-06', 40.5]
+    ];
+    series = anchors.map(([d,y]) => ({ x: new Date(d + '-15').getTime(), y }));
+  }
+
+  // Filter by selected range
+  const cutoffYears = valState.years;
+  const cutoffMs = Date.now() - cutoffYears * 365.25 * 24 * 3600 * 1000;
+  const filtered = series.filter(p => p.x >= cutoffMs);
+
+  if (valState.chart) valState.chart.destroy();
+  const opts = baseOptions('Shiller CAPE');
+  opts.scales.y.title = { display: true, text: 'Shiller CAPE', color: '#6b83a3', font: { family: 'Space Mono', size: 9 } };
+  opts.scales.y.ticks.callback = v => v.toFixed(0);
+  opts.plugins.legend = { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 10 } } };
+  // Add horizontal annotation lines via a custom plugin-like approach: simulate with extra datasets
+  const xMin = filtered.length ? filtered[0].x : cutoffMs;
+  const xMax = filtered.length ? filtered[filtered.length-1].x : Date.now();
+  const hline = (val, label, color, dash=[4,4]) => ({
+    label: `${label} (${val})`, data: [{x:xMin,y:val},{x:xMax,y:val}],
+    borderColor: color, backgroundColor: color, borderWidth: 1, pointRadius: 0, borderDash: dash, fill: false
+  });
+  const datasets = [
+    { label: 'Shiller CAPE', data: filtered, borderColor: '#00e5ff', backgroundColor: 'rgba(0,229,255,0.08)', borderWidth: 2, pointRadius: 0, tension: 0.2, fill: true },
+    hline(17, 'Media histórica', '#7e93ab', [2,3]),
+    hline(33, 'Pico 1929', '#fb923c'),
+    hline(44, 'Pico 1999', '#ff5252'),
+    hline(38, 'Pico 2021', '#a78bfa'),
+    hline(27, 'Pico 2007', '#fcd34d'),
+  ];
+  valState.chart = new Chart(ctx.getContext('2d'), { type: 'line', data: { datasets }, options: opts });
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
