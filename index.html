@@ -363,6 +363,14 @@
   .liq-card-value{font-family:var(--mono);font-size:17px;font-weight:700;margin:4px 0}
   .liq-card-interp{font-size:9.5px;line-height:1.5;color:var(--text2)}
   .liq-card-temporal{font-size:9px;color:var(--text3);margin-top:6px;line-height:1.5}
+  /* compact variant */
+  .liq-cards-compact{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1px;background:var(--border)}
+  .liq-cc{background:var(--bg2);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+  .liq-cc-top{display:flex;justify-content:space-between;align-items:center}
+  .liq-cc-name{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:var(--text2);font-weight:700}
+  .liq-cc-value{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1.1}
+  .liq-cc-sub{font-size:8.5px;color:var(--text3);line-height:1.4;font-family:var(--mono)}
+  .liq-cc-read{font-size:9px;color:var(--text2);line-height:1.4}
   .liq-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px}
   .liq-chart-section{padding:18px 22px;border-top:1px solid var(--border)}
   .liq-chart-wrap{height:340px;position:relative}
@@ -491,17 +499,20 @@
   </div>
 
   <!-- LIQUIDITY & PLUMBING -->
-  <div class="section-title">Liquidez &amp; tuberías del sistema <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· la marea que mueve todos los activos</span></div>
+  <div class="section-title">Pilar 1 · Liquidez &amp; tuberías del sistema <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· la marea que mueve todos los activos</span></div>
   <div class="liq-panel">
     <div class="liq-master">
-      <div class="liq-master-main">
+      <div class="liq-master-main" style="border-right:none;">
         <div class="liq-master-label">Estado de las tuberías</div>
         <div class="liq-master-state" id="liq-state" style="color:var(--text3);">Calculando...</div>
         <div class="liq-gauge"><div class="liq-gauge-marker" id="liq-gauge-marker" style="left:50%;"></div></div>
         <div class="liq-gauge-labels"><span>Fluida · risk-on</span><span>Tensión</span><span>Fricción · risk-off</span></div>
-        <div class="liq-master-desc" id="liq-desc" style="margin-top:10px;">El sistema combina el canario de reservas (EFFR−IORB), la tensión del repo (TGCR), la marea de colateral (RRP) y el estrés de crédito/dólar para medir si la liquidez fluye o se atasca.</div>
+        <div class="liq-master-desc" id="liq-desc" style="margin-top:10px;"></div>
       </div>
-      <div class="liq-hierarchy">
+    </div>
+    <div class="liq-cards-compact" id="liq-cards"></div>
+    <div class="liq-master" style="border-top:1px solid var(--border);">
+      <div class="liq-hierarchy" style="padding:18px 22px;">
         <div class="liq-hier-label">¿Dónde conviene estar en la jerarquía del dinero?</div>
         <div class="liq-hier-ladder" id="liq-ladder">
           <div class="liq-hier-rung" data-rung="core"><span class="rung-tag" style="background:var(--green-dim);color:var(--green);">CENTRO</span><span class="rung-zone">Reservas Fed · T-Bills · Treasuries</span></div>
@@ -510,7 +521,6 @@
         </div>
       </div>
     </div>
-    <div class="liq-cards" id="liq-cards"></div>
     <div class="liq-chart-section">
       <div class="chart-controls">
         <span class="ctrl-label">Histórico:</span>
@@ -521,7 +531,7 @@
         <span class="ctrl-label" style="font-size:9px;">Liquidez neta (Fed−TGA−RRP) vs activos de la cola (BTC, HY)</span>
       </div>
       <div class="liq-chart-wrap"><canvas id="liq-canvas"></canvas></div>
-      <div class="chart-note">La <b>liquidez neta</b> (balance de la Fed − cuenta del Tesoro − reverse repo) es el mejor proxy de cuánto dinero hay disponible para activos de riesgo. Cuando sube, la marea empuja a la cola (cripto, HY); cuando baja, la cola sufre primero. El marco conceptual es la <i>money view</i> de Mehrling/Pozsar: la liquidez no es dinero, es colateral + financiación circulando por las tuberías de repo.</div>
+      <div class="chart-note">Cómo se calcula el estado, qué mide cada indicador y cómo leer esta gráfica: pestaña <b>📚 Información → Pilar 1</b>.</div>
     </div>
   </div>
 
@@ -1075,6 +1085,76 @@
 
   <!-- TAB: INFORMACIÓN -->
   <div class="tab-content" id="tab-info">
+
+  <!-- PILAR 1: LIQUIDEZ EXPLAINER -->
+  <div class="section-title">Pilar 1 · Liquidez &amp; tuberías del sistema</div>
+  <div class="score-guide">
+
+    <div class="sg-block">
+      <div class="sg-title">🌊 Qué es este pilar (para no versados)</div>
+      <div class="sg-text">Imagina el sistema financiero como una red de tuberías por las que circula la financiación. Los precios de los activos no dependen solo de si las empresas ganan dinero — dependen de si <b>hay financiación circulando</b> para comprarlos. Este pilar mide una sola cosa: <b>¿fluye o se atasca el dinero por las tuberías?</b></div>
+      <div class="sg-text">La idea contraintuitiva clave (marco <i>money view</i> de Perry Mehrling y Zoltan Pozsar): <b>la liquidez no es "dinero impreso"</b>. Es la capacidad del sistema para transformar activos en capacidad de pago sin fricción — colateral + financiación + dealers circulando por el mercado repo. Cuando esas tuberías se tensan, los precios caen aunque los beneficios empresariales sean buenos. Cuando fluyen, todo sube — y lo más arriesgado sube más.</div>
+      <div class="sg-text"><b>Qué NO mide este pilar:</b> no mide crecimiento ni inflación (eso es el pilar de régimen), no mide si el mercado está caro (pilar de valoración), no mide el miedo o codicia de los inversores (capa de sentimiento). Cada dato del sistema puntúa en un solo pilar para no contar lo mismo dos veces.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">⬆️⬇️ Upstream vs downstream — por qué elegimos estos indicadores y no otros</div>
+      <div class="sg-text">Hay dos tipos de señales de estrés financiero, y la diferencia importa mucho:</div>
+      <div class="sg-text"><b>Señales upstream (aguas arriba):</b> miden la fricción EN EL ORIGEN del sistema — el mercado repo donde los dealers se financian cada noche. Cuando algo va mal, aparece aquí PRIMERO, antes de que los precios de bolsa se muevan. Son anticipatorias. Ejemplos: el spread EFFR−IORB, la tensión del repo TGCR, la dispersión del percentil 99.</div>
+      <div class="sg-text"><b>Señales downstream (aguas abajo):</b> miden el estrés cuando YA ha salido de las tuberías y ha llegado a los precios. Los spreads de high yield ampliándose, el VIX disparándose — son síntomas, no causas. Llegan más tarde. Por eso <b>los spreads HY NO puntúan en este pilar</b>: viven en la capa de Sentimiento del pilar de régimen, que es donde pertenecen conceptualmente (miden apetito de riesgo del mercado, no fricción de tubería).</div>
+      <div class="sg-text">Este pilar es 100% upstream a propósito: queremos la alarma que suena antes, no la que confirma lo que ya pasó.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🧮 Cómo se calcula el Estado de las tuberías (0–100)</div>
+      <div class="sg-text">El score combina 5 componentes upstream, cada uno convertido a una escala 0 (fluido) – 100 (fricción) y ponderado:</div>
+      <table class="sg-table">
+        <tr><th>Componente</th><th>Peso</th><th>Escala (0 → 100)</th><th>Por qué importa</th></tr>
+        <tr><td><b>EFFR − IORB</b> (canario)</td><td>30%</td><td>−12 bps → 0 · 0 bps → ~70 · +5 bps → 100</td><td>Si los bancos pagan por reservas MÁS que lo que la Fed remunera, hay escasez real. Fue la señal de la crisis repo de sept-2019.</td></tr>
+        <tr><td><b>TGCR − IORB</b> (tensión repo)</td><td>25%</td><td>−8 bps → 0 · +10 bps → 100</td><td>El repo tri-party cotizando sobre el suelo de la Fed = los dealers no tienen balance para intermediar.</td></tr>
+        <tr><td><b>Cola del repo</b> (P99 − mediana)</td><td>15%</td><td>0 bps → 0 · +15 bps → 100</td><td>Si los repos más caros se disparan respecto a la mediana, alguien no encuentra financiación barata: fricción de colateral.</td></tr>
+        <tr><td><b>DXY 3m</b> (estrés offshore)</td><td>15%</td><td>−2% → 0 · +6% → 100</td><td>El mundo se financia en dólares offshore (eurodólar). Cuando esa financiación se tensa, el dólar sube mecánicamente. Es la única señal gratuita del eurodólar.</td></tr>
+        <tr><td><b>Δ Liquidez neta 3m</b> (dirección de la marea)</td><td>15%</td><td>+$300B → 0 · $0 → 50 · −$300B → 100</td><td>Lo que importa de la marea no es el nivel, es si sube o baja. Marea bajando = drenaje de combustible para el riesgo.</td></tr>
+      </table>
+      <div class="sg-text"><b>Lectura del score:</b></div>
+      <div class="sg-readout">
+        <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">&lt;35 · 🟢 Tuberías fluidas — risk-on, la cola puede vivir</div>
+        <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">35–65 · 🟡 Tensión moderada — escalón intermedio, vigilar</div>
+        <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">&gt;65 · 🔴 Fricción — risk-off, replegarse al centro</div>
+      </div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🗂️ Las 7 tarjetas, una a una</div>
+      <table class="sg-table">
+        <tr><th>Tarjeta</th><th>Qué es</th><th>Cómo leerla</th></tr>
+        <tr><td><b>Liquidez neta</b></td><td>Balance de la Fed (WALCL) − Cuenta del Tesoro (TGA) − Reverse Repo (RRP). El mejor proxy agregado de cuánto dinero hay disponible para activos de riesgo.</td><td>El desglose muestra las tres piezas. La flecha indica la dirección 3m: ↑ marea subiendo (viento de cola para riesgo), ↓ bajando (drenaje). El TGA drena liquidez cuando el Tesoro acumula caja; el RRP la aparca fuera del mercado.</td></tr>
+        <tr><td><b>Reverse Repo (RRP)</b></td><td>Efectivo que los fondos monetarios aparcan en la Fed porque no encuentran mejor destino.</td><td>Alto (&gt;$500B) = liquidez sin desplegar (reserva seca). Drenándose = ese dinero está saliendo al mercado (el vaciado 2023-24 alimentó el rally). Casi vacío = la liquidez ya está desplegada, no queda ese colchón.</td></tr>
+        <tr><td><b>EFFR − IORB</b></td><td>Lo que los bancos se pagan entre sí por reservas overnight menos lo que la Fed remunera por tenerlas aparcadas.</td><td>🟢 muy negativo = reservas abundantes. 🟡 acercándose a 0 = el sistema empieza a valorar las reservas más que el suelo de la Fed. 🔴 positivo = escasez real (2019). Es EL canario de la mina.</td></tr>
+        <tr><td><b>TGCR − IORB</b></td><td>Tipo del repo tri-party (dealer–cliente) menos el suelo de la Fed. Mide la capacidad de balance de los dealers, el corazón del sistema.</td><td>🟢 negativo = financiación cómoda. 🟡 positivo leve = tensión de balance. 🔴 &gt;+5bps = dealers constreñidos, reducen intermediación → los precios pierden soporte.</td></tr>
+        <tr><td><b>Cola del repo (P99)</b></td><td>Diferencia entre el percentil 99 del repo (los préstamos más caros del día) y la mediana.</td><td>Cuando se separa mucho, la financiación deja de ser homogénea: los agentes marginales pagan caro o no encuentran. Fricción de colateral incipiente aunque la mediana esté tranquila.</td></tr>
+        <tr><td><b>DXY 3m</b></td><td>Momentum del dólar a 3 meses como proxy del estrés de financiación offshore (eurodólar).</td><td>🟢 débil/estable = alivio para la periferia global. 🟡 firme = vigilar. 🔴 apreciándose &gt;+4% = escasez de dólares offshore; suele coincidir con caídas de los activos de la cola. Nota: DXY puntúa SOLO aquí; se retiró de los modificadores del pilar de régimen para no contar dos veces.</td></tr>
+        <tr><td><b>Standing Repo Facility</b></td><td>El backstop permanente de la Fed (desde 2021): dealers pueden convertir Treasuries en efectivo overnight a este tipo.</td><td>Informativa, sin semáforo. Importante: su uso NO es señal de pánico — es gestión de balance. Existe precisamente para que tensiones puntuales no escalen como en 2019, cuando no existía.</td></tr>
+      </table>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🪜 La jerarquía del dinero — la conclusión accionable</div>
+      <div class="sg-text">No todos los activos son iguales ante un shock de liquidez. Existe una <b>jerarquía</b>: en la cúspide está lo que el sistema acepta como colateral sin pestañear (reservas Fed, T-Bills, Treasuries); en medio, lo que se acepta con descuento (RV large cap, MBS, crédito investment grade); y en la cola, lo que no es colateral elegible para nadie (high yield, small caps, cripto).</div>
+      <div class="sg-text"><b>La regla de oro:</b> cuando el centro se tensiona, la cola muere primero. Cripto es el último eslabón de la cadena de financiación → el primero en colapsar cuando las tuberías se aprietan, y el que más sube cuando hay exceso de liquidez buscando destino. Por eso el panel ilumina el escalón donde conviene estar según el estado de las tuberías: fluidas → puedes vivir en la cola; fricción → repliégate al centro.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">📈 Cómo leer la gráfica de liquidez neta</div>
+      <div class="sg-text">La línea principal (área azul) es la <b>liquidez neta mensual</b> (Fed − TGA − RRP) en billones de dólares. Superpuestas, en el eje derecho: <b>BTC</b> (el activo más sensible de la cola, base 100) y el <b>spread HY invertido</b> (invertido para que "subir = menos estrés" y sea comparable visualmente).</div>
+      <div class="sg-text">Lo que buscas: la <b>correlación de la marea con la cola</b>. Cuando la liquidez neta sube sostenidamente, BTC y el crédito basura suelen subir con retraso de semanas; cuando la marea baja, la cola pierde soporte primero. Si ves divergencia (la marea baja pero BTC sube), es señal de fragilidad — la cola está viviendo de prestado.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔀 Cambios respecto a versiones anteriores del panel</div>
+      <div class="sg-text">Para que cada dato puntúe en un solo pilar: <b>los spreads HY salieron del score de tuberías</b> (son señal downstream; viven en la capa Sentimiento del pilar de régimen, donde ya estaban). <b>DXY y WALCL salieron de los modificadores del pilar de régimen</b> (DXY puntúa aquí como estrés offshore; WALCL vive dentro de la Liquidez neta). Las tarjetas de DXY y WALCL del semáforo de indicadores siguen visibles como referencia informativa hasta que reorganicemos ese pilar.</div>
+    </div>
+  </div>
 
   <!-- SENTIMIENTO EXPLAINER -->
   <div class="section-title">El indicador de sentimiento — de dónde sale cada uno</div>
@@ -2386,13 +2466,13 @@ function renderAxis(axis, score) {
 }
 
 function renderModStrip() {
+  // DXY y WALCL ya no aparecen aquí: puntúan en el Pilar 1 (Liquidez & tuberías)
+  // para no contar el mismo dato en dos pilares.
   const mods = [
     { key: 'fedfunds', label: 'Fed Funds' },
     { key: 'dotplot', label: 'Dot Plot' },
     { key: 'tips', label: 'TIPS' },
-    { key: 'dxy', label: 'DXY' },
     { key: 'crb', label: 'DBC' },
-    { key: 'walcl', label: 'Liquidez' },
   ];
   const strip = document.getElementById('mod-strip');
   strip.innerHTML = mods.map(m => {
@@ -3939,11 +4019,11 @@ async function fredLatest(seriesId) {
   return null;
 }
 
-const liquidity = { effr:null, iorb:null, tgcr:null, tgcr99:null, sofr:null, rrp:null, rrpRate:null, hy:null, dxyMom:null, score:null, rung:null };
+const liquidity = { effr:null, iorb:null, tgcr:null, tgcr99:null, sofr:null, rrp:null, srf:null, dxyMom:null, walcl:null, tga:null, netLiq:null, netLiqDir:null, score:null, rung:null };
 
 async function loadLiquidity() {
   const cards = document.getElementById('liq-cards');
-  cards.innerHTML = '<div class="liq-card"><span class="spinner"></span> Cargando tuberías...</div>';
+  cards.innerHTML = '<div class="liq-cc"><span class="spinner"></span> Cargando tuberías...</div>';
 
   // Fetch the plumbing series (latest values)
   const safe = async (fn) => { try { return await fn(); } catch(e) { return null; } };
@@ -3951,16 +4031,35 @@ async function loadLiquidity() {
   liquidity.iorb   = await safe(() => fredLatest('IORB'));    await delay(120);
   liquidity.tgcr   = await safe(() => fredLatest('TGCRRATE')); await delay(120);
   liquidity.tgcr99 = await safe(() => fredLatest('TGCR99THPERCENTILE')); await delay(120);
-  liquidity.sofr   = await safe(() => fredLatest('SOFR'));    await delay(120);
-  liquidity.rrp    = await safe(() => fredLatest('RRPONTSYD')); await delay(120);  // volume $B
+  liquidity.rrp    = await safe(() => fredLatest('RRPONTSYD')); await delay(120);  // $B
   liquidity.srf    = await safe(() => fredLatest('SRFTSYD')); await delay(120);
 
-  // HY spreads (reuse sentiment.hy if present, else fetch)
-  if (sentiment.hy != null) liquidity.hy = { value: sentiment.hy };
-  else liquidity.hy = await safe(() => fredLatest('BAMLH0A0HYM2'));
+  // Net liquidity components + direction (last ~4 months to compute 3m trend)
+  try {
+    const [walclS, tgaS, rrpS] = await Promise.all([
+      fredRange('WALCL', 1, 'm', 'w'),      // $M weekly
+      fredRange('WTREGEN', 1, 'm', 'w'),    // $B weekly
+      fredRange('RRPONTSYD', 1, 'm', 'd'),  // $B daily→monthly avg
+    ]);
+    const lastOf = s => s && s.length ? s[s.length-1].y : null;
+    const agoOf = (s, n) => s && s.length > n ? s[s.length-1-n].y : null;
+    const w = lastOf(walclS), t = lastOf(tgaS), r = lastOf(rrpS);
+    if (w != null) {
+      liquidity.walcl = w / 1000; // $B
+      liquidity.tga = t ?? 0;
+      const rrpNow = r ?? 0;
+      liquidity.netLiq = liquidity.walcl - liquidity.tga - rrpNow;
+      // 3-month direction
+      const w3 = agoOf(walclS, 3), t3 = agoOf(tgaS, 3), r3 = agoOf(rrpS, 3);
+      if (w3 != null) {
+        const netAgo = w3/1000 - (t3 ?? 0) - (r3 ?? 0);
+        liquidity.netLiqDir = liquidity.netLiq - netAgo; // $B change over ~3 months
+      }
+    }
+  } catch(e) {}
   await delay(120);
 
-  // DXY momentum (3-month change) as offshore-stress proxy
+  // DXY momentum (3-month change) — offshore/eurodollar stress proxy
   try {
     const dxy = await yahooRange('DX-Y.NYB', 1, 'm');
     if (dxy.length >= 4) {
@@ -3976,40 +4075,37 @@ async function loadLiquidity() {
 }
 
 function computeLiquidityScore() {
-  // Score 0 (fluida/risk-on) → 100 (fricción/risk-off). Higher = more stress.
+  // Score 0 (fluida/risk-on) → 100 (fricción/risk-off). 100% plumbing — upstream signals only.
+  // (HY spreads viven en la capa Sentimiento del pilar de régimen: son señal downstream.)
   const parts = [];
 
-  // 1. Canary: EFFR - IORB. Negative/low = healthy. Crossing above = scarcity.
+  // 1. Canario de reservas: EFFR − IORB (30%). Cruce por encima = escasez real (señal 2019).
   if (liquidity.effr && liquidity.iorb) {
     const spread = (liquidity.effr.value - liquidity.iorb.value) * 100; // bps
-    // -10bps or less = 0 stress; 0bps = 60; +5bps+ = 100
-    let s = (spread + 12) / 17 * 100;
+    let s = (spread + 12) / 17 * 100; // -12bps→0 · 0bps→~70 · +5bps→100
     parts.push({ w: 0.30, v: Math.max(0, Math.min(100, s)) });
   }
-  // 2. Repo tension: TGCR - IORB (bps). Above IORB = tight.
+  // 2. Tensión repo: TGCR − IORB (25%). Repo sobre el suelo Fed = dealers constreñidos.
   if (liquidity.tgcr && liquidity.iorb) {
     const spread = (liquidity.tgcr.value - liquidity.iorb.value) * 100;
     let s = (spread + 8) / 18 * 100;
-    parts.push({ w: 0.20, v: Math.max(0, Math.min(100, s)) });
+    parts.push({ w: 0.25, v: Math.max(0, Math.min(100, s)) });
   }
-  // 3. TGCR tail: 99th percentile vs median (spike = stress)
+  // 3. Cola del repo: P99 − mediana (15%). Dispersión = fricción de colateral.
   if (liquidity.tgcr99 && liquidity.tgcr) {
     const tail = (liquidity.tgcr99.value - liquidity.tgcr.value) * 100;
     let s = tail / 15 * 100;
     parts.push({ w: 0.15, v: Math.max(0, Math.min(100, s)) });
   }
-  // 4. RRP drain direction: high RRP = excess liquidity parked (low stress on tail when draining)
-  //    We treat very low RRP as neutral-to-slightly-positive (liquidity already deployed)
-  //    and use it lightly; main signal is HY + DXY below.
-  // 5. HY spreads: credit stress propagates from the tail.
-  if (liquidity.hy) {
-    const hy = liquidity.hy.value;
-    let s = (hy - 3) / 4 * 100; // 3% = 0, 7% = 100
-    parts.push({ w: 0.20, v: Math.max(0, Math.min(100, s)) });
-  }
-  // 6. DXY momentum: rising dollar = offshore funding stress.
+  // 4. Estrés offshore/eurodólar: DXY 3m (15%). Dólar subiendo = financiación global tensa.
   if (liquidity.dxyMom != null) {
-    let s = (liquidity.dxyMom + 2) / 8 * 100; // -2% = 0, +6% = 100
+    let s = (liquidity.dxyMom + 2) / 8 * 100; // -2%→0 · +6%→100
+    parts.push({ w: 0.15, v: Math.max(0, Math.min(100, s)) });
+  }
+  // 5. Dirección de la marea: Δ liquidez neta 3m (15%). Marea bajando = drenaje.
+  if (liquidity.netLiqDir != null) {
+    // +300B en 3m → 0 estrés · 0 → 50 · -300B → 100
+    let s = 50 - (liquidity.netLiqDir / 300) * 50;
     parts.push({ w: 0.15, v: Math.max(0, Math.min(100, s)) });
   }
 
@@ -4031,16 +4127,20 @@ function renderLiquidityMaster() {
   if (s == null) { stateEl.textContent = 'Datos no disponibles'; stateEl.style.color = 'var(--text3)'; return; }
 
   marker.style.left = `calc(${s}% - 2px)`;
+  const dirTxt = liquidity.netLiqDir == null ? '' :
+    liquidity.netLiqDir > 50 ? ' La marea de liquidez neta sube (+$' + liquidity.netLiqDir.toFixed(0) + 'B en 3m).' :
+    liquidity.netLiqDir < -50 ? ' La marea de liquidez neta baja (−$' + Math.abs(liquidity.netLiqDir).toFixed(0) + 'B en 3m).' :
+    ' La marea de liquidez neta está plana.';
   let label, color, desc;
   if (s < 35) {
     label = '🟢 Tuberías fluidas'; color = 'var(--green)';
-    desc = 'El colateral circula sin fricción y hay marea de liquidez. Entorno risk-on: la cola de la jerarquía (cripto, high yield, small caps) puede vivir y suele liderar. Es cuando el dinero fluye hacia los activos más alejados del centro.';
+    desc = 'El colateral circula sin fricción. Entorno risk-on: la cola de la jerarquía (cripto, high yield, small caps) puede vivir y suele liderar.' + dirTxt;
   } else if (s < 65) {
     label = '🟡 Tensión moderada'; color = 'var(--yellow)';
-    desc = 'Hay algo de fricción en las tuberías pero sin estrés sistémico. Zona de transición: conviene estar en el escalón intermedio (RV large cap, crédito IG) y vigilar si la tensión escala hacia la cola o se relaja hacia el centro.';
+    desc = 'Algo de fricción en las tuberías, sin estrés sistémico. Zona de transición: escalón intermedio (RV large cap, crédito IG) y vigilar si escala.' + dirTxt;
   } else {
     label = '🔴 Fricción / estrés'; color = 'var(--red)';
-    desc = 'Las tuberías se tensan: el repo se encarece, el crédito se estresa y/o el dólar se aprecia (estrés offshore). Risk-off. El dinero se repliega hacia el centro de la jerarquía (T-Bills, cash, Treasuries) y la cola colapsa primero — cripto es el primer eslabón en caer.';
+    desc = 'Las tuberías se tensan: repo caro y/o dólar apreciándose (estrés offshore). Risk-off: replegarse hacia el centro (T-Bills, cash). La cola colapsa primero.' + dirTxt;
   }
   stateEl.textContent = label; stateEl.style.color = color;
   descEl.textContent = desc;
@@ -4062,67 +4162,72 @@ function renderLiquidityCards() {
   const fmt = (v, d=2, suf='') => v == null ? 'N/D' : v.toFixed(d) + suf;
   const items = [];
 
-  // EFFR - IORB canary
+  // 1. Liquidez neta (con desglose)
+  if (liquidity.netLiq != null) {
+    const dir = liquidity.netLiqDir;
+    const stress = dir == null ? null : dir < -100 ? 75 : dir < 0 ? 50 : 25;
+    items.push({ stress,
+      name: 'Liquidez neta',
+      value: '$' + (liquidity.netLiq/1000).toFixed(2) + 'T',
+      sub: `Fed $${(liquidity.walcl/1000).toFixed(1)}T − TGA $${liquidity.tga.toFixed(0)}B − RRP $${(liquidity.rrp ? liquidity.rrp.value : 0).toFixed(0)}B`,
+      read: dir == null ? 'La marea disponible para riesgo' : dir > 50 ? '↑ Marea subiendo (+$' + dir.toFixed(0) + 'B / 3m)' : dir < -50 ? '↓ Marea bajando (−$' + Math.abs(dir).toFixed(0) + 'B / 3m)' : '→ Marea plana (3m)' });
+  } else {
+    items.push({ stress: null, name: 'Liquidez neta', value: 'N/D', sub: 'WALCL − TGA − RRP', read: 'FRED no accesible' });
+  }
+  // 2. RRP
+  items.push({ stress: null,
+    name: 'Reverse Repo (RRP)',
+    value: liquidity.rrp ? '$' + fmt(liquidity.rrp.value,0) + 'B' : 'N/D',
+    sub: 'FRED · RRPONTSYD',
+    read: !liquidity.rrp ? '' : liquidity.rrp.value > 500 ? 'Mucho colateral aparcado sin desplegar' : liquidity.rrp.value > 100 ? 'Drenándose hacia el mercado' : 'Casi vacío — liquidez ya desplegada' });
+  // 3. EFFR − IORB
   if (liquidity.effr && liquidity.iorb) {
     const sp = (liquidity.effr.value - liquidity.iorb.value) * 100;
     const stress = sp > 0 ? 90 : sp > -5 ? 60 : 20;
-    items.push({ stress, name: 'Canario: EFFR − IORB', src: 'FRED · EFFR, IORB', value: (sp>=0?'+':'') + fmt(sp,1,' bps'),
-      interp: sp > 0 ? '⚠ EFFR por encima de IORB = escasez real de reservas (la señal de 2019)' : sp > -5 ? 'Acercándose al suelo de reservas — vigilar' : 'Reservas abundantes, sin escasez',
-      temporal: 'La señal más fiable de estrés de reservas según la money view' });
+    items.push({ stress, name: 'EFFR − IORB · canario', value: (sp>=0?'+':'') + fmt(sp,1) + ' bps', sub: 'FRED · EFFR, IORB',
+      read: sp > 0 ? '⚠ Escasez real de reservas' : sp > -5 ? 'Cerca del suelo — vigilar' : 'Reservas abundantes' });
+  } else {
+    items.push({ stress: null, name: 'EFFR − IORB · canario', value: 'N/D', sub: 'FRED · EFFR, IORB', read: '' });
   }
-  // TGCR - IORB
+  // 4. TGCR − IORB
   if (liquidity.tgcr && liquidity.iorb) {
     const sp = (liquidity.tgcr.value - liquidity.iorb.value) * 100;
     const stress = sp > 5 ? 85 : sp > 0 ? 55 : 25;
-    items.push({ stress, name: 'Repo tri-party (TGCR − IORB)', src: 'FRED · TGCRRATE', value: (sp>=0?'+':'') + fmt(sp,1,' bps'),
-      interp: sp > 5 ? '⚠ Repo tensionado sobre el suelo Fed — dealers constreñidos' : sp > 0 ? 'Ligera tensión de balance en repo' : 'Repo cómodo, financiación fluida',
-      temporal: 'El mejor termómetro de capacidad de balance de los dealers' });
+    items.push({ stress, name: 'TGCR − IORB · repo', value: (sp>=0?'+':'') + fmt(sp,1) + ' bps', sub: 'FRED · TGCRRATE',
+      read: sp > 5 ? '⚠ Dealers constreñidos' : sp > 0 ? 'Ligera tensión de balance' : 'Repo cómodo' });
+  } else {
+    items.push({ stress: null, name: 'TGCR − IORB · repo', value: 'N/D', sub: 'FRED · TGCRRATE', read: '' });
   }
-  // TGCR tail
+  // 5. Cola del repo P99
   if (liquidity.tgcr99 && liquidity.tgcr) {
     const tail = (liquidity.tgcr99.value - liquidity.tgcr.value) * 100;
     const stress = tail > 8 ? 80 : tail > 4 ? 50 : 20;
-    items.push({ stress, name: 'Cola del repo (P99 − mediana)', src: 'FRED · TGCR percentiles', value: '+' + fmt(tail,1,' bps'),
-      interp: tail > 8 ? '⚠ Los repos más caros se disparan — fricción de colateral' : tail > 4 ? 'Dispersión moderada en repo' : 'Repo homogéneo, sin tensión en la cola',
-      temporal: 'Cuando el percentil 99 se separa, algunos no encuentran financiación barata' });
+    items.push({ stress, name: 'Cola del repo · P99', value: '+' + fmt(tail,1) + ' bps', sub: 'FRED · TGCR percentiles',
+      read: tail > 8 ? '⚠ Fricción de colateral' : tail > 4 ? 'Dispersión moderada' : 'Repo homogéneo' });
+  } else {
+    items.push({ stress: null, name: 'Cola del repo · P99', value: 'N/D', sub: 'FRED · TGCR percentiles', read: '' });
   }
-  // RRP
-  if (liquidity.rrp) {
-    items.push({ stress: null, name: 'Reverse Repo (RRP)', src: 'FRED · RRPONTSYD', value: '$' + fmt(liquidity.rrp.value,0) + 'B',
-      interp: liquidity.rrp.value > 500 ? 'Mucho efectivo aparcado en la Fed — liquidez sin desplegar' : liquidity.rrp.value > 100 ? 'RRP drenándose hacia el mercado — combustible para riesgo' : 'RRP casi vacío — la liquidez ya está desplegada',
-      temporal: 'Su vaciado 2023-24 alimentó el rally; nivel = colateral en reserva' });
-  }
-  // HY spreads
-  if (liquidity.hy) {
-    const hy = liquidity.hy.value;
-    const stress = hy > 5 ? 85 : hy > 3.5 ? 50 : 20;
-    items.push({ stress, name: 'Spreads High Yield', src: 'FRED · BAMLH0A0HYM2', value: fmt(hy,2,'%'),
-      interp: hy > 5 ? '⚠ Estrés de crédito — la cola empieza a sufrir' : hy > 3.5 ? 'Crédito algo tenso' : 'Crédito tranquilo, apetito de riesgo sano',
-      temporal: 'El crédito huele los problemas antes que la bolsa' });
-  }
-  // DXY momentum
+  // 6. DXY 3m
   if (liquidity.dxyMom != null) {
     const stress = liquidity.dxyMom > 4 ? 80 : liquidity.dxyMom > 0 ? 45 : 20;
-    items.push({ stress, name: 'Momentum del dólar (DXY 3m)', src: 'Yahoo · DX-Y.NYB', value: (liquidity.dxyMom>=0?'+':'') + fmt(liquidity.dxyMom,1,'%'),
-      interp: liquidity.dxyMom > 4 ? '⚠ Dólar apreciándose con fuerza = estrés de financiación offshore' : liquidity.dxyMom > 0 ? 'Dólar firme — vigilar la periferia' : 'Dólar débil/estable — alivio para la periferia',
-      temporal: 'El dólar sube cuando el sistema global se estresa' });
+    items.push({ stress, name: 'DXY 3m · offshore', value: (liquidity.dxyMom>=0?'+':'') + fmt(liquidity.dxyMom,1) + '%', sub: 'Yahoo · DX-Y.NYB',
+      read: liquidity.dxyMom > 4 ? '⚠ Estrés eurodólar' : liquidity.dxyMom > 0 ? 'Dólar firme — vigilar periferia' : 'Dólar estable — alivio offshore' });
+  } else {
+    items.push({ stress: null, name: 'DXY 3m · offshore', value: 'N/D', sub: 'Yahoo · DX-Y.NYB', read: '' });
   }
-  // SRF usage
-  if (liquidity.srf) {
-    items.push({ stress: null, name: 'Standing Repo Facility', src: 'FRED · SRFTSYD', value: fmt(liquidity.srf.value,2,'%'),
-      interp: 'El uso del SRF NO es pánico: es gestión de balance. Existe desde 2021 y evita que tensiones puntuales escalen como en 2019.',
-      temporal: 'Backstop permanente — la Fed como dealer of last resort' });
-  }
+  // 7. SRF (informativa, sin semáforo)
+  items.push({ stress: null,
+    name: 'Standing Repo Facility',
+    value: liquidity.srf ? fmt(liquidity.srf.value,2) + '%' : 'N/D',
+    sub: 'FRED · SRFTSYD',
+    read: 'Backstop de la Fed — su uso es gestión, no pánico' });
 
   cards.innerHTML = items.map(it => `
-    <div class="liq-card">
-      <div class="liq-card-top">
-        <div><div class="liq-card-name">${it.name}</div><div class="liq-card-src">${it.src}</div></div>
-        ${liqDot(it.stress)}
-      </div>
-      <div class="liq-card-value">${it.value}</div>
-      <div class="liq-card-interp">${it.interp}</div>
-      <div class="liq-card-temporal">${it.temporal}</div>
+    <div class="liq-cc">
+      <div class="liq-cc-top"><span class="liq-cc-name">${it.name}</span>${liqDot(it.stress)}</div>
+      <div class="liq-cc-value">${it.value}</div>
+      <div class="liq-cc-sub">${it.sub}</div>
+      ${it.read ? `<div class="liq-cc-read">${it.read}</div>` : ''}
     </div>
   `).join('');
 }
