@@ -1092,16 +1092,16 @@
 
     <div class="sg-block">
       <div class="sg-title">🌊 Qué es este pilar (para no versados)</div>
-      <div class="sg-text">Imagina el sistema financiero como una red de tuberías por las que circula la financiación. Los precios de los activos no dependen solo de si las empresas ganan dinero — dependen de si <b>hay financiación circulando</b> para comprarlos. Este pilar mide una sola cosa: <b>¿fluye o se atasca el dinero por las tuberías?</b></div>
-      <div class="sg-text">La idea contraintuitiva clave (marco <i>money view</i> de Perry Mehrling y Zoltan Pozsar): <b>la liquidez no es "dinero impreso"</b>. Es la capacidad del sistema para transformar activos en capacidad de pago sin fricción — colateral + financiación + dealers circulando por el mercado repo. Cuando esas tuberías se tensan, los precios caen aunque los beneficios empresariales sean buenos. Cuando fluyen, todo sube — y lo más arriesgado sube más.</div>
+      <div class="sg-text">Imagina el sistema financiero como una red de tuberías por las que circula la financiación. Los precios de los activos no dependen solo de si las empresas ganan dinero: dependen de si <b>hay financiación circulando</b> para comprarlos. Este pilar mide una sola cosa: <b>¿fluye o se atasca el dinero por las tuberías?</b></div>
+      <div class="sg-text">La idea contraintuitiva clave (marco <i>money view</i> de Perry Mehrling y Zoltan Pozsar): <b>la liquidez no es "dinero impreso"</b>. Es la capacidad del sistema para transformar activos en capacidad de pago sin fricción (colateral + financiación + dealers circulando por el mercado repo). Cuando esas tuberías se tensan, los precios caen aunque los beneficios empresariales sean buenos. Cuando fluyen, todo sube (y lo más arriesgado sube más).</div>
       <div class="sg-text"><b>Qué NO mide este pilar:</b> no mide crecimiento ni inflación (eso es el pilar de régimen), no mide si el mercado está caro (pilar de valoración), no mide el miedo o codicia de los inversores (capa de sentimiento). Cada dato del sistema puntúa en un solo pilar para no contar lo mismo dos veces.</div>
     </div>
 
     <div class="sg-block">
-      <div class="sg-title">⬆️⬇️ Upstream vs downstream — por qué elegimos estos indicadores y no otros</div>
+      <div class="sg-title">⬆️⬇️ Upstream vs downstream (por qué elegimos estos indicadores y no otros)</div>
       <div class="sg-text">Hay dos tipos de señales de estrés financiero, y la diferencia importa mucho:</div>
-      <div class="sg-text"><b>Señales upstream (aguas arriba):</b> miden la fricción EN EL ORIGEN del sistema — el mercado repo donde los dealers se financian cada noche. Cuando algo va mal, aparece aquí PRIMERO, antes de que los precios de bolsa se muevan. Son anticipatorias. Ejemplos: el spread EFFR−IORB, la tensión del repo TGCR, la dispersión del percentil 99.</div>
-      <div class="sg-text"><b>Señales downstream (aguas abajo):</b> miden el estrés cuando YA ha salido de las tuberías y ha llegado a los precios. Los spreads de high yield ampliándose, el VIX disparándose — son síntomas, no causas. Llegan más tarde. Por eso <b>los spreads HY NO puntúan en este pilar</b>: viven en la capa de Sentimiento del pilar de régimen, que es donde pertenecen conceptualmente (miden apetito de riesgo del mercado, no fricción de tubería).</div>
+      <div class="sg-text"><b>Señales upstream (aguas arriba):</b> miden la fricción EN EL ORIGEN del sistema (el mercado repo donde los dealers se financian cada noche). Cuando algo va mal, aparece aquí PRIMERO, antes de que los precios de bolsa se muevan. Son anticipatorias. Ejemplos: el spread EFFR−IORB, la tensión del repo TGCR, la dispersión del percentil 99.</div>
+      <div class="sg-text"><b>Señales downstream (aguas abajo):</b> miden el estrés cuando YA ha salido de las tuberías y ha llegado a los precios. Los spreads de high yield ampliándose o el VIX disparándose son síntomas, no causas. Llegan más tarde. Por eso <b>los spreads HY NO puntúan en este pilar</b>: viven en la capa de Sentimiento del pilar de régimen, que es donde pertenecen conceptualmente (miden apetito de riesgo del mercado, no fricción de tubería).</div>
       <div class="sg-text">Este pilar es 100% upstream a propósito: queremos la alarma que suena antes, no la que confirma lo que ya pasó.</div>
     </div>
 
@@ -1110,17 +1110,17 @@
       <div class="sg-text">El score combina 5 componentes upstream, cada uno convertido a una escala 0 (fluido) – 100 (fricción) y ponderado:</div>
       <table class="sg-table">
         <tr><th>Componente</th><th>Peso</th><th>Escala (0 → 100)</th><th>Por qué importa</th></tr>
-        <tr><td><b>EFFR − IORB</b> (canario)</td><td>30%</td><td>−12 bps → 0 · 0 bps → ~70 · +5 bps → 100</td><td>Si los bancos pagan por reservas MÁS que lo que la Fed remunera, hay escasez real. Fue la señal de la crisis repo de sept-2019.</td></tr>
-        <tr><td><b>TGCR − IORB</b> (tensión repo)</td><td>25%</td><td>−8 bps → 0 · +10 bps → 100</td><td>El repo tri-party cotizando sobre el suelo de la Fed = los dealers no tienen balance para intermediar.</td></tr>
-        <tr><td><b>Cola del repo</b> (P99 − mediana)</td><td>15%</td><td>0 bps → 0 · +15 bps → 100</td><td>Si los repos más caros se disparan respecto a la mediana, alguien no encuentra financiación barata: fricción de colateral.</td></tr>
-        <tr><td><b>DXY 3m</b> (estrés offshore)</td><td>15%</td><td>−2% → 0 · +6% → 100</td><td>El mundo se financia en dólares offshore (eurodólar). Cuando esa financiación se tensa, el dólar sube mecánicamente. Es la única señal gratuita del eurodólar.</td></tr>
-        <tr><td><b>Δ Liquidez neta 3m</b> (dirección de la marea)</td><td>15%</td><td>+$300B → 0 · $0 → 50 · −$300B → 100</td><td>Lo que importa de la marea no es el nivel, es si sube o baja. Marea bajando = drenaje de combustible para el riesgo.</td></tr>
+        <tr><td><b>EFFR − IORB</b> (canario)</td><td>30%</td><td>• −12 bps → 0<br>• 0 bps → ~70<br>• +5 bps → 100</td><td>Si los bancos pagan por reservas MÁS que lo que la Fed remunera, hay escasez real. Fue la señal de la crisis repo de sept-2019.</td></tr>
+        <tr><td><b>TGCR − IORB</b> (tensión repo)</td><td>25%</td><td>• −8 bps → 0<br>• +10 bps → 100</td><td>El repo tri-party cotizando sobre el suelo de la Fed = los dealers no tienen balance para intermediar.</td></tr>
+        <tr><td><b>Cola del repo</b> (P99 − mediana)</td><td>15%</td><td>• 0 bps → 0<br>• +15 bps → 100</td><td>Si los repos más caros se disparan respecto a la mediana, alguien no encuentra financiación barata: fricción de colateral.</td></tr>
+        <tr><td><b>DXY 3m</b> (estrés offshore)</td><td>15%</td><td>• −2% → 0<br>• +6% → 100</td><td>El mundo se financia en dólares offshore (eurodólar). Cuando esa financiación se tensa, el dólar sube mecánicamente. Es la única señal gratuita del eurodólar.</td></tr>
+        <tr><td><b>Δ Liquidez neta 3m</b> (dirección de la marea)</td><td>15%</td><td>• +$300B → 0<br>• $0 → 50<br>• −$300B → 100</td><td>Lo que importa de la marea no es el nivel, es si sube o baja. Marea bajando = drenaje de combustible para el riesgo.</td></tr>
       </table>
       <div class="sg-text"><b>Lectura del score:</b></div>
       <div class="sg-readout">
-        <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">&lt;35 · 🟢 Tuberías fluidas — risk-on, la cola puede vivir</div>
-        <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">35–65 · 🟡 Tensión moderada — escalón intermedio, vigilar</div>
-        <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">&gt;65 · 🔴 Fricción — risk-off, replegarse al centro</div>
+        <div class="sg-readout-item" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">&lt;35 · 🟢 Tuberías fluidas (risk-on, la cola puede vivir)</div>
+        <div class="sg-readout-item" style="background:var(--yellow-dim);color:var(--yellow);border-color:var(--yellow-border);">35–65 · 🟡 Tensión moderada (escalón intermedio, vigilar)</div>
+        <div class="sg-readout-item" style="background:var(--red-dim);color:var(--red);border-color:var(--red-border);">&gt;65 · 🔴 Fricción (risk-off, replegarse al centro)</div>
       </div>
     </div>
 
@@ -1128,18 +1128,18 @@
       <div class="sg-title">🗂️ Las 7 tarjetas, una a una</div>
       <table class="sg-table">
         <tr><th>Tarjeta</th><th>Qué es</th><th>Cómo leerla</th></tr>
-        <tr><td><b>Liquidez neta</b></td><td>Balance de la Fed (WALCL) − Cuenta del Tesoro (TGA) − Reverse Repo (RRP). El mejor proxy agregado de cuánto dinero hay disponible para activos de riesgo.</td><td>El desglose muestra las tres piezas. La flecha indica la dirección 3m: ↑ marea subiendo (viento de cola para riesgo), ↓ bajando (drenaje). El TGA drena liquidez cuando el Tesoro acumula caja; el RRP la aparca fuera del mercado.</td></tr>
-        <tr><td><b>Reverse Repo (RRP)</b></td><td>Efectivo que los fondos monetarios aparcan en la Fed porque no encuentran mejor destino.</td><td>Alto (&gt;$500B) = liquidez sin desplegar (reserva seca). Drenándose = ese dinero está saliendo al mercado (el vaciado 2023-24 alimentó el rally). Casi vacío = la liquidez ya está desplegada, no queda ese colchón.</td></tr>
-        <tr><td><b>EFFR − IORB</b></td><td>Lo que los bancos se pagan entre sí por reservas overnight menos lo que la Fed remunera por tenerlas aparcadas.</td><td>🟢 muy negativo = reservas abundantes. 🟡 acercándose a 0 = el sistema empieza a valorar las reservas más que el suelo de la Fed. 🔴 positivo = escasez real (2019). Es EL canario de la mina.</td></tr>
-        <tr><td><b>TGCR − IORB</b></td><td>Tipo del repo tri-party (dealer–cliente) menos el suelo de la Fed. Mide la capacidad de balance de los dealers, el corazón del sistema.</td><td>🟢 negativo = financiación cómoda. 🟡 positivo leve = tensión de balance. 🔴 &gt;+5bps = dealers constreñidos, reducen intermediación → los precios pierden soporte.</td></tr>
-        <tr><td><b>Cola del repo (P99)</b></td><td>Diferencia entre el percentil 99 del repo (los préstamos más caros del día) y la mediana.</td><td>Cuando se separa mucho, la financiación deja de ser homogénea: los agentes marginales pagan caro o no encuentran. Fricción de colateral incipiente aunque la mediana esté tranquila.</td></tr>
-        <tr><td><b>DXY 3m</b></td><td>Momentum del dólar a 3 meses como proxy del estrés de financiación offshore (eurodólar).</td><td>🟢 débil/estable = alivio para la periferia global. 🟡 firme = vigilar. 🔴 apreciándose &gt;+4% = escasez de dólares offshore; suele coincidir con caídas de los activos de la cola. Nota: DXY puntúa SOLO aquí; se retiró de los modificadores del pilar de régimen para no contar dos veces.</td></tr>
-        <tr><td><b>Standing Repo Facility</b></td><td>El backstop permanente de la Fed (desde 2021): dealers pueden convertir Treasuries en efectivo overnight a este tipo.</td><td>Informativa, sin semáforo. Importante: su uso NO es señal de pánico — es gestión de balance. Existe precisamente para que tensiones puntuales no escalen como en 2019, cuando no existía.</td></tr>
+        <tr><td><b>Liquidez neta</b></td><td>Balance de la Fed (WALCL) − Cuenta del Tesoro (TGA) − Reverse Repo (RRP). El mejor proxy agregado de cuánto dinero hay disponible para activos de riesgo.</td><td>• El desglose muestra las tres piezas<br>• ↑ marea subiendo (viento de cola para el riesgo)<br>• ↓ marea bajando (drenaje)<br>• El TGA drena liquidez cuando el Tesoro acumula caja; el RRP la aparca fuera del mercado</td></tr>
+        <tr><td><b>Reverse Repo (RRP)</b></td><td>Efectivo que los fondos monetarios aparcan en la Fed porque no encuentran mejor destino.</td><td>• Alto (&gt;$500B) = liquidez sin desplegar (reserva seca)<br>• Drenándose = ese dinero está saliendo al mercado (el vaciado 2023-24 alimentó el rally)<br>• Casi vacío = la liquidez ya está desplegada, no queda ese colchón</td></tr>
+        <tr><td><b>EFFR − IORB</b></td><td>Lo que los bancos se pagan entre sí por reservas overnight menos lo que la Fed remunera por tenerlas aparcadas.</td><td>• 🟢 muy negativo = reservas abundantes<br>• 🟡 acercándose a 0 = el sistema empieza a valorar las reservas más que el suelo de la Fed<br>• 🔴 positivo = escasez real (la señal de 2019)<br>• Es EL canario de la mina</td></tr>
+        <tr><td><b>TGCR − IORB</b></td><td>Tipo del repo tri-party (dealer–cliente) menos el suelo de la Fed. Mide la capacidad de balance de los dealers, el corazón del sistema.</td><td>• 🟢 negativo = financiación cómoda<br>• 🟡 positivo leve = tensión de balance<br>• 🔴 &gt;+5bps = dealers constreñidos, reducen intermediación (los precios pierden soporte)</td></tr>
+        <tr><td><b>Cola del repo (P99)</b></td><td>Diferencia entre el percentil 99 del repo (los préstamos más caros del día) y la mediana.</td><td>• Si se separa mucho, la financiación deja de ser homogénea (los agentes marginales pagan caro o no encuentran)<br>• Fricción de colateral incipiente aunque la mediana esté tranquila</td></tr>
+        <tr><td><b>DXY 3m</b></td><td>Momentum del dólar a 3 meses como proxy del estrés de financiación offshore (eurodólar).</td><td>• 🟢 débil/estable = alivio para la periferia global<br>• 🟡 firme = vigilar<br>• 🔴 apreciándose &gt;+4% = escasez de dólares offshore (suele coincidir con caídas de los activos de la cola)<br>• DXY puntúa SOLO aquí (se retiró de los modificadores del pilar de régimen para no contar dos veces)</td></tr>
+        <tr><td><b>Standing Repo Facility</b></td><td>El backstop permanente de la Fed (desde 2021): dealers pueden convertir Treasuries en efectivo overnight a este tipo.</td><td>• Informativa, sin semáforo<br>• Su uso NO es señal de pánico (es gestión de balance)<br>• Existe para que tensiones puntuales no escalen como en 2019 (cuando no existía)</td></tr>
       </table>
     </div>
 
     <div class="sg-block">
-      <div class="sg-title">🪜 La jerarquía del dinero — la conclusión accionable</div>
+      <div class="sg-title">🪜 La jerarquía del dinero (la conclusión accionable)</div>
       <div class="sg-text">No todos los activos son iguales ante un shock de liquidez. Existe una <b>jerarquía</b>: en la cúspide está lo que el sistema acepta como colateral sin pestañear (reservas Fed, T-Bills, Treasuries); en medio, lo que se acepta con descuento (RV large cap, MBS, crédito investment grade); y en la cola, lo que no es colateral elegible para nadie (high yield, small caps, cripto).</div>
       <div class="sg-text"><b>La regla de oro:</b> cuando el centro se tensiona, la cola muere primero. Cripto es el último eslabón de la cadena de financiación → el primero en colapsar cuando las tuberías se aprietan, y el que más sube cuando hay exceso de liquidez buscando destino. Por eso el panel ilumina el escalón donde conviene estar según el estado de las tuberías: fluidas → puedes vivir en la cola; fricción → repliégate al centro.</div>
     </div>
@@ -1147,7 +1147,7 @@
     <div class="sg-block">
       <div class="sg-title">📈 Cómo leer la gráfica de liquidez neta</div>
       <div class="sg-text">La línea principal (área azul) es la <b>liquidez neta mensual</b> (Fed − TGA − RRP) en billones de dólares. Superpuestas, en el eje derecho: <b>BTC</b> (el activo más sensible de la cola, base 100) y el <b>spread HY invertido</b> (invertido para que "subir = menos estrés" y sea comparable visualmente).</div>
-      <div class="sg-text">Lo que buscas: la <b>correlación de la marea con la cola</b>. Cuando la liquidez neta sube sostenidamente, BTC y el crédito basura suelen subir con retraso de semanas; cuando la marea baja, la cola pierde soporte primero. Si ves divergencia (la marea baja pero BTC sube), es señal de fragilidad — la cola está viviendo de prestado.</div>
+      <div class="sg-text">Lo que buscas: la <b>correlación de la marea con la cola</b>. Cuando la liquidez neta sube sostenidamente, BTC y el crédito basura suelen subir con retraso de semanas; cuando la marea baja, la cola pierde soporte primero. Si ves divergencia (la marea baja pero BTC sube), es señal de fragilidad (la cola está viviendo de prestado).</div>
     </div>
 
     <div class="sg-block">
