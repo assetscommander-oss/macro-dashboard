@@ -455,61 +455,6 @@
   <!-- TAB: MACRO -->
   <div class="tab-content active" id="tab-macro">
 
-  <!-- REGIME PANEL -->
-  <div class="regime-panel">
-    <div class="regime-main">
-      <div class="regime-left">
-        <div class="regime-title">⚙️ Posición en los ejes</div>
-        <div class="axis-row">
-          <div class="axis-label">Crecimiento</div>
-          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="growth-fill"></div></div>
-          <div class="axis-score" id="growth-score">—</div>
-        </div>
-        <div class="axis-row">
-          <div class="axis-label">Inflación</div>
-          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="inflation-fill"></div></div>
-          <div class="axis-score" id="inflation-score">—</div>
-        </div>
-        <div class="regime-quad">
-          <div class="quad-cell" id="quad-expansion" style="border-color:var(--green);">
-            <div class="quad-name" style="color:var(--green);">🟢 Expansión</div>
-            <div class="quad-assets">Crec.↑ Infl.↓ · RV growth/tech, emergentes, BTC máximo</div>
-          </div>
-          <div class="quad-cell" id="quad-overheat" style="border-color:var(--orange);">
-            <div class="quad-name" style="color:var(--orange);">🟠 Sobrecalentamiento</div>
-            <div class="quad-assets">Crec.↑ Infl.↑ · Commodities industriales, RV value/energía</div>
-          </div>
-          <div class="quad-cell" id="quad-deflation" style="border-color:var(--blue);">
-            <div class="quad-name" style="color:var(--blue);">🔵 Recesión deflacionaria</div>
-            <div class="quad-assets">Crec.↓ Infl.↓ · RF larga duración, cash</div>
-          </div>
-          <div class="quad-cell" id="quad-stagflation" style="border-color:var(--red);">
-            <div class="quad-name" style="color:var(--red);">🔴 Estanflación</div>
-            <div class="quad-assets">Crec.↓ Infl.↑ · Oro, metales preciosos, cash</div>
-          </div>
-        </div>
-      </div>
-      <div class="regime-right">
-        <div class="regime-title">📍 Régimen detectado</div>
-        <div class="regime-name" id="regime-name" style="color:var(--text3);">Calculando...</div>
-        <div class="regime-desc" id="regime-desc">Cargando indicadores para determinar el régimen macro actual...</div>
-        <div class="alloc-title">Asignación orientativa</div>
-        <div class="reco-alloc" id="reco-alloc"></div>
-        <div id="reco-exact"></div>
-        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado RV US</div>
-        <div class="senti-bar"><div class="senti-marker" id="senti-marker"></div></div>
-        <div class="senti-labels"><span>Pánico</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Euforia</span></div>
-        <div class="senti-read" id="senti-read">Cargando sentimiento...</div>
-        <div class="senti-tactic" id="senti-tactic" style="display:none;"></div>
-        <div class="alloc-title" style="margin-top:16px;">Sentimiento de mercado cripto</div>
-        <div class="senti-bar"><div class="senti-marker" id="senti-marker-crypto"></div></div>
-        <div class="senti-labels"><span>Miedo extr.</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Codicia extr.</span></div>
-        <div class="senti-read" id="senti-read-crypto">Cargando sentimiento cripto...</div>
-      </div>
-    </div>
-    <div class="mod-strip" id="mod-strip"></div>
-  </div>
-
   <!-- LIQUIDITY & PLUMBING -->
   <div class="section-title">Pilar 1 · Liquidez &amp; tuberías del sistema <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· la marea que mueve todos los activos</span></div>
   <div class="liq-panel">
@@ -594,9 +539,33 @@
     </div>
   </div>
 
-  <!-- SEMÁFORO -->
-  <div class="section-title">Indicadores por eje</div>
-  <div class="layers">
+  <!-- PILAR 3: RÉGIMEN MACRO -->
+  <div class="section-title">Pilar 3 · Régimen macro <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· el clima que define qué tipo de activos favorece el entorno</span></div>
+  <div class="liq-panel">
+    <div class="liq-master">
+      <div class="liq-master-main" style="border-right:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div class="liq-master-label">Régimen detectado</div>
+          <div class="regime-name" id="regime-name" style="color:var(--text3);font-size:16px;margin:0;">Calculando...</div>
+        </div>
+        <div class="liq-master-desc" id="regime-desc" style="margin-top:8px;">Cargando indicadores para determinar el régimen macro actual...</div>
+        <div class="axis-row" style="margin-top:16px;">
+          <div class="axis-label">Crecimiento</div>
+          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="growth-fill"></div></div>
+          <div class="axis-score" id="growth-score">—</div>
+        </div>
+        <div class="liq-gauge-labels" style="margin:0 0 8px 0;"><span>Contracción</span><span>Estancado</span><span>Expansión</span></div>
+        <div class="axis-row">
+          <div class="axis-label">Inflación</div>
+          <div class="axis-bar"><div class="axis-center"></div><div class="axis-fill" id="inflation-fill"></div></div>
+          <div class="axis-score" id="inflation-score">—</div>
+        </div>
+        <div class="liq-gauge-labels" style="margin:0;"><span>Desinflación</span><span>Objetivo</span><span>Inflación alta</span></div>
+      </div>
+    </div>
+
+    <div style="padding:16px 18px;border-top:1px solid var(--border);">
+  <div class="layers" style="margin:0;">
 
     <!-- EJE CRECIMIENTO -->
     <div class="layer">
@@ -654,45 +623,33 @@
 
     <!-- MODIFICADORES -->
     <div class="layer">
-      <div class="layer-header"><span class="layer-icon">⚡</span><span class="layer-title">Modificadores</span><span class="layer-sub">Amplifican o suavizan el régimen · dimensionan BTC</span></div>
+      <div class="layer-header"><span class="layer-icon">⚡</span><span class="layer-title">Modificadores</span><span class="layer-sub">Política monetaria: contexto informativo (marcador I, no votan en los ejes)</span></div>
       <div class="layer-cards">
         <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Fed Funds Rate</div><div class="card-source">FRED · FEDFUNDS</div></div><div class="status-dot dot-loading" id="dot-fedfunds"></div></div>
+          <div class="card-top"><div><div class="card-name">Fed Funds Rate</div><div class="card-source">FRED · FEDFUNDS</div></div><span class="info-i" id="dot-fedfunds" style="color:var(--text3);">I</span></div>
           <div class="card-value value-loading" id="val-fedfunds"><span class="spinner"></span> Cargando</div>
           <div class="card-thresholds"><span class="threshold t-green">Estable</span><span class="threshold t-yellow">Bajando, inflación ok</span><span class="threshold t-red">Bajando + inflación &gt;3%</span></div>
           <div class="card-temporal">Política acomodaticia con inflación alta acelera el giro hacia estanflación</div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Fed Dot Plot</div><div class="card-source"><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank">Fed.gov ↗</a> · Trimestral</div></div>
-            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><div class="status-dot dot-loading" id="dot-dotplot"></div></div></div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="manual-badge">Manual</span><span class="info-i" id="dot-dotplot" style="color:var(--text3);">I</span></div></div>
           <div class="card-value value-loading" id="val-dotplot">—</div>
           <div class="card-thresholds"><span class="threshold t-green">Estable/al alza</span><span class="threshold t-yellow">-50/-75bps</span><span class="threshold t-red">≤-100bps proyectados</span></div>
           <div class="card-temporal">Introduce bps proyectados (ej: -75). Anticipa la dirección de la política</div>
           <div class="manual-input-row"><input class="manual-input" id="input-dotplot" type="text" placeholder="ej: -75"><button class="manual-btn" onclick="setManual('dotplot')">OK</button></div>
         </div>
         <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Tipos Reales TIPS 10Y</div><div class="card-source">FRED · DFII10</div></div><div class="status-dot dot-loading" id="dot-tips"></div></div>
+          <div class="card-top"><div><div class="card-name">Tipos Reales TIPS 10Y</div><div class="card-source">FRED · DFII10</div></div><span class="info-i" id="dot-tips" style="color:var(--text3);">I</span></div>
           <div class="card-value value-loading" id="val-tips"><span class="spinner"></span> Cargando</div>
           <div class="card-thresholds"><span class="threshold t-green">&gt;1% RF compensa</span><span class="threshold t-yellow">0–1% transición</span><span class="threshold t-red">&lt;0% activos reales</span></div>
           <div class="card-temporal">Driver clave de oro y BTC: tipos reales negativos = combustible para ambos</div>
         </div>
         <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">DXY (Índice Dólar)</div><div class="card-source">Yahoo · DX-Y.NYB</div></div><div class="status-dot dot-loading" id="dot-dxy"></div></div>
-          <div class="card-value value-loading" id="val-dxy"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">&gt;103 dólar fuerte</span><span class="threshold t-yellow">100–103 neutral</span><span class="threshold t-red">&lt;100 dólar débil</span></div>
-          <div class="card-temporal">Dólar débil favorece commodities, oro, BTC y emergentes. Fuerte favorece RF/cash USD</div>
-        </div>
-        <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Commodity Index</div><div class="card-source">Yahoo · DBC (proxy CRB)</div></div><div class="status-dot dot-loading" id="dot-crb"></div></div>
+          <div class="card-top"><div><div class="card-name">Commodity Index</div><div class="card-source">Yahoo · DBC (proxy CRB)</div></div><span class="info-i" id="dot-crb" style="color:var(--text3);">I</span></div>
           <div class="card-value value-loading" id="val-crb"><span class="spinner"></span> Cargando</div>
           <div class="card-thresholds"><span class="threshold t-green">Lejos de máximos</span><span class="threshold t-yellow">Cerca máx 6m</span><span class="threshold t-red">Ruptura máx 12m</span></div>
           <div class="card-temporal">La ruptura de máximos confirma momentum del ciclo de materias primas</div>
-        </div>
-        <div class="indicator-card">
-          <div class="card-top"><div><div class="card-name">Liquidez Fed (Balance)</div><div class="card-source">FRED · WALCL (semanal)</div></div><div class="status-dot dot-loading" id="dot-walcl"></div></div>
-          <div class="card-value value-loading" id="val-walcl"><span class="spinner"></span> Cargando</div>
-          <div class="card-thresholds"><span class="threshold t-green">Expandiendo &gt;+0.5% 3m</span><span class="threshold t-yellow">Plano ±0.5%</span><span class="threshold t-red">Contrayendo &lt;-0.5% 3m</span></div>
-          <div class="card-temporal">El driver más potente de BTC y activos de riesgo. Su giro al alza marca el momento de acumular BTC tras una caída</div>
         </div>
       </div>
     </div>
@@ -737,39 +694,83 @@
           <div class="card-temporal">Open interest puts/calls del vencimiento más cercano del SPY</div>
         </div>
       </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;padding:14px 4px 4px;">
+        <div>
+          <div class="alloc-title">Sentimiento agregado RV US</div>
+          <div class="senti-bar"><div class="senti-marker" id="senti-marker"></div></div>
+          <div class="senti-labels"><span>Pánico</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Euforia</span></div>
+          <div class="senti-read" id="senti-read">Cargando sentimiento...</div>
+          <div class="senti-tactic" id="senti-tactic" style="display:none;"></div>
+        </div>
+        <div>
+          <div class="alloc-title">Sentimiento agregado cripto</div>
+          <div class="senti-bar"><div class="senti-marker" id="senti-marker-crypto"></div></div>
+          <div class="senti-labels"><span>Miedo extr.</span><span>Miedo</span><span>Neutral</span><span>Codicia</span><span>Codicia extr.</span></div>
+          <div class="senti-read" id="senti-read-crypto">Cargando sentimiento cripto...</div>
+        </div>
+      </div>
     </div>
   </div>
+    </div>
 
-  <!-- COMBINED INDICATORS CHART -->
-  <div class="section-title">Gráfica combinada de indicadores</div>
-  <div class="chart-section">
-    <div class="chart-controls" id="ind-toggles">
-      <span class="ctrl-label">Indicadores:</span>
-      <span class="ctrl-divider" id="ind-toggle-end"></span>
-      <button class="ctrl-btn-all" onclick="setAll('ind', true)">Todos</button>
-      <button class="ctrl-btn-all" onclick="setAll('ind', false)">Ninguno</button>
+    <!-- CONCLUSIÓN DEL PILAR: cuadrante + cartera -->
+    <div class="liq-master" style="border-top:1px solid var(--border);">
+      <div style="flex:1;padding:18px 22px;">
+        <div class="liq-hier-label">El cuadrante del clima (régimen activo iluminado)</div>
+        <div class="regime-quad" style="margin-top:8px;">
+          <div class="quad-cell" id="quad-expansion" style="border-color:var(--green);">
+            <div class="quad-name" style="color:var(--green);">🟢 Expansión</div>
+            <div class="quad-assets">Crec.↑ Infl.↓ · RV growth/tech, emergentes, BTC máximo</div>
+          </div>
+          <div class="quad-cell" id="quad-overheat" style="border-color:var(--orange);">
+            <div class="quad-name" style="color:var(--orange);">🟠 Sobrecalentamiento</div>
+            <div class="quad-assets">Crec.↑ Infl.↑ · Commodities industriales, RV value/energía</div>
+          </div>
+          <div class="quad-cell" id="quad-deflation" style="border-color:var(--blue);">
+            <div class="quad-name" style="color:var(--blue);">🔵 Recesión deflacionaria</div>
+            <div class="quad-assets">Crec.↓ Infl.↓ · RF larga duración, cash</div>
+          </div>
+          <div class="quad-cell" id="quad-stagflation" style="border-color:var(--red);">
+            <div class="quad-name" style="color:var(--red);">🔴 Estanflación</div>
+            <div class="quad-assets">Crec.↓ Infl.↑ · Oro, metales preciosos, cash</div>
+          </div>
+        </div>
+        <div class="alloc-title" style="margin-top:16px;">Asignación orientativa</div>
+        <div class="reco-alloc" id="reco-alloc"></div>
+        <div id="reco-exact"></div>
+      </div>
     </div>
-    <div class="chart-controls">
-      <span class="ctrl-label">Histórico:</span>
-      <button class="range-btn" data-chart="ind" data-years="1" onclick="setRange('ind',this)">1A</button>
-      <button class="range-btn active" data-chart="ind" data-years="2" onclick="setRange('ind',this)">2A</button>
-      <button class="range-btn" data-chart="ind" data-years="5" onclick="setRange('ind',this)">5A</button>
-      <button class="range-btn" data-chart="ind" data-years="10" onclick="setRange('ind',this)">10A</button>
-      <button class="range-btn" data-chart="ind" data-years="25" onclick="setRange('ind',this)">25A</button>
-      <button class="range-btn" data-chart="ind" data-years="50" onclick="setRange('ind',this)">50A</button>
-      <button class="range-btn" data-chart="ind" data-years="70" onclick="setRange('ind',this)">MAX</button>
-      <span class="ctrl-divider"></span>
-      <span class="ctrl-label">Vista:</span>
-      <button class="freq-btn" data-chart="ind" data-freq="d" onclick="setFreq('ind',this)">Diaria</button>
-      <button class="freq-btn" data-chart="ind" data-freq="w" onclick="setFreq('ind',this)">Semanal</button>
-      <button class="freq-btn active" data-chart="ind" data-freq="m" onclick="setFreq('ind',this)">Mensual</button>
-      <button class="freq-btn" data-chart="ind" data-freq="a" onclick="setFreq('ind',this)">Anual</button>
+
+    <!-- GRÁFICA COMBINADA DEL PILAR -->
+    <div class="liq-chart-section">
+      <div class="chart-controls" id="ind-toggles">
+        <span class="ctrl-label">Indicadores:</span>
+        <span class="ctrl-divider" id="ind-toggle-end"></span>
+        <button class="ctrl-btn-all" onclick="setAll('ind', true)">Todos</button>
+        <button class="ctrl-btn-all" onclick="setAll('ind', false)">Ninguno</button>
+      </div>
+      <div class="chart-controls">
+        <span class="ctrl-label">Histórico:</span>
+        <button class="range-btn" data-chart="ind" data-years="1" onclick="setRange('ind',this)">1A</button>
+        <button class="range-btn active" data-chart="ind" data-years="2" onclick="setRange('ind',this)">2A</button>
+        <button class="range-btn" data-chart="ind" data-years="5" onclick="setRange('ind',this)">5A</button>
+        <button class="range-btn" data-chart="ind" data-years="10" onclick="setRange('ind',this)">10A</button>
+        <button class="range-btn" data-chart="ind" data-years="25" onclick="setRange('ind',this)">25A</button>
+        <button class="range-btn" data-chart="ind" data-years="50" onclick="setRange('ind',this)">50A</button>
+        <button class="range-btn" data-chart="ind" data-years="70" onclick="setRange('ind',this)">MAX</button>
+        <span class="ctrl-divider"></span>
+        <span class="ctrl-label">Vista:</span>
+        <button class="freq-btn" data-chart="ind" data-freq="d" onclick="setFreq('ind',this)">Diaria</button>
+        <button class="freq-btn" data-chart="ind" data-freq="w" onclick="setFreq('ind',this)">Semanal</button>
+        <button class="freq-btn active" data-chart="ind" data-freq="m" onclick="setFreq('ind',this)">Mensual</button>
+        <button class="freq-btn" data-chart="ind" data-freq="a" onclick="setFreq('ind',this)">Anual</button>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-loading hidden" id="ind-loading"><span class="spinner"></span> Cargando datos...</div>
+        <canvas id="ind-canvas"></canvas>
+      </div>
+      <div class="chart-note">Cómo se detecta el régimen, qué vota cada indicador y cómo leer esta gráfica: pestaña <b>📚 Información → Pilar 3</b>.</div>
     </div>
-    <div class="chart-wrap">
-      <div class="chart-loading hidden" id="ind-loading"><span class="spinner"></span> Cargando datos...</div>
-      <canvas id="ind-canvas"></canvas>
-    </div>
-    <div class="chart-note">Series mensuales por naturaleza (PCE, CPI, Fed Funds) se muestran mensuales aunque la vista sea diaria/semanal. Liquidez Fed se muestra como variación interanual %. En rangos largos la granularidad fina se agrega automáticamente.</div>
   </div>
 
   <!-- COMBINED ASSETS CHART -->
@@ -1323,54 +1324,74 @@
     </div>
   </div>
 
-  <!-- SENTIMIENTO EXPLAINER -->
-  <div class="section-title">El indicador de sentimiento — de dónde sale cada uno</div>
+  <!-- PILAR 3: RÉGIMEN EXPLAINER -->
+  <div class="section-title">Pilar 3 · Régimen macro</div>
   <div class="score-guide">
+
     <div class="sg-block">
-      <div class="sg-title">🇺🇸 Sentimiento de mercado RV US</div>
-      <div class="sg-text">El termómetro principal mide el clima emocional de la renta variable estadounidense (que es el mercado bursátil global por excelencia y donde existen los mejores indicadores gratuitos de sentimiento). Es un agregado de hasta <b>6 componentes</b>, cada uno con su propia fuente:</div>
-      <table class="sg-table">
-        <tr><th>Componente</th><th>Qué mide</th><th>Fuente</th></tr>
-        <tr><td><b>VIX</b></td><td>Volatilidad implícita del S&P 500 a 30 días. Sube con miedo, baja con calma.</td><td>Yahoo · ^VIX</td></tr>
-        <tr><td><b>Estructura VIX/VIX3M</b></td><td>Cociente VIX corto / VIX 3 meses. Cuando se invierte (>1), el mercado paga más por protección inmediata = estrés agudo.</td><td>Yahoo · ^VIX/^VIX3M</td></tr>
-        <tr><td><b>Spreads High Yield</b></td><td>Lo que paga de extra la deuda basura sobre Treasury. El crédito huele los problemas antes que la bolsa.</td><td>FRED · BAMLH0A0HYM2</td></tr>
-        <tr><td><b>CNN Fear & Greed</b></td><td>Agregado de 7 sub-indicadores propios de CNN (momentum, breadth, put/call, junk bond demand, etc.)</td><td>CNN dataviz API</td></tr>
-        <tr><td><b>Put/Call SPY</b></td><td>Ratio de open interest puts/calls del vencimiento más cercano del SPY. Alto = cobertura alta = miedo.</td><td>Yahoo options · SPY</td></tr>
-        <tr><td><b>Crypto F&G</b></td><td>Sí, también entra aquí — la cripto se ha correlacionado con risk-on tradicional. Pero solo cuenta como 1/6 del agregado.</td><td>alternative.me</td></tr>
-      </table>
-      <div class="sg-text"><b>Fórmula de agregación:</b> cada componente se normaliza a una escala 0–100 (0 = pánico extremo, 100 = euforia) y se promedia. Si CNN o Put/Call bloquean su endpoint en una recarga, se calcula con los componentes que sí estén disponibles. Por eso a veces verás un termómetro con 5 de 6 ingredientes.</div>
-      <div class="sg-text"><b>A qué activos se aplica este termómetro:</b> en el screener, lo verás solo en activos de las categorías <b>Índices RV</b> (S&P, Nasdaq, Russell, etc.) y <b>Sectores</b> (XLK, XLE, etc.) — porque son los activos donde estos componentes son realmente relevantes. Para RF, commodities, FX, etc. aparece <b>N/A</b>: no existe un indicador gratuito que mida específicamente el sentimiento de esos mercados, y aplicar el de RV US sería engañoso.</div>
+      <div class="sg-title">🌦 Qué es este pilar (para no versados)</div>
+      <div class="sg-text">Si la liquidez es la marea y la valoración es la profundidad del fondo, este pilar es el <b>clima</b>. La idea (conocida como <i>investment clock</i>) es que la economía rota por 4 climas según dos preguntas: ¿el crecimiento acelera o frena? y ¿los precios suben o se enfrían? Cada clima favorece históricamente a una familia de activos distinta, y la mayoría de las grandes pérdidas vienen de llevar la embarcación equivocada para el clima que hace.</div>
+      <div class="sg-text"><b>Por qué hacen falta DOS ejes y no uno</b> (la lección 2008 vs 2022): en 2008 el crecimiento se hundió CON deflación (todo caía, los tipos iban a cero) y lo correcto era cash y bonos largos. En 2022 el crecimiento frenó CON inflación disparada: el cash te destruía (perdía 8% de poder de compra al año) y los bonos caían con la bolsa; lo correcto eran activos reales (la energía hizo +60% mientras el S&P caía −19%). Un sistema de un solo eje ("¿recesión sí o no?") es incapaz de distinguir esos dos mundos opuestos. El segundo eje (inflación) es el que decide si protegerse significa cash o significa activos reales.</div>
+      <div class="sg-text"><b>Qué NO mide este pilar:</b> no mide si hay financiación circulando (Pilar 1), ni si el mercado está caro (Pilar 2). Mide en qué fase del ciclo económico estamos y por tanto <b>qué tipo de activos favorece el entorno</b>.</div>
     </div>
+
     <div class="sg-block">
-      <div class="sg-title">₿ Sentimiento de mercado cripto</div>
-      <div class="sg-text">El <b>Crypto Fear & Greed Index</b> de alternative.me es un indicador propio del mercado de criptomonedas. Combina <b>6 ingredientes específicamente cripto</b>:</div>
+      <div class="sg-title">🧮 Cómo se detecta el régimen (el sistema de votos)</div>
+      <div class="sg-text">Cada eje tiene 3 indicadores. Cada indicador vota +1, 0 o −1 según sus umbrales. La suma de votos (−3 a +3) posiciona cada eje, y la combinación de ambos ejes determina el cuadrante:</div>
       <table class="sg-table">
-        <tr><th>Componente</th><th>Peso</th><th>Qué mide</th></tr>
-        <tr><td>Volatilidad</td><td>25%</td><td>Volatilidad actual + max drawdown de BTC vs 30/90 días</td></tr>
-        <tr><td>Momentum/Volumen</td><td>25%</td><td>Volumen de mercado actual vs medias 30/90 días</td></tr>
-        <tr><td>Redes sociales</td><td>15%</td><td>Análisis de hashtags y volumen de menciones BTC en X/Twitter, Reddit</td></tr>
-        <tr><td>Encuestas</td><td>15%</td><td>strawpoll.com encuestas semanales (actualmente pausado)</td></tr>
-        <tr><td>Dominancia BTC</td><td>10%</td><td>Cuota de mercado de BTC vs altcoins. Dominancia subiendo = miedo migrando a "seguro"</td></tr>
-        <tr><td>Tendencias Google</td><td>10%</td><td>Volumen de búsquedas "Bitcoin", "crypto crash", etc.</td></tr>
+        <tr><th>Eje</th><th>Indicador</th><th>Votos</th><th>Qué aporta</th></tr>
+        <tr><td rowspan="3"><b>Crecimiento</b></td><td><b>ISM PMI</b> (manual, mensual)</td><td>• &gt;52 → +1<br>• 49–52 → 0<br>• &lt;49 → −1</td><td>Termómetro del ciclo industrial (encuesta a directores de compras: pedidos, producción, empleo)</td></tr>
+        <tr><td><b>Yield Curve 10Y−2Y</b></td><td>• &gt;+0.5% → +1<br>• −0.2 a +0.5% → 0<br>• &lt;−0.2% → −1</td><td>El mercado de bonos anticipando: curva empinada = expansión por delante; invertida = frenazo descontado</td></tr>
+        <tr><td><b>Copper/Gold ratio</b></td><td>• &gt;0.18 → +1<br>• 0.13–0.18 → 0<br>• &lt;0.13 → −1</td><td>Cobre = demanda industrial real; oro = refugio. El ratio revela cuál pesa (el "Dr. Cobre" tiene doctorado en economía)</td></tr>
+        <tr><td rowspan="3"><b>Inflación</b></td><td><b>Core PCE YoY</b></td><td>• &gt;3% → +1<br>• 2–3% → 0<br>• &lt;2% → −1</td><td>La métrica oficial de la Fed (excluye energía y alimentos: la inflación "pegajosa")</td></tr>
+        <tr><td><b>CPI YoY</b></td><td>• &gt;4% → +1<br>• 2.5–4% → 0<br>• &lt;2.5% → −1</td><td>La inflación "de la calle" (la que sienten los consumidores y mueve la política)</td></tr>
+        <tr><td><b>Breakevens 5Y5Y</b></td><td>• &gt;2.8% → +1<br>• 2.3–2.8% → 0<br>• &lt;2.3% → −1</td><td>Expectativas del mercado de bonos a 5 años vista (mide la credibilidad de la Fed: si se desanclan, el mercado deja de creer)</td></tr>
       </table>
-      <div class="sg-text"><b>Escala:</b> 0–100, donde 0–24 = miedo extremo, 25–44 = miedo, 45–55 = neutral, 56–75 = codicia, 76–100 = codicia extrema.</div>
-      <div class="sg-text"><b>A qué se aplica:</b> al panel de régimen (barra separada para mercado cripto) y a los activos de la categoría <b>Crypto</b> del screener (BTC, ETH).</div>
-    </div>
-    <div class="sg-block">
-      <div class="sg-title">📊 Cómo usar el sentimiento</div>
-      <div class="sg-text">El sentimiento <b>NO determina el régimen</b> y <b>NO afecta al Score</b> de los activos. Es una capa de timing táctico que se interpreta en clave <b>contrarian</b> en los extremos:</div>
-      <ul class="rg-list" style="margin-top:8px;">
-        <li><b>Pánico extremo + régimen favorable al riesgo</b> → señal de entrada históricamente. "Be greedy when others are fearful."</li>
-        <li><b>Pánico + régimen defensivo</b> → coherente, no es señal de compra; esperar confirmación macro.</li>
-        <li><b>Euforia extrema + régimen tardío</b> (sobrecalentamiento o estanflación) → recorte/recogida de beneficios.</li>
-        <li><b>Zona media (25–75)</b> → el sentimiento no aporta señal accionable. Se ignora.</li>
-        <li><b>Para BTC específicamente</b>: el Crypto F&G afina el tamaño de la posición dentro del rango que dicta el régimen (miedo extremo → techo del rango; codicia extrema → suelo del rango).</li>
+      <div class="sg-text"><b>Mapeo de los ejes al régimen:</b></div>
+      <ul class="rg-list">
+        <li>Crecimiento ≥ +1 e Inflación ≤ 0 → 🟢 <b>Expansión</b></li>
+        <li>Crecimiento ≥ +1 e Inflación ≥ +1 → 🟠 <b>Sobrecalentamiento</b></li>
+        <li>Crecimiento ≤ −1 e Inflación ≥ +1 → 🔴 <b>Estanflación</b></li>
+        <li>Crecimiento ≤ −1 e Inflación ≤ 0 → 🔵 <b>Recesión deflacionaria</b></li>
+        <li>Cualquier otra combinación → ⚪ <b>Transición/Neutral</b> (los ejes no marcan dirección clara: zona de cambio de régimen)</li>
       </ul>
+      <div class="sg-text">Las dos barras del panel muestran la puntuación de cada eje (−3 a +3): te dicen POR QUÉ el sistema detecta ese régimen y lo cerca que está de cambiar de cuadrante (un eje en +1 está a un voto de girar; en +3 el régimen es sólido).</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🎛 Los modificadores (marcador "I": contexto, no votan)</div>
+      <div class="sg-text">Fed Funds, Dot Plot, TIPS reales y DBC no votan en los ejes: son el <b>pronóstico del tiempo</b> de la política monetaria (hacia dónde va el clima), no el clima presente. Se muestran con el marcador "I" (informativa) coloreado por su valor:</div>
+      <ul class="rg-list">
+        <li><b>Fed Funds:</b> política acomodaticia con inflación &gt;3% acelera el giro hacia estanflación (histórico: los errores de la Fed de los 70)</li>
+        <li><b>Dot Plot</b> (manual, trimestral): las proyecciones de los propios miembros de la Fed (≤−100bps proyectados = giro dovish fuerte por delante)</li>
+        <li><b>TIPS 10Y reales:</b> el driver clave de oro y BTC (tipos reales negativos = combustible para ambos; &gt;1% = la RF compensa sin riesgo)</li>
+        <li><b>DBC (commodities):</b> la ruptura de máximos confirma el momentum del ciclo de materias primas. Se mantuvo como informativo (no vota en inflación) para no mezclar precio de mercado con datos macro: ya hay 3 votantes de inflación</li>
+      </ul>
+      <div class="sg-text">Nota: DXY y el balance de la Fed (WALCL) se retiraron de este grupo (puntúan en el Pilar 1, regla de un dato = un pilar).</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">😱 La capa de Sentimiento (downstream, contrarian)</div>
+      <div class="sg-text">El sentimiento mide las <b>emociones del mercado</b> (miedo/codicia). Es señal downstream (síntoma, como se explica en el Pilar 1): no determina el régimen, pero es útil como termómetro <b>contrarian</b> de corto plazo: el miedo extremo ha sido históricamente zona de compra (los vendedores ya vendieron) y la codicia extrema pide precaución (no queda comprador marginal).</div>
+      <div class="sg-text">Sus 6 indicadores (VIX, estructura VIX/VIX3M, spreads HY, Crypto Fear &amp; Greed, CNN Fear &amp; Greed, Put/Call) se agregan en las 2 barras tácticas (RV US y cripto) con su mensaje operativo. El detalle de cada indicador y sus umbrales está en la subsección de sentimiento más abajo.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">📊 Cómo leer la gráfica del pilar</div>
+      <ul class="rg-list">
+        <li>Activa/desactiva cada indicador con los botones (los colores del botón y la serie coinciden)</li>
+        <li>Lo que buscas: indicadores acercándose a sus umbrales de voto (un ISM en 49.5 está a décimas de cambiar su voto) y divergencias entre ejes (crecimiento cayendo con inflación subiendo = rumbo a estanflación)</li>
+        <li>Series mensuales por naturaleza (PCE, CPI, Fed Funds) se muestran mensuales aunque la vista sea diaria/semanal; en rangos largos la granularidad fina se agrega automáticamente</li>
+      </ul>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔀 Cambios respecto a versiones anteriores del panel</div>
+      <div class="sg-text">La antigua sección "Indicadores por eje" (el semáforo por capas) se absorbió dentro del panel del Pilar 3 (mismas tarjetas, reagrupadas bajo la barra de régimen). Las tarjetas de DXY y WALCL se retiraron (puntúan en el Pilar 1). Los modificadores pasaron a marcador "I" (no votan). Las barras de sentimiento agregado se movieron del panel de régimen a la capa de Sentimiento. La tira compacta de modificadores (mod-strip) desapareció (duplicaba las tarjetas de modificadores). La gráfica combinada de indicadores pasó a ser la gráfica de cierre del pilar. Las secciones siguientes (guía de indicadores, cómo leer los ejes, el sentimiento) son el detalle de este pilar.</div>
     </div>
   </div>
 
-  <!-- GUÍA DE INDICADORES -->
-  <div class="section-title">Guía de indicadores</div>
+  <div class="section-title">Pilar 3 · Guía de indicadores (detalle uno a uno)</div>
   <div class="guide">
 
     <div class="guide-layer">
@@ -1495,7 +1516,7 @@
   </div>
 
   <!-- GUÍA DE EJES Y REGÍMENES -->
-  <div class="section-title">Cómo leer los ejes y los regímenes</div>
+  <div class="section-title">Pilar 3 · Cómo leer los ejes y los regímenes (detalle)</div>
   <div class="regime-guide">
 
     <div class="rg-block">
@@ -1581,6 +1602,53 @@
   </div>
 
   <!-- SCORE GUIDE -->
+  <!-- SENTIMIENTO EXPLAINER -->
+  <div class="section-title">Pilar 3 · El sentimiento (de dónde sale cada indicador)</div>
+  <div class="score-guide">
+    <div class="sg-block">
+      <div class="sg-title">🇺🇸 Sentimiento de mercado RV US</div>
+      <div class="sg-text">El termómetro principal mide el clima emocional de la renta variable estadounidense (que es el mercado bursátil global por excelencia y donde existen los mejores indicadores gratuitos de sentimiento). Es un agregado de hasta <b>6 componentes</b>, cada uno con su propia fuente:</div>
+      <table class="sg-table">
+        <tr><th>Componente</th><th>Qué mide</th><th>Fuente</th></tr>
+        <tr><td><b>VIX</b></td><td>Volatilidad implícita del S&P 500 a 30 días. Sube con miedo, baja con calma.</td><td>Yahoo · ^VIX</td></tr>
+        <tr><td><b>Estructura VIX/VIX3M</b></td><td>Cociente VIX corto / VIX 3 meses. Cuando se invierte (>1), el mercado paga más por protección inmediata = estrés agudo.</td><td>Yahoo · ^VIX/^VIX3M</td></tr>
+        <tr><td><b>Spreads High Yield</b></td><td>Lo que paga de extra la deuda basura sobre Treasury. El crédito huele los problemas antes que la bolsa.</td><td>FRED · BAMLH0A0HYM2</td></tr>
+        <tr><td><b>CNN Fear & Greed</b></td><td>Agregado de 7 sub-indicadores propios de CNN (momentum, breadth, put/call, junk bond demand, etc.)</td><td>CNN dataviz API</td></tr>
+        <tr><td><b>Put/Call SPY</b></td><td>Ratio de open interest puts/calls del vencimiento más cercano del SPY. Alto = cobertura alta = miedo.</td><td>Yahoo options · SPY</td></tr>
+        <tr><td><b>Crypto F&G</b></td><td>Sí, también entra aquí — la cripto se ha correlacionado con risk-on tradicional. Pero solo cuenta como 1/6 del agregado.</td><td>alternative.me</td></tr>
+      </table>
+      <div class="sg-text"><b>Fórmula de agregación:</b> cada componente se normaliza a una escala 0–100 (0 = pánico extremo, 100 = euforia) y se promedia. Si CNN o Put/Call bloquean su endpoint en una recarga, se calcula con los componentes que sí estén disponibles. Por eso a veces verás un termómetro con 5 de 6 ingredientes.</div>
+      <div class="sg-text"><b>A qué activos se aplica este termómetro:</b> en el screener, lo verás solo en activos de las categorías <b>Índices RV</b> (S&P, Nasdaq, Russell, etc.) y <b>Sectores</b> (XLK, XLE, etc.) — porque son los activos donde estos componentes son realmente relevantes. Para RF, commodities, FX, etc. aparece <b>N/A</b>: no existe un indicador gratuito que mida específicamente el sentimiento de esos mercados, y aplicar el de RV US sería engañoso.</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">₿ Sentimiento de mercado cripto</div>
+      <div class="sg-text">El <b>Crypto Fear & Greed Index</b> de alternative.me es un indicador propio del mercado de criptomonedas. Combina <b>6 ingredientes específicamente cripto</b>:</div>
+      <table class="sg-table">
+        <tr><th>Componente</th><th>Peso</th><th>Qué mide</th></tr>
+        <tr><td>Volatilidad</td><td>25%</td><td>Volatilidad actual + max drawdown de BTC vs 30/90 días</td></tr>
+        <tr><td>Momentum/Volumen</td><td>25%</td><td>Volumen de mercado actual vs medias 30/90 días</td></tr>
+        <tr><td>Redes sociales</td><td>15%</td><td>Análisis de hashtags y volumen de menciones BTC en X/Twitter, Reddit</td></tr>
+        <tr><td>Encuestas</td><td>15%</td><td>strawpoll.com encuestas semanales (actualmente pausado)</td></tr>
+        <tr><td>Dominancia BTC</td><td>10%</td><td>Cuota de mercado de BTC vs altcoins. Dominancia subiendo = miedo migrando a "seguro"</td></tr>
+        <tr><td>Tendencias Google</td><td>10%</td><td>Volumen de búsquedas "Bitcoin", "crypto crash", etc.</td></tr>
+      </table>
+      <div class="sg-text"><b>Escala:</b> 0–100, donde 0–24 = miedo extremo, 25–44 = miedo, 45–55 = neutral, 56–75 = codicia, 76–100 = codicia extrema.</div>
+      <div class="sg-text"><b>A qué se aplica:</b> al panel de régimen (barra separada para mercado cripto) y a los activos de la categoría <b>Crypto</b> del screener (BTC, ETH).</div>
+    </div>
+    <div class="sg-block">
+      <div class="sg-title">📊 Cómo usar el sentimiento</div>
+      <div class="sg-text">El sentimiento <b>NO determina el régimen</b> y <b>NO afecta al Score</b> de los activos. Es una capa de timing táctico que se interpreta en clave <b>contrarian</b> en los extremos:</div>
+      <ul class="rg-list" style="margin-top:8px;">
+        <li><b>Pánico extremo + régimen favorable al riesgo</b> → señal de entrada históricamente. "Be greedy when others are fearful."</li>
+        <li><b>Pánico + régimen defensivo</b> → coherente, no es señal de compra; esperar confirmación macro.</li>
+        <li><b>Euforia extrema + régimen tardío</b> (sobrecalentamiento o estanflación) → recorte/recogida de beneficios.</li>
+        <li><b>Zona media (25–75)</b> → el sentimiento no aporta señal accionable. Se ignora.</li>
+        <li><b>Para BTC específicamente</b>: el Crypto F&G afina el tamaño de la posición dentro del rango que dicta el régimen (miedo extremo → techo del rango; codicia extrema → suelo del rango).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- GUÍA DE INDICADORES -->
   <div class="section-title">Cómo se calcula el Score de cada activo</div>
   <div class="score-guide">
 
@@ -2148,14 +2216,22 @@ function setCard(key, value, unit, color) {
   const dotEl = document.getElementById('dot-' + key);
   if (!valEl || !dotEl) return;
   valEl.innerHTML = `<span class="value-${color}">${value}${unit}</span>`;
-  dotEl.className = `status-dot dot-${color}`;
+  if (dotEl.classList.contains('info-i')) {
+    const cmap = { green: 'var(--green)', yellow: 'var(--yellow)', red: 'var(--red)' };
+    dotEl.style.color = cmap[color] || 'var(--text3)';
+  } else {
+    dotEl.className = `status-dot dot-${color}`;
+  }
 }
 
 function setCardError(key) {
   const valEl = document.getElementById('val-' + key);
   const dotEl = document.getElementById('dot-' + key);
   if (valEl) valEl.innerHTML = '<span class="value-yellow">N/D</span>';
-  if (dotEl) dotEl.className = 'status-dot dot-yellow';
+  if (dotEl) {
+    if (dotEl.classList.contains('info-i')) dotEl.style.color = 'var(--yellow)';
+    else dotEl.className = 'status-dot dot-yellow';
+  }
   scores[key] = { axis: null, score: 0 };
 }
 
@@ -2588,6 +2664,7 @@ function renderModStrip() {
     { key: 'crb', label: 'DBC' },
   ];
   const strip = document.getElementById('mod-strip');
+  if (!strip) return;
   strip.innerHTML = mods.map(m => {
     const dot = document.getElementById('dot-' + m.key);
     let color = 'var(--text3)';
