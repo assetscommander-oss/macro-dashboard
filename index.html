@@ -2234,20 +2234,53 @@ function saveManualToStorage() {
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
 // Cadena de proxies CORS. Estrategia 2026:
 //   • corsproxy.io se retiró (exige clave de pago desde 2026).
-//   • thingproxy y corsproxy.org se retiraron en v25→v26: 100% fallos en todos
-//     los tests, solo aportaban ruido al fail-count.
-//   • codetabs limita a ~5 req/seg y allorigins a ~20 req/min: probarlos en
-//     serie con timeouts largos hace que baste con que UNO vaya lento para
-//     que toda la carga se caiga a N/D.
-//   • Solución: race paralelo (Promise.any) — gana el primero con JSON válido.
-//   • Y si TODOS fallan (rate limit generalizado), retry único con backoff
-//     de 2-3 s: casi siempre limpia el 429 del segundo intento.
+//   • thingproxy y corsproxy.org se retiraron en v25→v26: 100% fallos.
+//   • codetabs limita a ~5 req/seg y allorigins a ~20 req/min.
+//   • Con una carga completa de ~100 peticiones en burst, ambos saturaban y
+//     un solo retry corto no bastaba (v26 → aún dejaba N/D).
+// v27 añade dos capas:
+//   1) Rate limiter GLOBAL de salida: max 3 concurrentes + 250 ms entre inicios
+//      = ≈4/seg. Por debajo del límite duro de codetabs, así que nunca lo
+//      disparamos nosotros. allorigins seguirá siendo rate-limited a nivel
+//      servidor, pero da igual: en el race, codetabs suele ganar.
+//   2) Retry con backoff exponencial: 3 s y 7 s (con jitter). Suficiente para
+//      que la ventana de allorigins-20/min se despeje entre intentos.
 const PROXIES = [
   { name: 'codetabs',        url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct'  },
   { name: 'allorigins',      url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct'  },
   { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,      parse: 'wrapped' },
 ];
 const proxyState = { best: null, failures: {}, retries: 0, lastRaceMs: 0 };
+
+// Semáforo global: max N concurrentes + gap mínimo entre inicios.
+// Evita disparar el rate limit de codetabs (5/seg) desde nuestro lado.
+const rateLimiter = {
+  active: 0,
+  queue: [],
+  lastStart: 0,
+  MAX_CONCURRENT: 3,
+  MIN_GAP_MS: 250,
+  acquire() {
+    return new Promise(resolve => { this.queue.push(resolve); this._tryNext(); });
+  },
+  _tryNext() {
+    if (this.active >= this.MAX_CONCURRENT || this.queue.length === 0) return;
+    const gap = Date.now() - this.lastStart;
+    if (gap < this.MIN_GAP_MS) {
+      setTimeout(() => this._tryNext(), this.MIN_GAP_MS - gap);
+      return;
+    }
+    this.active++;
+    this.lastStart = Date.now();
+    const resolve = this.queue.shift();
+    resolve();
+    setTimeout(() => this._tryNext(), this.MIN_GAP_MS);
+  },
+  release() {
+    this.active = Math.max(0, this.active - 1);
+    this._tryNext();
+  },
+};
 
 async function fetchWithTimeout(url, ms = 12000) {
   const ctrl = new AbortController();
@@ -2274,8 +2307,6 @@ async function tryProxy(p, targetUrl, asText) {
 }
 
 async function proxyRace(targetUrl, asText) {
-  // Disparamos TODOS los proxies en paralelo; el primero con JSON válido gana.
-  // Los fallidos se registran en proxyState.failures pero no bloquean al ganador.
   const attempts = PROXIES.map(p =>
     tryProxy(p, targetUrl, asText).then(
       out => ({ p, out }),
@@ -2288,34 +2319,41 @@ async function proxyRace(targetUrl, asText) {
   return winner.out;
 }
 
-async function proxyRequest(targetUrl, asText) {
-  // Fast path: probar el último proxy que funcionó (una sola llamada, rápida).
+async function proxyRequestOnce(targetUrl, asText) {
+  // Se llama YA con el slot del rate limiter adquirido.
   if (proxyState.best) {
-    try {
-      return await tryProxy(proxyState.best, targetUrl, asText);
-    } catch (e) {
+    try { return await tryProxy(proxyState.best, targetUrl, asText); }
+    catch (e) {
       proxyState.failures[proxyState.best.name] = (proxyState.failures[proxyState.best.name] || 0) + 1;
-      proxyState.best = null; // se rompió → race para encontrar otro
+      proxyState.best = null;
     }
   }
-  // Slow path: race entre todos.
-  try {
-    return await proxyRace(targetUrl, asText);
-  } catch (agg1) {
-    // Todos fallaron a la vez → casi siempre rate limit sincronizado (429).
-    // Esperamos 2-3 s (con jitter) para que las ventanas se limpien y reintentamos UNA vez.
-    // Sin esto, cada indicador que caía en la ventana quedaba en N/D hasta el próximo refresh manual.
-    proxyState.retries++;
-    await delay(2000 + Math.random() * 1000);
+  return await proxyRace(targetUrl, asText);
+}
+
+async function proxyRequest(targetUrl, asText) {
+  // Retries: primer intento (0 ms espera) + 2 retries (3 s, 7 s con jitter).
+  // El slot del rate limiter se libera DURANTE la espera para no bloquear a otros.
+  const backoffs = [0, 3000, 7000];
+  let lastErr = null;
+  for (let i = 0; i < backoffs.length; i++) {
+    if (backoffs[i] > 0) {
+      proxyState.retries++;
+      await delay(backoffs[i] + Math.random() * 1500);
+    }
+    await rateLimiter.acquire();
     try {
-      return await proxyRace(targetUrl, asText);
-    } catch (agg2) {
-      const detail = agg2 && agg2.errors
-        ? agg2.errors.map(e => e.message).join(' | ')
-        : String(agg2 && agg2.message || agg2);
-      throw new Error('Todos los proxies fallaron (tras retry): ' + detail);
+      return await proxyRequestOnce(targetUrl, asText);
+    } catch (e) {
+      lastErr = e;
+    } finally {
+      rateLimiter.release();
     }
   }
+  const detail = lastErr && lastErr.errors
+    ? lastErr.errors.map(x => x.message).join(' | ')
+    : String(lastErr && lastErr.message || lastErr);
+  throw new Error('Todos los proxies fallaron tras 2 retries: ' + detail);
 }
 
 async function proxyFetch(targetUrl) { return proxyRequest(targetUrl, false); }
@@ -2883,8 +2921,9 @@ function showProxyStatus() {
     el.style.color = 'var(--yellow)';
     el.innerHTML = `<b>⚠ Datos parciales.</b> ${ndCount} indicadores en N/D. `
       + `Proxy activo: <b>${proxyState.best.name}</b>. Fallos por proxy: ${failList}${retryNote}. `
-      + 'Rate limit típico (codetabs = 5/seg, allorigins = 20/min). '
-      + 'Pulsa «Actualizar datos» en 30-60 s para completar los que faltan — el sistema ya ha reintentado 1 vez con backoff automático.';
+      + 'Throttle interno: 4 req/seg · Retries automáticos: 2 (3 s y 7 s). '
+      + 'Si aún hay N/D, la carga completa (~100 peticiones) satura allorigins (20/min). '
+      + 'Pulsa «Actualizar datos» en 1-2 min para completar los que faltan.';
   } else {
     el.style.display = 'none';
   }
