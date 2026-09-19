@@ -2232,18 +2232,25 @@ function saveManualToStorage() {
 }
 
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
-// Cadena de proxies CORS. corsproxy.io se retiró: desde 2026 exige clave de pago
-// y devuelve siempre 401, lo que hacía fallar TODAS las peticiones a FRED y Yahoo.
-// El proxy que funciona se recuerda (proxyState.best) para no reintentar los muertos
-// en cada llamada, que es lo que hacía el dashboard eternamente lento.
+// Cadena de proxies CORS. Estrategia 2026:
+//   • corsproxy.io se retiró (exige clave de pago desde 2026).
+//   • codetabs limita a ~5 req/seg y allorigins a ~20 req/min: probarlos en
+//     serie con timeouts de 15 s hace que baste con que UNO vaya lento para
+//     que toda la carga se caiga a N/D (era el fallo de la v24).
+//   • Solución: race paralelo — se disparan todos los proxies a la vez y gana
+//     el primero que devuelva JSON válido (Promise.any). Los muertos ya no
+//     bloquean a nadie. El ganador se recuerda para la siguiente petición
+//     (fast path) para no gastar peticiones de más en los rate-limited.
 const PROXIES = [
-  { name: 'codetabs',   url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct' },
-  { name: 'allorigins', url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct' },
-  { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, parse: 'wrapped' },
+  { name: 'codetabs',        url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct'  },
+  { name: 'allorigins',      url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct'  },
+  { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,      parse: 'wrapped' },
+  { name: 'thingproxy',      url: u => `https://thingproxy.freeboard.io/fetch/${u}`,                       parse: 'direct'  },
+  { name: 'corsproxy-org',   url: u => `https://corsproxy.org/?${encodeURIComponent(u)}`,                  parse: 'direct'  },
 ];
-const proxyState = { best: null, failures: {} };
+const proxyState = { best: null, failures: {}, lastRaceMs: 0 };
 
-async function fetchWithTimeout(url, ms = 15000) {
+async function fetchWithTimeout(url, ms = 12000) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), ms);
   try { return await fetch(url, { signal: ctrl.signal }); }
@@ -2252,34 +2259,55 @@ async function fetchWithTimeout(url, ms = 15000) {
 
 async function tryProxy(p, targetUrl, asText) {
   const res = await fetchWithTimeout(p.url(targetUrl));
-  if (!res.ok) throw new Error('HTTP ' + res.status);
+  if (!res.ok) throw new Error(p.name + ' HTTP ' + res.status);
   if (p.parse === 'wrapped') {
     const wrapper = await res.json();
     const body = wrapper && wrapper.contents;
-    if (body == null) throw new Error('empty wrapper');
+    if (body == null) throw new Error(p.name + ' empty wrapper');
     return asText ? body : JSON.parse(body);
   }
-  return asText ? await res.text() : await res.json();
+  if (asText) return await res.text();
+  // Validar la forma: algunos proxies devuelven HTML de error con status 200
+  const text = await res.text();
+  const c = text.trimStart()[0];
+  if (c !== '{' && c !== '[') throw new Error(p.name + ' non-JSON');
+  return JSON.parse(text);
+}
+
+async function proxyRace(targetUrl, asText) {
+  // Disparamos TODOS los proxies en paralelo; el primero con JSON válido gana.
+  // Los fallidos se registran en proxyState.failures pero no bloquean al ganador.
+  const attempts = PROXIES.map(p =>
+    tryProxy(p, targetUrl, asText).then(
+      out => ({ p, out }),
+      e => { proxyState.failures[p.name] = (proxyState.failures[p.name] || 0) + 1; throw e; }
+    )
+  );
+  const winner = await Promise.any(attempts);
+  proxyState.best = winner.p;
+  proxyState.lastRaceMs = Date.now();
+  return winner.out;
 }
 
 async function proxyRequest(targetUrl, asText) {
-  // Empezar por el que funcionó la última vez
-  const ordered = proxyState.best
-    ? [proxyState.best, ...PROXIES.filter(p => p !== proxyState.best)]
-    : PROXIES;
-  let lastErr = null;
-  for (const p of ordered) {
+  // Fast path: probar el último proxy que funcionó (una sola llamada, rápida).
+  if (proxyState.best) {
     try {
-      const out = await tryProxy(p, targetUrl, asText);
-      proxyState.best = p;
-      return out;
+      return await tryProxy(proxyState.best, targetUrl, asText);
     } catch (e) {
-      lastErr = e;
-      proxyState.failures[p.name] = (proxyState.failures[p.name] || 0) + 1;
-      if (proxyState.best === p) proxyState.best = null; // dejó de funcionar
+      proxyState.failures[proxyState.best.name] = (proxyState.failures[proxyState.best.name] || 0) + 1;
+      proxyState.best = null; // se rompió → race para encontrar otro
     }
   }
-  throw new Error('Proxies failed (' + (lastErr && lastErr.message) + '): ' + targetUrl.slice(0, 60));
+  // Slow path: race entre todos.
+  try {
+    return await proxyRace(targetUrl, asText);
+  } catch (agg) {
+    const detail = agg && agg.errors
+      ? agg.errors.map(e => e.message).join(' | ')
+      : String(agg && agg.message || agg);
+    throw new Error('Todos los proxies fallaron: ' + detail);
+  }
 }
 
 async function proxyFetch(targetUrl) { return proxyRequest(targetUrl, false); }
@@ -2808,8 +2836,9 @@ async function loadCards() {
   btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
 }
 
-// Aviso visible del estado de conexión: si los proxies CORS caen (como pasó con
-// corsproxy.io en 2026), todo sale N/D y conviene saber POR QUÉ de un vistazo.
+// Aviso visible del estado de conexión: si los proxies CORS caen o rate-limitan
+// (frecuente en 2026 con codetabs/allorigins), los indicadores salen N/D y
+// conviene saber POR QUÉ de un vistazo — y con qué proxy (para diagnosticar).
 function showProxyStatus() {
   let el = document.getElementById('proxy-status');
   if (!el) {
@@ -2819,16 +2848,36 @@ function showProxyStatus() {
     const anchor = document.querySelector('#tab-macro .section-title');
     if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
   }
-  if (proxyState.best) {
-    el.style.display = 'none';
-  } else {
+  // Contar cuántos indicadores acabaron en N/D para detectar caídas parciales.
+  const totalDots = document.querySelectorAll('#tab-macro .indicator-card .card-value').length;
+  const ndCount = Array.from(document.querySelectorAll('#tab-macro .indicator-card .card-value'))
+    .filter(v => v.textContent.trim().startsWith('N/D')).length;
+  const failList = Object.entries(proxyState.failures)
+    .filter(([, n]) => n > 0)
+    .map(([name, n]) => `${name}(${n})`)
+    .join(', ') || 'ninguno';
+
+  if (!proxyState.best) {
     el.style.display = 'block';
     el.style.background = 'var(--red-dim)';
     el.style.border = '1px solid var(--red)';
     el.style.color = 'var(--red)';
-    el.innerHTML = '<b>⚠ Sin conexión a los datos.</b> Ningún proxy CORS respondió, así que FRED y Yahoo no se han podido leer y los indicadores muestran N/D. '
+    el.innerHTML = `<b>⚠ Sin conexión a los datos.</b> Ningún proxy CORS respondió (fallos: ${failList}), `
+      + 'FRED y Yahoo no se han podido leer y los indicadores muestran N/D. '
       + 'Causas habituales: (1) has abierto el archivo con doble clic en vez de servirlo por http:// o desde GitHub Pages; '
-      + '(2) el proxy público está caído o limitando peticiones — espera un minuto y pulsa «Actualizar datos».';
+      + '(2) todos los proxies públicos están rate-limited — espera 1-2 minutos y pulsa «Actualizar datos».';
+  } else if (ndCount >= 4 && totalDots > 0) {
+    // Proxy responde pero muchas peticiones han fallado → rate limit intermitente
+    el.style.display = 'block';
+    el.style.background = 'var(--yellow-dim)';
+    el.style.border = '1px solid var(--yellow)';
+    el.style.color = 'var(--yellow)';
+    el.innerHTML = `<b>⚠ Datos parciales.</b> ${ndCount} indicadores en N/D. `
+      + `Proxy activo: <b>${proxyState.best.name}</b>. Fallos por proxy: ${failList}. `
+      + 'Suele ser rate limit (codetabs = 5/seg, allorigins = 20/min). '
+      + 'Pulsa «Actualizar datos» en 30-60 s para completar los que faltan; el sistema irá probando otros proxies en el race.';
+  } else {
+    el.style.display = 'none';
   }
 }
 
