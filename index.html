@@ -2232,20 +2232,57 @@ function saveManualToStorage() {
 }
 
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
-async function proxyFetch(targetUrl) {
-  const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
-    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`,
-  ];
-  for (const p of proxies) {
-    try {
-      const res = await fetch(p);
-      if (!res.ok) continue;
-      return await res.json();
-    } catch(e) { continue; }
-  }
-  throw new Error('Proxies failed: ' + targetUrl.slice(0, 60));
+// Cadena de proxies CORS. corsproxy.io se retiró: desde 2026 exige clave de pago
+// y devuelve siempre 401, lo que hacía fallar TODAS las peticiones a FRED y Yahoo.
+// El proxy que funciona se recuerda (proxyState.best) para no reintentar los muertos
+// en cada llamada, que es lo que hacía el dashboard eternamente lento.
+const PROXIES = [
+  { name: 'codetabs',   url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct' },
+  { name: 'allorigins', url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct' },
+  { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`, parse: 'wrapped' },
+];
+const proxyState = { best: null, failures: {} };
+
+async function fetchWithTimeout(url, ms = 15000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try { return await fetch(url, { signal: ctrl.signal }); }
+  finally { clearTimeout(t); }
 }
+
+async function tryProxy(p, targetUrl, asText) {
+  const res = await fetchWithTimeout(p.url(targetUrl));
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  if (p.parse === 'wrapped') {
+    const wrapper = await res.json();
+    const body = wrapper && wrapper.contents;
+    if (body == null) throw new Error('empty wrapper');
+    return asText ? body : JSON.parse(body);
+  }
+  return asText ? await res.text() : await res.json();
+}
+
+async function proxyRequest(targetUrl, asText) {
+  // Empezar por el que funcionó la última vez
+  const ordered = proxyState.best
+    ? [proxyState.best, ...PROXIES.filter(p => p !== proxyState.best)]
+    : PROXIES;
+  let lastErr = null;
+  for (const p of ordered) {
+    try {
+      const out = await tryProxy(p, targetUrl, asText);
+      proxyState.best = p;
+      return out;
+    } catch (e) {
+      lastErr = e;
+      proxyState.failures[p.name] = (proxyState.failures[p.name] || 0) + 1;
+      if (proxyState.best === p) proxyState.best = null; // dejó de funcionar
+    }
+  }
+  throw new Error('Proxies failed (' + (lastErr && lastErr.message) + '): ' + targetUrl.slice(0, 60));
+}
+
+async function proxyFetch(targetUrl) { return proxyRequest(targetUrl, false); }
 
 async function fredRange(seriesId, years, reqFreq, nativeFreq) {
   const freq = coarsen(reqFreq, years);
@@ -2767,7 +2804,32 @@ async function loadCards() {
     syncPensionFromMacro();
   }
   renderSystemConclusion(); // sintetiza los 5 pilares
+  showProxyStatus();
   btn.classList.remove('loading'); btn.textContent = '↻ Actualizar datos';
+}
+
+// Aviso visible del estado de conexión: si los proxies CORS caen (como pasó con
+// corsproxy.io en 2026), todo sale N/D y conviene saber POR QUÉ de un vistazo.
+function showProxyStatus() {
+  let el = document.getElementById('proxy-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'proxy-status';
+    el.style.cssText = 'margin:0 0 14px;padding:10px 14px;border-radius:6px;font-size:11px;line-height:1.6;';
+    const anchor = document.querySelector('#tab-macro .section-title');
+    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(el, anchor);
+  }
+  if (proxyState.best) {
+    el.style.display = 'none';
+  } else {
+    el.style.display = 'block';
+    el.style.background = 'var(--red-dim)';
+    el.style.border = '1px solid var(--red)';
+    el.style.color = 'var(--red)';
+    el.innerHTML = '<b>⚠ Sin conexión a los datos.</b> Ningún proxy CORS respondió, así que FRED y Yahoo no se han podido leer y los indicadores muestran N/D. '
+      + 'Causas habituales: (1) has abierto el archivo con doble clic en vez de servirlo por http:// o desde GitHub Pages; '
+      + '(2) el proxy público está caído o limitando peticiones — espera un minuto y pulsa «Actualizar datos».';
+  }
 }
 
 // ─── MANUAL ──────────────────────────────────────────────────────────────────
@@ -4866,17 +4928,7 @@ async function loadValuation() {
 
 // Helper: fetch as text (for HTML scraping)
 async function proxyFetchText(url) {
-  const proxies = [
-    `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-  ];
-  for (const p of proxies) {
-    try {
-      const r = await fetch(p);
-      if (r.ok) return await r.text();
-    } catch(e) {}
-  }
-  return null;
+  try { return await proxyRequest(url, true); } catch(e) { return null; }
 }
 
 function computeValuationScore() {
