@@ -2234,21 +2234,20 @@ function saveManualToStorage() {
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
 // Cadena de proxies CORS. Estrategia 2026:
 //   • corsproxy.io se retiró (exige clave de pago desde 2026).
+//   • thingproxy y corsproxy.org se retiraron en v25→v26: 100% fallos en todos
+//     los tests, solo aportaban ruido al fail-count.
 //   • codetabs limita a ~5 req/seg y allorigins a ~20 req/min: probarlos en
-//     serie con timeouts de 15 s hace que baste con que UNO vaya lento para
-//     que toda la carga se caiga a N/D (era el fallo de la v24).
-//   • Solución: race paralelo — se disparan todos los proxies a la vez y gana
-//     el primero que devuelva JSON válido (Promise.any). Los muertos ya no
-//     bloquean a nadie. El ganador se recuerda para la siguiente petición
-//     (fast path) para no gastar peticiones de más en los rate-limited.
+//     serie con timeouts largos hace que baste con que UNO vaya lento para
+//     que toda la carga se caiga a N/D.
+//   • Solución: race paralelo (Promise.any) — gana el primero con JSON válido.
+//   • Y si TODOS fallan (rate limit generalizado), retry único con backoff
+//     de 2-3 s: casi siempre limpia el 429 del segundo intento.
 const PROXIES = [
   { name: 'codetabs',        url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct'  },
   { name: 'allorigins',      url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct'  },
   { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,      parse: 'wrapped' },
-  { name: 'thingproxy',      url: u => `https://thingproxy.freeboard.io/fetch/${u}`,                       parse: 'direct'  },
-  { name: 'corsproxy-org',   url: u => `https://corsproxy.org/?${encodeURIComponent(u)}`,                  parse: 'direct'  },
 ];
-const proxyState = { best: null, failures: {}, lastRaceMs: 0 };
+const proxyState = { best: null, failures: {}, retries: 0, lastRaceMs: 0 };
 
 async function fetchWithTimeout(url, ms = 12000) {
   const ctrl = new AbortController();
@@ -2302,11 +2301,20 @@ async function proxyRequest(targetUrl, asText) {
   // Slow path: race entre todos.
   try {
     return await proxyRace(targetUrl, asText);
-  } catch (agg) {
-    const detail = agg && agg.errors
-      ? agg.errors.map(e => e.message).join(' | ')
-      : String(agg && agg.message || agg);
-    throw new Error('Todos los proxies fallaron: ' + detail);
+  } catch (agg1) {
+    // Todos fallaron a la vez → casi siempre rate limit sincronizado (429).
+    // Esperamos 2-3 s (con jitter) para que las ventanas se limpien y reintentamos UNA vez.
+    // Sin esto, cada indicador que caía en la ventana quedaba en N/D hasta el próximo refresh manual.
+    proxyState.retries++;
+    await delay(2000 + Math.random() * 1000);
+    try {
+      return await proxyRace(targetUrl, asText);
+    } catch (agg2) {
+      const detail = agg2 && agg2.errors
+        ? agg2.errors.map(e => e.message).join(' | ')
+        : String(agg2 && agg2.message || agg2);
+      throw new Error('Todos los proxies fallaron (tras retry): ' + detail);
+    }
   }
 }
 
@@ -2856,13 +2864,14 @@ function showProxyStatus() {
     .filter(([, n]) => n > 0)
     .map(([name, n]) => `${name}(${n})`)
     .join(', ') || 'ninguno';
+  const retryNote = proxyState.retries > 0 ? ` · Retries automáticos: ${proxyState.retries}` : '';
 
   if (!proxyState.best) {
     el.style.display = 'block';
     el.style.background = 'var(--red-dim)';
     el.style.border = '1px solid var(--red)';
     el.style.color = 'var(--red)';
-    el.innerHTML = `<b>⚠ Sin conexión a los datos.</b> Ningún proxy CORS respondió (fallos: ${failList}), `
+    el.innerHTML = `<b>⚠ Sin conexión a los datos.</b> Ningún proxy CORS respondió (fallos: ${failList}${retryNote}), `
       + 'FRED y Yahoo no se han podido leer y los indicadores muestran N/D. '
       + 'Causas habituales: (1) has abierto el archivo con doble clic en vez de servirlo por http:// o desde GitHub Pages; '
       + '(2) todos los proxies públicos están rate-limited — espera 1-2 minutos y pulsa «Actualizar datos».';
@@ -2873,9 +2882,9 @@ function showProxyStatus() {
     el.style.border = '1px solid var(--yellow)';
     el.style.color = 'var(--yellow)';
     el.innerHTML = `<b>⚠ Datos parciales.</b> ${ndCount} indicadores en N/D. `
-      + `Proxy activo: <b>${proxyState.best.name}</b>. Fallos por proxy: ${failList}. `
-      + 'Suele ser rate limit (codetabs = 5/seg, allorigins = 20/min). '
-      + 'Pulsa «Actualizar datos» en 30-60 s para completar los que faltan; el sistema irá probando otros proxies en el race.';
+      + `Proxy activo: <b>${proxyState.best.name}</b>. Fallos por proxy: ${failList}${retryNote}. `
+      + 'Rate limit típico (codetabs = 5/seg, allorigins = 20/min). '
+      + 'Pulsa «Actualizar datos» en 30-60 s para completar los que faltan — el sistema ya ha reintentado 1 vez con backoff automático.';
   } else {
     el.style.display = 'none';
   }
