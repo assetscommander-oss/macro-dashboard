@@ -2233,19 +2233,20 @@ function saveManualToStorage() {
 
 // ─── FETCHERS ────────────────────────────────────────────────────────────────
 // Cadena de proxies CORS. Estrategia 2026:
-//   • corsproxy.io se retiró (exige clave de pago desde 2026).
-//   • thingproxy y corsproxy.org se retiraron en v25→v26: 100% fallos.
-//   • codetabs limita a ~5 req/seg y allorigins a ~20 req/min.
-//   • Con una carga completa de ~100 peticiones en burst, ambos saturaban y
-//     un solo retry corto no bastaba (v26 → aún dejaba N/D).
-// v27 añade dos capas:
-//   1) Rate limiter GLOBAL de salida: max 3 concurrentes + 250 ms entre inicios
-//      = ≈4/seg. Por debajo del límite duro de codetabs, así que nunca lo
-//      disparamos nosotros. allorigins seguirá siendo rate-limited a nivel
-//      servidor, pero da igual: en el race, codetabs suele ganar.
-//   2) Retry con backoff exponencial: 3 s y 7 s (con jitter). Suficiente para
-//      que la ventana de allorigins-20/min se despeje entre intentos.
+//   • v28: Cloudflare Worker propio (macro-proxy) como proxy PRINCIPAL. Sin
+//     rate limits reales (100k/día, harás <1k), 100% CORS OK, sub-100ms.
+//     Los proxies publicos quedan solo como red de seguridad por si el Worker
+//     cayera puntualmente.
+//   • Historia: corsproxy.io (2026) → clave de pago. thingproxy y corsproxy.org
+//     (v25) → 100% fallos. allorigins (v27) → dejó de mandar CORS a GitHub
+//     Pages. codetabs sigue vivo pero con rate limit de 5/seg. Todos eran
+//     inestables porque son servicios publicos gratuitos.
+//   • Si necesitas cambiar la URL del Worker, edita CUSTOM_PROXY_URL abajo.
+//     Ponlo a null para deshabilitarlo y volver a usar solo los publicos.
+const CUSTOM_PROXY_URL = 'https://macro-proxy.assetscommander.workers.dev/';
+
 const PROXIES = [
+  ...(CUSTOM_PROXY_URL ? [{ name: 'macro-proxy', url: u => `${CUSTOM_PROXY_URL}?url=${encodeURIComponent(u)}`, parse: 'direct' }] : []),
   { name: 'codetabs',        url: u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`, parse: 'direct'  },
   { name: 'allorigins',      url: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,      parse: 'direct'  },
   { name: 'allorigins-json', url: u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,      parse: 'wrapped' },
@@ -2921,9 +2922,9 @@ function showProxyStatus() {
     el.style.color = 'var(--yellow)';
     el.innerHTML = `<b>⚠ Datos parciales.</b> ${ndCount} indicadores en N/D. `
       + `Proxy activo: <b>${proxyState.best.name}</b>. Fallos por proxy: ${failList}${retryNote}. `
-      + 'Throttle interno: 4 req/seg · Retries automáticos: 2 (3 s y 7 s). '
-      + 'Si aún hay N/D, la carga completa (~100 peticiones) satura allorigins (20/min). '
-      + 'Pulsa «Actualizar datos» en 1-2 min para completar los que faltan.';
+      + (proxyState.best.name === 'macro-proxy'
+        ? 'Fallos puntuales del upstream (FRED/Yahoo) o del Worker. Pulsa «Actualizar datos» en 30-60 s.'
+        : '⚠ Worker propio no disponible, tirando de proxy publico (rate-limited). Comprueba en Cloudflare que macro-proxy sigue desplegado.');
   } else {
     el.style.display = 'none';
   }
