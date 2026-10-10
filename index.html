@@ -499,7 +499,7 @@
   </div>
 
   <!-- VALUATION -->
-  <div class="section-title">Pilar 2 · Valoración del mercado <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· altura del agua de fondo · informativo: no mueve la cartera</span></div>
+  <div class="section-title">Pilar 2 · Valoración del mercado <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· altura del agua de fondo · fija el tamaño solo si eliges «Con sizing» en la Conclusión</span></div>
   <div class="val-panel">
     <div class="val-master">
       <div class="val-master-main" style="border-right:none;">
@@ -542,6 +542,22 @@
       </div>
       <div class="val-chart-wrap"><canvas id="val-div-canvas"></canvas></div>
       <div class="chart-note">Cómo se calcula el estado, qué mide cada tarjeta y cómo leer estas gráficas: pestaña <b>📚 Información → Pilar 2</b>.</div>
+    </div>
+    <div class="val-chart-section" id="er-section">
+      <div class="val-chart-head">
+        <span class="ctrl-label" style="font-size:10px;"><b>Resultados de las 10 mayores del S&amp;P 500</b> — beneficios declarados por trimestre desde 2015 (SEC) y los nuevos en cuanto se publican</span>
+        <div>
+          <button class="range-btn active" data-er-view="ni" onclick="setErView('ni')">Beneficio neto</button>
+          <button class="range-btn" data-er-view="op" onclick="setErView('op')">Operativo</button>
+          <button class="range-btn" data-er-view="rev" onclick="setErView('rev')">Ventas</button>
+          <button class="range-btn" data-er-view="mg" onclick="setErView('mg')">Márgenes</button>
+          <button class="range-btn" style="margin-left:6px;" onclick="erLoadLive(true)" title="Vuelve a buscar resultados nuevos (SEC y Yahoo)">↻</button>
+        </div>
+      </div>
+      <div class="liq-cards-compact" id="er-cards" style="margin-bottom:12px;"></div>
+      <div class="val-chart-wrap" style="height:330px;"><canvas id="er-canvas"></canvas></div>
+      <div id="er-table" style="margin-top:12px;"></div>
+      <div class="chart-note" style="margin-top:8px;"><span id="er-status">Cargando…</span>. Cada celda: verde = mejor que el mismo trimestre del año anterior, rojo = peor; <span style="color:var(--accent);">●</span> = trimestre nuevo publicado después de esta versión. Pasa el ratón por una celda para ver ventas, márgenes y fuente. Trimestres naturales (los fiscales desplazados se asignan al más cercano). Detalle: <b>📚 Información → Pilar 2</b>.</div>
     </div>
   </div>
 
@@ -609,6 +625,12 @@
           <div class="card-value value-loading" id="val-yield"><span class="spinner"></span> Cargando</div>
           <div class="card-thresholds"><span class="threshold t-green">&gt;+0.5% empinada</span><span class="threshold t-yellow">-0.2 a +0.5% plana</span><span class="threshold t-red">&lt;-0.2% invertida</span></div>
           <div class="card-temporal">Curva empinada = expansión por delante. Invertida = frenazo descontado</div>
+        </div>
+        <div class="indicator-card">
+          <div class="card-top"><div><div class="card-name">Curva · velocidad y tipo de movimiento</div><div class="card-source">FRED · T10Y2Y · DGS10 · DGS2</div></div><span class="info-i" id="dot-ycsteep" style="color:var(--text3);" title="Informativa: no vota en el eje">I</span></div>
+          <div class="card-value value-loading" id="val-ycsteep"><span class="spinner"></span> Cargando</div>
+          <div class="card-thresholds"><span class="threshold t-green">Sin señal</span><span class="threshold t-yellow">Tras inversión, +0,25 en 6m</span><span class="threshold t-red">Tras inversión, +0,5 en 6m (brusca)</span></div>
+          <div class="card-temporal" id="ycsteep-read">Cambio del 10A−2A en 6 meses. Tras una inversión, el re-empinamiento brusco ha precedido a varias recesiones. Informativa: no vota</div>
         </div>
         <div class="indicator-card">
           <div class="card-top"><div><div class="card-name">Copper/Gold Ratio</div><div class="card-source">Yahoo · HG=F / GC=F</div></div><div class="status-dot dot-loading" id="dot-coppergold"></div></div>
@@ -1602,13 +1624,14 @@
     </div>
 
     <div class="sg-block">
-      <div class="sg-title">🗂️ Las 4 tarjetas, una a una</div>
+      <div class="sg-title">🗂️ Las 5 tarjetas, una a una</div>
       <table class="sg-table">
         <tr><th>Tarjeta</th><th>Qué es</th><th>Cómo leerla</th></tr>
         <tr><td><b>Shiller CAPE</b> (peso 50%)</td><td>Precio del S&P dividido entre la media de los últimos 10 años de beneficios ajustados por inflación.</td><td>• 🟢 &lt;17 = en línea con la media histórica o barato<br>• 🟡 17-25 = sobre la media<br>• 🟠 25-35 = muy caro (2007 hizo techo en 27)<br>• 🔴 &gt;35 = zona burbuja (2021: 38 · récord 1999: 44)<br>• La tarjeta muestra el percentil histórico aproximado</td></tr>
         <tr><td><b>Buffett Indicator</b> (peso 30%)</td><td>Capitalización bursátil total USA (Wilshire 5000) dividida entre el PIB nominal.</td><td>• 🟢 ~80% = media histórica<br>• 🟡 100-140% = caro<br>• 🔴 &gt;140% = niveles solo vistos en 1999 y post-2020<br>• Hoy en zona extrema (&gt;200%)</td></tr>
         <tr><td><b>Equity Risk Premium</b> (peso 20%)</td><td>Earnings yield del S&P (1/PER) menos el yield del Treasury a 10 años.</td><td>• 🟢 &gt;4% = la bolsa compensa generosamente vs bonos<br>• 🟡 2-4% = prima razonable/baja<br>• 🔴 &lt;1% = casi sin prima (¿para qué asumir riesgo?)<br>• ⚠ Negativo = la bolsa rinde MENOS que el bono sin riesgo (anomalía de 1999)</td></tr>
         <tr><td><b>PER S&P 500</b> (informativa, marcador "I")</td><td>Precio / beneficios de los últimos 12 meses. NO puntúa en el score (el CAPE ya captura la valoración); su valor está en compararlo con el CAPE.</td><td>• El marcador "I" indica informativa (coloreado por su valor: 🟢 &lt;18 · 🟡 18-25 · 🟠 25-30 · 🔴 &gt;30)<br>• Si CAPE &gt;&gt; PER (ratio &gt;1.4) = los beneficios actuales están inflados vs su media de 10 años (márgenes en máximos, típico de techos de ciclo)<br>• Si PER &gt;&gt; CAPE = los beneficios actuales están hundidos (típico de suelos, ej. 2009)</td></tr>
+        <tr><td><b>Beneficios / PIB</b> (informativa, marcador "I")</td><td>Beneficios empresariales después de impuestos de EE.UU. (FRED · CP) entre el PIB nominal, trimestral. Es el margen de toda la economía: el margen neto del S&amp;P 500 no tiene fuente gratuita con histórico. NO puntúa en el score.</td><td>• El marcador "I" se colorea por la dirección: 🟢 se amplían · 🟡 se estrechan este trimestre · 🔴 se estrechan 2 trimestres seguidos<br>• Debajo: cambio en el trimestre y en un año, y percentil desde 1947<br>• Márgenes altos sostienen el PER; si se estrechan, el mismo precio pasa a ser más caro<br>• Se publica unos 2 meses después de cada trimestre y luego se revisa</td></tr>
       </table>
     </div>
 
@@ -1627,6 +1650,39 @@
         <li><b>Cuándo tendría sentido:</b> si lo que más te importa es no ver caídas grandes y aceptas quedarte muy por detrás en los años buenos. O si vives otra década como 2000-2010 (mercado caro que corrige), que es para lo que está diseñado</li>
         <li><b>Sirve siempre para expectativas a 10 años:</b> con CAPE alto, lo normal es que la próxima década rinda menos que la media. Útil para decidir cuánto de tu patrimonio total pones en bolsa</li>
       </ul>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🧪 ¿Avisan los márgenes? (probado en el backtest, v34)</div>
+      <div class="sg-text">Se probó como regla dentro del motor: cuando los márgenes (beneficios / PIB) caen varios trimestres seguidos, con el dato que ya estaba publicado, el P1 pasa a «solo centro» (oro, bonos y liquidez). Rentabilidad al año con 100% invertido, sin cripto, desde 2007 / 2013 / 2019:</div>
+      <table class="sg-table">
+        <tr><th>Regla</th><th>Dato disponible 1 mes tras el trimestre</th><th>2 meses (lo realista)</th><th>3 meses</th><th>4 meses</th></tr>
+        <tr><td>Sin regla</td><td colspan="4">12,1% / 16,3% / 17,9%</td></tr>
+        <tr><td>2 trimestres bajando</td><td>12,3 / 15,2 / 16,8</td><td><b>13,8 / 16,4 / 20,8</b></td><td>12,7 / 16,5 / 19,9</td><td>10,4 / 13,4 / 16,1</td></tr>
+        <tr><td>1 trimestre bajando</td><td>9,5 / 11,3 / 14,1</td><td>9,4 / 10,7 / 13,7</td><td>8,0 / 10,0 / 12,5</td><td>8,6 / 10,4 / 12,2</td></tr>
+        <tr><td>3 trimestres bajando</td><td>11,2 / 15,0 / 17,7</td><td>11,2 / 15,0 / 18,2</td><td>11,4 / 15,4 / 17,8</td><td>12,0 / 16,2 / 18,0</td></tr>
+      </table>
+      <div class="sg-text"><b>Lectura:</b> solo mejora con una combinación concreta (2 trimestres y 2-3 meses de retraso); moviendo un mes el retraso o un trimestre la condición, empeora. La caída máxima no mejora (−21% desde 2007 en todos los casos). Además el backtest usa los datos ya revisados, no los que se publicaron en su momento. Es un ajuste a medida del pasado, no una regla fiable: <b>se queda como tarjeta informativa</b>. Episodios con 2 trimestres bajando: mediados de 2007, 2009, 2011, 2013, 2015-16, 2019, inicio de 2020, 2022, 2023 y finales de 2025.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🏢 Resultados de las 10 mayores del S&amp;P 500 (v35)</div>
+      <div class="sg-text"><b>Qué muestra:</b> los beneficios que declaran cada trimestre, desde 2015, Nvidia, Microsoft, Apple, Amazon, Alphabet, Meta, Broadcom, Tesla, JPMorgan y Eli Lilly (alrededor del 40% del índice). Berkshire Hathaway queda fuera aunque esté entre las mayores: su beneficio incluye las subidas y bajadas de su cartera de acciones y deformaría el conjunto. Es informativo: no mueve la cartera.</div>
+      <ul class="rg-list">
+        <li><b>Cuatro vistas:</b> beneficio neto (lo declarado, incluye ganancias y pérdidas de inversiones), beneficio operativo (el del negocio; en JPMorgan y Eli Lilly, antes de impuestos), ventas y márgenes</li>
+        <li><b>Las tarjetas:</b> el último trimestre en el que han publicado las 10, comparado con el mismo trimestre del año anterior, y la <b>temporada en curso</b>: cuántas han publicado ya y cuáles faltan</li>
+        <li><b>La gráfica:</b> barras apiladas por empresa (quién aporta el beneficio) y la línea del margen conjunto. Solo trimestres completos</li>
+        <li><b>La tabla:</b> todos los trimestres, el más reciente a la izquierda. Verde = mejor que el mismo trimestre del año anterior; rojo = peor. Al pasar el ratón: ventas, márgenes, crecimiento y fuente. <span style="color:var(--accent);">●</span> = trimestre publicado después de esta versión</li>
+      </ul>
+      <div class="sg-text"><b>El canario de los márgenes</b> es la tarjeta «Margen operativo conjunto»: si las grandes no pueden trasladar costes, se estrecha y la marca se pone roja (más de 1 punto de caída en un año). En el T2 de 2026 estaba en el 34,4%, frente al 30,9% de un año antes: se amplía. El beneficio neto de ese trimestre (+114% interanual) está inflado por ganancias de inversiones de Alphabet y Amazon; por eso conviene mirar el operativo (+45%).</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b></div>
+      <ul class="rg-list">
+        <li><b>Histórico (T1 2015 a T2 2026):</b> de la SEC (EDGAR), con las cifras de los 10-Q y 10-K que presentan las propias empresas. El cuarto trimestre no se presenta por separado: se calcula como el año completo menos los 9 primeros meses. Va dentro del dashboard, así que se ve aunque las fuentes en vivo fallen</li>
+        <li><b>Trimestres nuevos:</b> se buscan solos al abrir la página (como mucho cada 6 horas; el botón ↻ fuerza la búsqueda). Primero en la SEC, que es el dato oficial, si el worker lo permite (ver abajo); si no, en Yahoo Finance, marcados como provisionales y ajustados con la relación media Yahoo/SEC de los trimestres anteriores</li>
+        <li><b>La SEC necesita el worker v2:</b> la SEC solo atiende peticiones que se identifican con un email, y el proxy actual no la tiene permitida. Con el worker antiguo todo funciona igual, pero solo con Yahoo, que a veces tarda semanas en cargar un trimestre (el T2 de 2026 de Amazon aún no estaba en octubre)</li>
+        <li><b>Trimestres naturales:</b> Nvidia (año fiscal hasta finales de enero), Microsoft (junio), Apple (septiembre) y Broadcom (principios de noviembre) tienen el año desplazado. Cada trimestre fiscal se asigna al trimestre natural más cercano (el de su fecha de cierre menos 45 días); la fecha real de cierre sale al pasar el ratón</li>
+      </ul>
+      <div class="sg-text"><b>Limitaciones:</b> son las 10 mayores de hoy, y en 2015 varias eran mucho más pequeñas (Nvidia, Broadcom, Tesla, Eli Lilly), así que el crecimiento del conjunto exagera el del índice. No hay previsiones de analistas (si baten o no lo esperado): no existe una fuente gratuita fiable. Las cifras de Yahoo son provisionales hasta que llega el 10-Q a la SEC.</div>
     </div>
 
     <div class="sg-block">
@@ -1724,6 +1780,29 @@
         <li><b>DBC (commodities):</b> la ruptura de máximos confirma el momentum del ciclo de materias primas. Se mantuvo como informativo (no vota en inflación) para no mezclar precio de mercado con datos macro: ya hay 3 votantes de inflación</li>
       </ul>
       <div class="sg-text">Nota: DXY y el balance de la Fed (WALCL) se retiraron de este grupo (puntúan en el Pilar 1, regla de un dato = un pilar).</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">📐 La velocidad de la curva (tarjeta informativa, v34)</div>
+      <div class="sg-text">La tarjeta «Yield Curve 2Y–10Y» vota por su <b>nivel</b>. Esta otra mira <b>cómo se mueve</b>, que es lo que suele avisar: tras una inversión, la curva vuelve a empinarse de golpe poco antes o al inicio de las recesiones (2001, 2007, 2020).</div>
+      <ul class="rg-list">
+        <li><b>Valor:</b> cambio del 10A−2A en los últimos 6 meses, en puntos porcentuales</li>
+        <li><b>Estado:</b> 🔴 desinversión brusca = estuvo invertida en los últimos 24 meses y se ha empinado +0,5 o más en 6 meses · 🟡 desinvirtiéndose = lo mismo con +0,25 · 🟢 sin señal</li>
+        <li><b>Tipo de movimiento:</b> <b>bear</b> = el nivel de tipos sube (por ejemplo, el bono a 10 años sube para alcanzar a la inflación) · <b>bull</b> = el nivel de tipos baja (normalmente porque la Fed recorta y cae el 2 años). El texto del artículo que motivó esta tarjeta advierte sobre todo del empinamiento bear</li>
+        <li><b>No vota en el eje de crecimiento:</b> ojo, porque el voto por nivel lee la desinversión como buena noticia (pasa de −1 a 0 y a +1). Esta tarjeta es el contrapunto</li>
+      </ul>
+      <div class="sg-text"><b>Probado en el backtest:</b> con la alerta activa, el P1 pasa a «solo centro» (oro, bonos y liquidez). Rentabilidad al año con 100% invertido, sin cripto, desde 2007 / 2013 / 2019:</div>
+      <table class="sg-table">
+        <tr><th>Umbral (empinamiento en 6m tras inversión)</th><th>Resultado</th></tr>
+        <tr><td>Sin regla</td><td>12,1% / 16,3% / 17,9%</td></tr>
+        <tr><td>+0,30</td><td>11,9 / 15,2 / 15,9</td></tr>
+        <tr><td>+0,40</td><td>12,0 / 16,1 / 17,5</td></tr>
+        <tr><td>+0,50</td><td><b>12,6 / 16,7 / 18,5</b></td></tr>
+        <tr><td>+0,60</td><td>12,4 / 16,7 / 18,5</td></tr>
+        <tr><td>+0,75</td><td>12,2 / 16,3 / 17,9</td></tr>
+        <tr><td>+1,00</td><td>11,8 / 16,3 / 17,9</td></tr>
+      </table>
+      <div class="sg-text"><b>Lectura:</b> desde 2002 solo hay dos episodios con alerta. <b>Septiembre de 2007 a mayo de 2008 y octubre-noviembre de 2008</b> (empinamiento bull, la Fed recortaba): acertó, el S&amp;P en euros cayó un 19% en los 6 meses siguientes. <b>Enero de 2024 y diciembre de 2024 a enero de 2025</b>: falló, el S&amp;P subió un 13% en 6 meses y un 32% en 12 tras la primera alerta. Solo un mes de todo el periodo fue un empinamiento bear (enero de 2025). La mejora aparece solo entre +0,5 y +0,6, en buena parte porque el oro subió mucho en esos dos periodos, y la caída máxima no mejora. Con un acierto y un fallo no hay regla que validar: <b>se queda como tarjeta informativa</b>.</div>
     </div>
 
 
@@ -2223,6 +2302,7 @@
         <tr><td><b>P1, P3, P4 · Multiplicadores de peso</b></td><td>Cambia alrededor de 1 décima al año</td><td>Matices: reordenan pesos dentro del Top-5. Las listas de favorecidos por régimen se escribieron conociendo la historia (sesgo retrospectivo), así que su aportación real podría ser aún menor</td></tr>
         <tr><td><b>P2 · Sizing</b></td><td>Unos 3,5 puntos al año más de rentabilidad (y algo más de caída)</td><td>Es un seguro caro: por eso es opcional y se muestran las dos curvas</td></tr>
       </table>
+      <div class="sg-text"><b>Señales probadas en la v34 que no entran en la cartera:</b> la velocidad de desinversión de la curva (P3) y la caída de los márgenes empresariales (P2). Las dos mejoran el backtest solo con un parámetro exacto y en muy pocos episodios, y ninguna reduce la caída máxima. Se muestran como tarjetas informativas; el detalle de la prueba está en sus pilares.</div>
     </div>
 
     <div class="sg-block">
@@ -3186,6 +3266,31 @@ async function loadCards() {
     scores.yield = { axis: 'growth', score };
     setCard('yield', latest.toFixed(2), '%', statusColor(score, 'growth'));
   } catch(e) { setCardError('yield'); }
+  await delay(200);
+
+  // ── Curva: velocidad de desinversión y tipo de movimiento (informativa, v34; no vota)
+  //    · cambio del 10A−2A en 6 meses (medias mensuales) y si estuvo invertida en los últimos 24 meses
+  //    · bear = el nivel de tipos sube (media del cambio de 10A y 2A > 0) · bull = baja
+  //    Probado en el backtest como regla (irse al centro con la alerta): solo mejora con un umbral
+  //    exacto y en 2 episodios (2007-08 y 2024-25), así que se queda como lectura.
+  try {
+    const [yc3, t10, t2] = await Promise.all([fredRange('T10Y2Y', 3, 'm', 'd'), fredRange('DGS10', 1, 'm', 'd'), fredRange('DGS2', 1, 'm', 'd')]);
+    const n = yc3.length, now = yc3[n-1].y, ago = n > 6 ? yc3[n-7].y : null;
+    if (ago == null) throw new Error('curva corta');
+    const dy = now - ago, mn = Math.min(...yc3.slice(-25).map(p => p.y)), wasInv = mn < 0;
+    const chg = s => s.length > 6 ? s[s.length-1].y - s[s.length-7].y : null;
+    const d10 = chg(t10), d2 = chg(t2);
+    const kind = d10 != null && d2 != null ? ((d10 + d2) > 0 ? 'bear' : 'bull') : null;
+    let color = 'green', state = 'Sin señal';
+    if (wasInv && dy >= 0.5) { color = 'red'; state = '⚠ Desinversión brusca'; }
+    else if (wasInv && dy >= 0.25) { color = 'yellow'; state = 'Desinvirtiéndose'; }
+    const pp = v => (v >= 0 ? '+' : '') + v.toFixed(2).replace('.', ',');
+    const move = dy > 0.05 ? 'Empinamiento' : dy < -0.05 ? 'Aplanamiento' : 'Sin cambio';
+    const kindTxt = kind === 'bear' ? ' bear (los tipos suben)' : kind === 'bull' ? ' bull (los tipos bajan)' : '';
+    setCard('ycsteep', pp(dy), ' pp en 6m', color);
+    const rd = document.getElementById('ycsteep-read');
+    if (rd) rd.innerHTML = `<b>${state}</b> · ${move}${kindTxt}: 10A ${d10 != null ? pp(d10) : '—'} · 2A ${d2 != null ? pp(d2) : '—'} en 6 meses · ${wasInv ? `estuvo invertida (mínimo ${pp(mn)} en 24 meses)` : 'sin inversión en 24 meses'}. Informativa: no vota`;
+  } catch(e) { setCardError('ycsteep'); }
   await delay(200);
 
   // ── Copper/Gold
@@ -5382,7 +5487,7 @@ async function loadLiqChart() {
 
 // ─── VALUATION ───────────────────────────────────────────────────────────────
 const valState = { years: 50, chart: null };
-const valuation = { cape:null, buffett:null, erp:null, per:null, score:null, sizing:null };
+const valuation = { cape:null, buffett:null, erp:null, per:null, margin:null, score:null, sizing:null };
 
 // Recent CAPE values for fallback (updated periodically; multpl.com is the live source)
 // As of June 2026: CAPE ~40-41 per the public data sources
@@ -5456,6 +5561,24 @@ async function loadValuation() {
     const earningsYield = 100 / valuation.per.value;
     valuation.erp = { value: earningsYield - tnx.value, earningsYield, tnx: tnx.value };
   }
+
+  // Márgenes (v34, informativa): beneficios empresariales después de impuestos / PIB, trimestral.
+  // Es el margen de toda la economía de EE.UU. (no el del S&P 500, que no tiene fuente gratuita con histórico).
+  try {
+    const [cpS, gdpS] = await Promise.all([fredRange('CP', 80, 'q', 'q'), fredRange('GDP', 80, 'q', 'q')]);
+    const qk = ms => { const x = new Date(ms); return x.getUTCFullYear() * 10 + Math.floor(x.getUTCMonth() / 3) + 1; };
+    const g = {}; gdpS.forEach(p => g[qk(p.x)] = p.y);
+    const r = cpS.filter(p => g[qk(p.x)]).map(p => ({ q: qk(p.x), v: p.y / g[qk(p.x)] * 100 }));
+    if (r.length > 8) {
+      const n = r.length - 1, last = r[n], vals = r.map(x => x.v);
+      valuation.margin = {
+        value: last.v, q: `T${last.q % 10} ${Math.floor(last.q / 10)}`, prev: r[n-1].v, yoy: last.v - r[n-4].v,
+        down2: last.v < r[n-1].v && r[n-1].v < r[n-2].v,
+        avg: vals.reduce((a, b) => a + b, 0) / vals.length, from: Math.floor(r[0].q / 10),
+        pct: vals.filter(v => v <= last.v).length / vals.length * 100,
+      };
+    }
+  } catch(e) {}
 
   computeValuationScore();
   renderValuationCards();
@@ -5607,6 +5730,17 @@ function renderValuationCards() {
       value: p.toFixed(1),
       sub: (valuation.per.source || 'multpl.com') + ' · media ~15-17',
       read: capeVal && capeVal > p * 1.4 ? '⚠ CAPE >> PER: beneficios actuales inflados (márgenes en máximos)' : p > 28 ? 'Muy caro en beneficios actuales' : p > 20 ? 'Caro vs media' : 'En línea o barato' });
+  }
+  // Márgenes: beneficios / PIB (informativa — marcador I coloreado por la dirección)
+  if (valuation.margin) {
+    const m = valuation.margin, f = v => v.toFixed(1).replace('.', ',');
+    const dq = m.value - m.prev;
+    const iColor = m.down2 ? 'var(--red)' : dq < 0 ? 'var(--yellow)' : 'var(--green)';
+    items.push({ info: true, iColor,
+      name: 'Beneficios / PIB · informativa',
+      value: f(m.value) + '%',
+      sub: `FRED CP / GDP · ${m.q} · media desde ${m.from}: ${f(m.avg)}%`,
+      read: (m.down2 ? '⚠ Se estrechan 2 trimestres seguidos' : dq < 0 ? 'Se estrechan este trimestre' : 'Se amplían') + ` (${dq >= 0 ? '+' : ''}${f(dq)} pp; ${m.yoy >= 0 ? '+' : ''}${f(m.yoy)} pp en un año)` + (m.pct >= 99 ? ' · máximo histórico' : ` · percentil ${m.pct.toFixed(0)}`) });
   }
 
   cards.innerHTML = items.map(it => `
@@ -6735,10 +6869,232 @@ function renderResidenceTabs() { renderSpainTab(); renderTerritorialTab(); }
 function setEsCap(btn) { esState.cap = parseInt(btn.dataset.esCap); document.querySelectorAll('[data-es-cap]').forEach(b => b.classList.toggle('active', b === btn)); renderSpainTab(); }
 
 
+// ─── RESULTADOS DE LAS 10 MAYORES DEL S&P 500 (v35) ─────────────────────────
+// Beneficios declarados por trimestre. Histórico 2015-T2 2026 embebido (SEC EDGAR, XBRL de los
+// 10-Q/10-K; el T4 = año completo − 9 meses). Los trimestres nuevos se añaden solos al publicarse:
+//   · SEC EDGAR a través del worker (si el worker permite data.sec.gov) → el dato oficial del 10-Q/10-K
+//   · Yahoo Finance (fundamentals-timeseries, últimos 5 trimestres) → llega antes en muchos casos;
+//     se ajusta con la relación media Yahoo/SEC de los trimestres que se solapan
+// Trimestres naturales: cada trimestre fiscal se asigna al trimestre natural de (fin − 45 días)
+// (Nvidia, Microsoft, Apple y Broadcom tienen años fiscales desplazados).
+// Millones de dólares. Berkshire queda fuera: su beneficio incluye las subidas y bajadas de su
+// cartera de acciones. «Operativo» = beneficio operativo; en JPMorgan y Eli Lilly, antes de impuestos.
+const ER_CO = [
+  { sym: 'NVDA',  name: 'Nvidia',    cik: '1045810', ni: 'NetIncomeLoss', rev: 'Revenues', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: 'año fiscal hasta finales de enero' },
+  { sym: 'MSFT',  name: 'Microsoft', cik: '789019',  ni: 'NetIncomeLoss', rev: 'RevenueFromContractWithCustomerExcludingAssessedTax', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: 'año fiscal hasta junio' },
+  { sym: 'AAPL',  name: 'Apple',     cik: '320193',  ni: 'NetIncomeLoss', rev: 'RevenueFromContractWithCustomerExcludingAssessedTax', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: 'año fiscal hasta septiembre' },
+  { sym: 'AMZN',  name: 'Amazon',    cik: '1018724', ni: 'NetIncomeLoss', rev: 'RevenueFromContractWithCustomerExcludingAssessedTax', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: '' },
+  { sym: 'GOOGL', name: 'Alphabet',  cik: '1652044', ni: 'NetIncomeLoss', rev: 'Revenues', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: '' },
+  { sym: 'META',  name: 'Meta',      cik: '1326801', ni: 'NetIncomeLoss', rev: 'RevenueFromContractWithCustomerExcludingAssessedTax', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: '' },
+  { sym: 'AVGO',  name: 'Broadcom',  cik: '1730168', ni: 'ProfitLoss', rev: 'RevenueFromContractWithCustomerExcludingAssessedTax', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: 'año fiscal hasta principios de noviembre' },
+  { sym: 'TSLA',  name: 'Tesla',     cik: '1318605', ni: 'NetIncomeLoss', rev: 'Revenues', op: 'OperatingIncomeLoss', yop: 'OperatingIncome', fy: '' },
+  { sym: 'JPM',   name: 'JPMorgan',  cik: '19617',   ni: 'NetIncomeLoss', rev: 'RevenuesNetOfInterestExpense', op: 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', yop: 'PretaxIncome', fy: '' },
+  { sym: 'LLY',   name: 'Eli Lilly', cik: '59478',   ni: 'NetIncomeLoss', rev: 'Revenues', op: 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', yop: 'PretaxIncome', fy: '' },
+];
+const ER_COLORS = ['#76b900', '#00a4ef', '#a3aaae', '#ff9900', '#4285f4', '#8b5cf6', '#cc092f', '#e31937', '#d4a24c', '#f472b6'];
+const ER_HIST = {
+  NVDA: ['150426,150726,151025,160131,160501,160731,161030,170129,170430,170730,171029,180128,180429,180729,181028,190127,190428,190728,191027,200126,200426,200726,201025,210131,210502,210801,211031,220130,220501,220731,221030,230129,230430,230730,231029,240128,240428,240728,241027,250126,250427,250727,251026,260125,260426,260726', [134,26,247,207,208,261,542,655,507,583,838,1118,1244,1101,1230,567,394,552,899,950,917,622,1336,1457,1912,2374,2464,3003,1618,656,680,1414,2043,6188,9243,12285,14881,16599,19309,22091,18775,26422,31910,42960,58321,59688], [1151,1153,1305,1401,1305,1428,2004,2173,1937,2230,2636,2911,3207,3123,3181,2205,2220,2579,3014,3105,3080,3866,4726,5003,5661,6507,7103,7643,8288,6704,5931,6051,7192,13507,18120,22103,26044,30040,35082,39331,44062,46743,57006,68127,81615,96221], [176,76,245,252,245,317,639,733,554,688,895,1073,1295,1157,1058,294,358,571,927,990,976,651,1398,1507,1956,2444,2671,2970,1868,499,601,1256,2140,6800,10417,13614,16909,18642,21869,24034,21638,28440,36010,44299,53536,63734]],
+  MSFT: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [4985,-3195,4902,5018,3756,3122,5667,6267,5486,8069,6576,-6302,7424,8873,8824,8420,8809,13187,10678,11649,10752,11202,13893,15463,15457,16458,20505,18765,16728,16740,17556,16425,18299,20081,22291,21870,21939,22036,24667,24108,25824,27233,27747,38458,31778,35766], [21729,22180,20379,23796,20531,20614,21928,25826,23212,25605,24538,28918,26819,30085,29084,32471,30571,33717,33055,36906,35021,38033,37154,43076,41706,46152,45317,51728,49360,51865,50122,52747,52857,56189,56517,62020,61858,64727,65585,69632,70066,76441,77673,81273,82886,90007], [6594,-2053,5793,6026,5283,3080,6715,7905,6723,7682,7708,8679,8292,10379,9955,10258,10341,12405,12686,13891,12975,13407,15876,17897,17048,19095,20238,22247,20364,20534,21518,20399,22352,24254,26895,27032,27581,27925,30552,31653,32000,34323,37961,38275,38398,40603]],
+  AAPL: ['150328,150627,150926,151226,160326,160625,160924,161231,170401,170701,170930,171230,180331,180630,180929,181229,190330,190629,190928,191228,200328,200627,200926,201226,210327,210626,210925,211225,220326,220625,220924,221231,230401,230701,230930,231230,240330,240629,240928,241228,250329,250628,250927,251227,260328,260627', [13569,10677,11124,18361,10516,7796,9014,17891,11029,8717,10714,20065,13822,11519,14125,19965,11561,10044,13686,22236,11249,11253,12673,28755,23630,21744,20551,34630,25010,19442,20721,29998,24160,19881,22956,33916,23636,21448,14736,36330,24780,23434,27466,42097,29578,29789], [58010,49605,51501,75872,50557,42358,46852,78351,52896,45408,52579,88293,61137,53265,62900,84310,58015,53809,64040,91819,58313,59685,64698,111439,89584,81434,83360,123945,97278,82959,90146,117154,94836,81797,89498,119575,90753,85777,94930,124300,95359,94036,102466,143756,111184,109417], [18278,14083,14623,24171,13987,10105,11761,23359,14097,10768,13120,26274,15894,12612,16118,23346,13415,11544,15625,25569,12853,13091,14775,33534,27503,24126,23786,41488,29979,23076,24894,36016,28318,22998,26969,40373,27900,25352,29591,42832,29589,28202,32427,50852,35885,35695]],
+  AMZN: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [-57,92,79,482,513,857,252,749,724,197,256,1856,1629,2534,2883,3027,3561,2625,2134,3268,2535,5243,6331,7222,8107,7778,3156,14323,-3844,-2028,2872,278,3172,6750,9879,10624,10431,13485,15328,20004,17127,18164,21187,21192,30255,62647], [22717,23185,25358,35747,29128,30404,32714,43741,35714,37955,43744,60453,51042,52886,56576,72383,59700,63404,69981,87437,75452,88912,96145,125555,108518,113080,110812,137412,116444,121234,127101,149204,127358,134383,143083,169961,143313,147977,158877,187792,155667,167702,180169,213386,181519,200606], [255,464,406,1108,1071,1285,575,1255,1005,628,347,2127,1927,2983,3724,3786,4420,3084,3157,3879,3989,5843,6194,6873,8865,7702,4852,3460,3669,3317,2525,2737,4774,7681,11188,13209,15307,14672,17411,21203,18405,19171,17422,24977,23852,27461]],
+  GOOGL: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [3515,3931,3979,4923,4207,4877,5061,5333,5426,3524,6732,-3020,9401,3195,9192,8948,6657,9947,7068,10671,6836,6959,11247,15227,17930,18525,18936,20642,16436,16002,13910,13624,15051,18368,19689,20687,23662,23619,26301,26536,34540,28196,34979,34455,62578,112193], [17258,17727,18675,21329,20257,21500,22451,26064,24750,26010,27772,32323,31146,32657,33740,39276,36339,38944,40499,46075,41159,38297,46173,56898,55314,61880,65118,75325,68011,69685,69092,76048,69787,74604,76693,86310,80539,84742,88268,96469,90234,96428,102346,113829,109896,119796], [4447,4825,4708,5380,5342,5968,5767,6639,6568,4132,7782,7696,7633,3045,8625,8221,6608,9180,9177,9266,7977,6383,11213,15651,16437,19361,21031,21885,20094,19453,17135,18160,17415,21838,21343,23697,25472,27425,28521,30972,30606,31271,31228,35934,39696,40770]],
+  META: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [512,719,896,1561,1738,2283,2627,3569,3064,3894,4707,4269,4988,5106,5137,6882,2429,2616,6091,7349,4902,5178,7846,11219,9497,10394,9194,10285,7465,6687,4395,4653,5709,7788,11583,14017,12369,13465,15688,20838,16644,18337,2709,22768,26773,15848], [3543,4042,4501,5841,5382,6436,7011,8809,8032,9321,10328,12972,11966,13231,13727,16914,15077,16886,17652,21082,17737,18687,21470,28072,26171,29077,29010,33671,27908,28822,27714,32165,28645,31999,34146,40111,36455,39071,40589,48385,42314,47516,51242,59893,56311,60801], [933,1273,1459,2560,2010,2734,3117,4567,3327,4401,5122,7352,5449,5863,5781,7820,3317,4626,7185,8858,5893,5963,8040,12775,11378,12367,10423,12585,8524,8358,5664,6399,7227,9392,13748,16384,13818,14847,17350,23364,17555,20441,20535,24745,22872,18775]],
+  AVGO: ['150503,150802,151101,160131,160501,160731,161030,170129,170430,170730,171029,180204,180506,180805,181104,190203,190505,190804,191103,200202,200503,200802,201101,210131,210502,210801,211031,220130,220501,220731,221030,230129,230430,230730,231029,240204,240505,240804,241103,250202,250504,250803,251102,260201,260503,260802', [344,240,429,377,-1186,-298,-632,239,440,481,532,6230,3718,1196,1115,471,691,715,847,385,563,688,1324,1378,1493,1876,1989,2472,2590,3074,3359,3774,3481,3303,3524,1325,2121,-1875,4324,5503,4965,4140,8518,7349,9310,13088], [1614,1735,1840,1771,3541,3792,4136,4139,4190,4463,4844,5327,5014,5063,5444,5789,5517,5515,5776,5858,5742,5821,6467,6655,6610,6778,7407,7706,8103,8464,8930,8915,8733,8876,9295,11961,12487,13072,14054,14916,15004,15952,18015,19311,22187,29591], [418,299,514,475,-1001,-264,381,506,474,648,755,943,1201,1339,1652,555,970,865,1054,714,766,1008,1526,1837,1975,2126,2581,3108,3394,3737,3986,4103,4008,3856,4240,2083,2965,3788,4627,6260,5829,5887,7508,8563,10788,15955]],
+  TSLA: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [-154,-184,-230,-320,-282,-293,22,-121,-330,-336,-619,-675,-709,-718,311,140,-702,-408,143,105,16,104,331,270,438,1142,1618,2321,3318,2259,3292,3687,2513,2703,1853,7928,1390,1400,2173,2128,409,1172,1373,840,477,1114], [940,955,937,1214,1147,1270,2298,2285,2696,2790,2985,3288,3409,4002,6824,7226,4541,6350,6303,7384,5985,6036,8771,10744,10389,11958,13757,17719,18756,16934,21454,24318,23329,24927,23350,25167,21301,25500,25182,25707,19335,22496,28095,24901,22387,28236], [-102,-170,-184,-260,-248,-238,86,-267,-258,-241,-535,-598,-597,-621,416,414,-522,-167,261,359,283,327,809,575,594,1312,2004,2613,3603,2464,3688,3901,2664,2399,1764,2064,1171,1605,2717,1583,399,923,1624,1409,941,398]],
+  JPM: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [5914,6290,6804,5434,5520,6200,6286,6727,6448,7029,6732,4232,8712,8316,8380,7066,9179,9652,9080,8520,2865,4687,9443,12136,14300,11948,11687,10365,8282,8649,9737,11032,12622,14472,13151,9355,13419,18149,12898,14034,14643,14987,14393,12977,16494,21155], [24066,23812,22780,22885,23239,24380,24673,24277,24939,25731,25578,24457,27907,27753,27260,25863,29123,28747,29291,28606,28286,33075,29255,29335,32266,30479,29647,29257,30717,30715,32716,34547,38349,41307,39874,38574,41934,50200,42654,42768,45310,44912,46427,45798,49836,57347], [8224,8377,6730,7371,7578,9340,8939,8679,8341,9749,9556,8254,10662,10572,10689,8841,11233,11342,11405,10886,3210,5660,11769,15176,17697,15097,14111,12657,10063,10865,12001,13237,15967,17586,16733,11326,17293,23435,16978,17375,18408,18284,18743,17160,20479,27516]],
+  LLY: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [530,601,800,478,440,748,778,772,-111,1008,556,-1657,1217,-260,1150,1125,4242,1327,1254,1496,1457,1412,1208,2117,1355,1390,1110,1726,1903,953,1452,1938,1345,1763,-57,2189,2243,2967,970,4410,2759,5661,5583,6638,7396,7095], [4645,4979,4960,5376,4865,5405,5192,5761,4515,5092,4961,5406,4964,5585,5307,5638,5092,5637,5477,6114,5860,5499,5741,7440,6806,6740,6773,8000,7810,6488,6942,7302,6960,8312,9499,9353,8768,11303,11439,13533,12729,15558,17601,19292,19799,22974], [618,680,1048,445,567,945,971,794,61,1261,592,392,1366,42,1341,932,731,1466,1406,1663,1680,1644,1437,2469,1476,1594,1245,1840,2054,1091,1566,2096,1530,2089,427,2508,2536,3517,1588,5038,3456,6777,7232,8266,8850,9247]],
+};
+const ER_LIVE_KEY = 'er_live_v1';
+const erState = { view: 'ni', data: null, live: null, loading: false, chart: null };
+
+// Trimestre natural (índice desde T1 2015) de un periodo que acaba en `end`
+const erIdx = end => { const d = new Date(new Date(end).getTime() - 45 * 864e5); return (d.getUTCFullYear() - 2015) * 4 + Math.floor(d.getUTCMonth() / 3); };
+const erLabel = (k, short) => `T${(k % 4) + 1} ${short ? String(2015 + Math.floor(k / 4)).slice(2) : 2015 + Math.floor(k / 4)}`;
+const erQEnd = k => new Date(Date.UTC(2015 + Math.floor(k / 4), (k % 4) * 3 + 3, 0));
+const erB = v => v == null ? '—' : (v / 1000).toFixed(Math.abs(v) >= 100000 ? 0 : 1).replace('.', ',');
+const erP = v => v == null || !isFinite(v) ? '—' : v.toFixed(1).replace('.', ',') + '%';
+
+// Trimestres a partir de los hechos XBRL de la SEC (igual que el histórico embebido)
+function erQuarters(facts) {
+  const days = (a, b) => (new Date(b) - new Date(a)) / 864e5;
+  const byKey = {}; facts.forEach(f => { if (!f.start) return; const k = f.start + '|' + f.end; if (!byKey[k] || f.filed > byKey[k].filed) byKey[k] = f; });
+  const all = Object.values(byKey), q = {};
+  all.filter(f => { const d = days(f.start, f.end); return d >= 80 && d <= 100; }).forEach(f => { q[erIdx(f.end)] = { v: f.val, end: f.end }; });
+  all.filter(f => { const d = days(f.start, f.end); return d >= 350 && d <= 380; }).forEach(fy => {
+    const k = erIdx(fy.end); if (q[k]) return;
+    const ytd9 = all.find(f => f.start === fy.start && days(f.start, f.end) >= 260 && days(f.start, f.end) <= 285);
+    if (ytd9) q[k] = { v: fy.val - ytd9.val, end: fy.end };
+  });
+  return q;
+}
+
+// SEC solo a través del worker propio (exige identificarse; los proxies públicos no sirven)
+async function erSec(url) {
+  if (!CUSTOM_PROXY_URL) return 'blocked';
+  try {
+    const res = await fetchWithTimeout(`${CUSTOM_PROXY_URL}?url=${encodeURIComponent(url)}`, 15000);
+    if (res.status === 403) return 'blocked';
+    if (!res.ok) return null;
+    const t = await res.text(); if (t.trimStart()[0] !== '{') return null;
+    return JSON.parse(t);
+  } catch (e) { return null; }
+}
+
+async function erLoadLive(force) {
+  if (erState.loading) return;
+  if (!force) {
+    try { const c = JSON.parse(localStorage.getItem(ER_LIVE_KEY) || 'null'); if (c && Date.now() - c.ts < 6 * 3600e3) { erState.live = c; erMerge(); return; } } catch (e) {}
+  }
+  erState.loading = true; erStatus('Buscando resultados nuevos…');
+  const live = { ts: Date.now(), yahoo: {}, sec: {}, secOk: null };
+  const now = Math.floor(Date.now() / 1000), p1 = now - 2 * 365 * 86400;
+  await Promise.all(ER_CO.map(async c => {
+    const types = ['quarterlyNetIncome', 'quarterlyTotalRevenue', 'quarterly' + c.yop];
+    try {
+      const j = await proxyFetch(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${c.sym}?type=${types.join(',')}&period1=${p1}&period2=${now + 86400}`);
+      const m = {};
+      (j?.timeseries?.result || []).forEach(r => {
+        const t = r?.meta?.type?.[0]; if (!t) return;
+        const f = t === 'quarterlyNetIncome' ? 'ni' : t === 'quarterlyTotalRevenue' ? 'rev' : 'op';
+        (r[t] || []).forEach(o => { if (!o || !o.reportedValue || o.periodType !== '3M') return; const k = erIdx(o.asOfDate); (m[k] = m[k] || { end: o.asOfDate })[f] = o.reportedValue.raw / 1e6; });
+      });
+      live.yahoo[c.sym] = m;
+    } catch (e) {}
+  }));
+  const lastH = ER_HIST.NVDA[1].length - 1;
+  for (const c of ER_CO) {
+    if (live.secOk === false) break;
+    const m = {};
+    for (const [f, tag] of [['ni', c.ni], ['rev', c.rev], ['op', c.op]]) {
+      const j = await erSec(`https://data.sec.gov/api/xbrl/companyconcept/CIK${c.cik.padStart(10, '0')}/us-gaap/${tag}.json`);
+      if (j === 'blocked') { live.secOk = false; break; }
+      if (!j) continue;
+      live.secOk = true;
+      const q = erQuarters(j.units?.USD || []);
+      Object.entries(q).forEach(([k, v]) => { if (+k > lastH - 4) (m[k] = m[k] || { end: v.end })[f] = v.v / 1e6; });
+      await delay(120);
+    }
+    live.sec[c.sym] = m;
+  }
+  try { localStorage.setItem(ER_LIVE_KEY, JSON.stringify(live)); } catch (e) {}
+  erState.live = live; erState.loading = false; erMerge();
+}
+
+// Histórico embebido + trimestres nuevos (SEC si está; si no, Yahoo ajustado)
+function erMerge() {
+  const D = {}, L = erState.live || {};
+  ER_CO.forEach(c => {
+    const h = ER_HIST[c.sym], ends = h[0].split(','), m = {};
+    ends.forEach((e, i) => { m[i] = { end: `20${e.slice(0, 2)}-${e.slice(2, 4)}-${e.slice(4, 6)}`, ni: h[1][i], rev: h[2][i], op: h[3][i], src: 'SEC' }; });
+    const lastH = ends.length - 1, sec = L.sec?.[c.sym] || {}, y = L.yahoo?.[c.sym] || {};
+    const fac = {};
+    ['ni', 'rev', 'op'].forEach(f => {
+      const r = Object.keys(y).filter(k => m[k] && y[k][f] && m[k][f]).map(k => m[k][f] / y[k][f]).filter(x => x > 0.8 && x < 1.25).sort((a, b) => a - b);
+      fac[f] = r.length ? r[Math.floor(r.length / 2)] : 1;
+    });
+    [...new Set([...Object.keys(sec), ...Object.keys(y)].map(Number))].filter(k => k > lastH).forEach(k => {
+      const s = sec[k] || {}, yy = y[k] || {};
+      const pick = f => s[f] != null ? s[f] : yy[f] != null ? yy[f] * fac[f] : null;
+      const rec = { end: s.end || yy.end, ni: pick('ni'), rev: pick('rev'), op: pick('op'), src: s.ni != null ? 'SEC' : 'Yahoo', fresh: true };
+      if (rec.ni != null && rec.rev != null) m[k] = rec;
+    });
+    D[c.sym] = m;
+  });
+  erState.data = D;
+  renderEarnings();
+}
+
+function setErView(v) {
+  erState.view = v;
+  document.querySelectorAll('[data-er-view]').forEach(b => b.classList.toggle('active', b.dataset.erView === v));
+  renderEarnings();
+}
+function erStatus(t) { const el = document.getElementById('er-status'); if (el) el.textContent = t; }
+
+function renderEarnings() {
+  const D = erState.data, cardsEl = document.getElementById('er-cards');
+  if (!D || !cardsEl) return;
+  const get = (s, k) => D[s][k];
+  const maxIdx = Math.max(...ER_CO.map(c => Math.max(...Object.keys(D[c.sym]).map(Number))));
+  const complete = k => ER_CO.every(c => get(c.sym, k));
+  let qc = maxIdx; while (qc > 0 && !complete(qc)) qc--;
+  const sum = (k, f) => ER_CO.reduce((a, c) => a + (get(c.sym, k)?.[f] ?? 0), 0);
+  const yoy = (a, b) => b ? (a / b - 1) * 100 : null;
+  const sgn = v => v == null ? '' : v >= 0 ? '+' : '';
+  // Tarjetas: último trimestre completo de las 10
+  const ni = sum(qc, 'ni'), ni4 = sum(qc - 4, 'ni'), op = sum(qc, 'op'), op4 = sum(qc - 4, 'op'), rv = sum(qc, 'rev'), rv4 = sum(qc - 4, 'rev');
+  const opm = op / rv * 100, opm4 = op4 / rv4 * 100, nim = ni / rv * 100, nim4 = ni4 / rv4 * 100;
+  const qs = qc + 1, ended = Date.now() > erQEnd(qs).getTime();
+  const done = ER_CO.filter(c => get(c.sym, qs)), pend = ER_CO.filter(c => !get(c.sym, qs));
+  const card = (name, value, sub, read, color) => `<div class="liq-cc"><div class="liq-cc-top"><span class="liq-cc-name">${name}</span>${color ? infoMarker(color) : ''}</div><div class="liq-cc-value">${value}</div><div class="liq-cc-sub">${sub}</div>${read ? `<div class="liq-cc-read">${read}</div>` : ''}</div>`;
+  const dOpm = opm - opm4;
+  cardsEl.innerHTML = [
+    card(`Beneficio neto · ${erLabel(qc)}`, '$' + erB(ni) + 'B', `${sgn(yoy(ni, ni4))}${erP(yoy(ni, ni4))} frente a ${erLabel(qc - 4)}`, 'Lo declarado: incluye ganancias y pérdidas de inversiones'),
+    card(`Beneficio operativo · ${erLabel(qc)}`, '$' + erB(op) + 'B', `${sgn(yoy(op, op4))}${erP(yoy(op, op4))} frente a ${erLabel(qc - 4)}`, 'El del negocio, sin ganancias de inversiones'),
+    card('Margen operativo conjunto', erP(opm), `Hace un año ${erP(opm4)} (${sgn(dOpm)}${dOpm.toFixed(1).replace('.', ',')} pp)`, dOpm < -1 ? '⚠ Se estrecha: el canario de los márgenes' : dOpm < 0 ? 'Se estrecha un poco' : 'Se amplía', dOpm < -1 ? 'var(--red)' : dOpm < 0 ? 'var(--yellow)' : 'var(--green)'),
+    card('Margen neto conjunto', erP(nim), `Hace un año ${erP(nim4)}`, `Ventas ${'$' + erB(rv)}B (${sgn(yoy(rv, rv4))}${erP(yoy(rv, rv4))} interanual)`),
+    card(`Temporada ${erLabel(qs)}`, ended ? `${done.length} de ${ER_CO.length}` : 'En curso', ended ? 'empresas han publicado' : `El trimestre acaba el ${erQEnd(qs).toLocaleDateString('es-ES')}`,
+      ended ? (done.length ? `Publicado: ${done.map(c => c.name).join(', ')}.` : '') + (pend.length ? ` Pendiente: ${pend.map(c => c.name).join(', ')}.` : ' Completa.') : 'Los resultados llegan de 2 a 8 semanas después del cierre', done.length && ended ? 'var(--accent)' : null),
+  ].join('');
+  // Gráfica
+  const V = erState.view, ks = []; for (let k = 0; k <= qc; k++) ks.push(k);
+  const labels = ks.map(k => erLabel(k, true));
+  const ctx = document.getElementById('er-canvas');
+  if (erState.chart) erState.chart.destroy();
+  const axisFont = { family: 'Space Mono', size: 9 };
+  let ds, scales;
+  if (V === 'mg') {
+    ds = [
+      { type: 'line', label: 'Margen operativo conjunto', data: ks.map(k => sum(k, 'op') / sum(k, 'rev') * 100), borderColor: '#00e5ff', backgroundColor: '#00e5ff', borderWidth: 2, pointRadius: 0, tension: 0.25 },
+      { type: 'line', label: 'Margen neto conjunto', data: ks.map(k => sum(k, 'ni') / sum(k, 'rev') * 100), borderColor: '#a78bfa', backgroundColor: '#a78bfa', borderWidth: 1.6, pointRadius: 0, tension: 0.25, borderDash: [4, 3] },
+    ];
+    scales = { x: { ticks: { color: '#7e93ab', font: axisFont, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false } }, y: { ticks: { color: '#7e93ab', font: axisFont, callback: v => v + '%' }, grid: { color: 'rgba(126,147,171,0.18)' }, title: { display: true, text: 'Margen (%)', color: '#6b83a3', font: axisFont } } };
+  } else {
+    const f = V === 'ni' ? 'ni' : V === 'op' ? 'op' : 'rev';
+    ds = ER_CO.map((c, i) => ({ type: 'bar', label: c.name, data: ks.map(k => (get(c.sym, k)?.[f] ?? 0) / 1000), backgroundColor: ER_COLORS[i], stack: 's', yAxisID: 'y', order: 2 }));
+    if (f !== 'rev') ds.push({ type: 'line', label: f === 'ni' ? 'Margen neto conjunto' : 'Margen operativo conjunto', data: ks.map(k => sum(k, f) / sum(k, 'rev') * 100), borderColor: '#ffffff', backgroundColor: '#ffffff', borderWidth: 1.6, pointRadius: 0, tension: 0.25, yAxisID: 'y2', order: 1 });
+    scales = {
+      x: { stacked: true, ticks: { color: '#7e93ab', font: axisFont, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false } },
+      y: { stacked: true, ticks: { color: '#7e93ab', font: axisFont, callback: v => '$' + v + 'B' }, grid: { color: 'rgba(126,147,171,0.18)' }, title: { display: true, text: (f === 'ni' ? 'Beneficio neto' : f === 'op' ? 'Beneficio operativo' : 'Ventas') + ' por trimestre ($ miles de millones)', color: '#6b83a3', font: axisFont } },
+    };
+    if (f !== 'rev') scales.y2 = { position: 'right', ticks: { color: '#7e93ab', font: axisFont, callback: v => v + '%' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Margen conjunto (%)', color: '#6b83a3', font: axisFont } };
+  }
+  erState.chart = new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels, datasets: ds }, options: {
+    responsive: true, maintainAspectRatio: false, animation: { duration: 300 }, interaction: { mode: 'index', intersect: false }, scales,
+    plugins: { legend: { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, boxWidth: 10 } },
+      tooltip: { backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1, titleFont: { family: 'Space Mono', size: 10 }, bodyFont: { family: 'Space Mono', size: 10 },
+        callbacks: { label: c => c.dataset.type === 'line' || V === 'mg' ? `${c.dataset.label}: ${c.parsed.y.toFixed(1).replace('.', ',')}%` : `${c.dataset.label}: $${c.parsed.y.toFixed(1).replace('.', ',')}B` } } } } });
+  // Tabla: todos los trimestres, el más reciente primero
+  const cols = []; for (let k = maxIdx; k >= 0; k--) cols.push(k);
+  const metric = (r, f) => !r ? null : f === 'mg' ? (r.rev ? r.op / r.rev * 100 : null) : r[f];
+  const f = V;
+  const cell = (r, prev, k, c) => {
+    if (!r) return `<td style="color:var(--text3);">${k > qc ? '·' : '—'}</td>`;
+    const v = metric(r, f), p = metric(prev, f);
+    const up = v != null && p != null ? v > p : null;
+    const col = v != null && v < 0 ? 'var(--red)' : up === true ? 'var(--green)' : up === false ? 'var(--red)' : 'var(--text2)';
+    const tip = `${c.name} · ${erLabel(k)} (trimestre fiscal hasta ${r.end}) · Ventas $${erB(r.rev)}B · Beneficio neto $${erB(r.ni)}B (margen ${erP(r.ni / r.rev * 100)})${prev && prev.ni ? ' · ' + sgn(yoy(r.ni, prev.ni)) + erP(yoy(r.ni, prev.ni)) + ' interanual' : ''} · Operativo $${erB(r.op)}B (${erP(r.op / r.rev * 100)}) · Fuente: ${r.src}${r.src === 'Yahoo' ? ' (provisional)' : ''}`;
+    return `<td title="${tip}" style="color:${col};${r.fresh ? 'font-weight:700;background:rgba(0,229,255,0.08);' : ''}">${f === 'mg' ? (v == null ? '—' : v.toFixed(0) + '%') : erB(v)}${r.fresh ? '<span style="color:var(--accent);"> ●</span>' : ''}</td>`;
+  };
+  const head = `<tr><th style="position:sticky;left:0;background:var(--bg2);z-index:1;text-align:left;">${f === 'mg' ? 'Margen operativo' : '$ miles de millones'}</th>${cols.map(k => `<th style="white-space:nowrap;">${erLabel(k, true)}${k > qc ? '<br><span style="color:var(--accent);font-weight:400;">en curso</span>' : ''}</th>`).join('')}</tr>`;
+  const rows = ER_CO.map(c => `<tr><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);white-space:nowrap;">${c.name}</td>${cols.map(k => cell(get(c.sym, k), get(c.sym, k - 4), k, c)).join('')}</tr>`).join('');
+  const tot = `<tr style="border-top:2px solid var(--border2);"><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);font-weight:700;">Las 10</td>${cols.map(k => {
+    if (!complete(k)) return '<td style="color:var(--text3);">—</td>';
+    const v = f === 'mg' ? sum(k, 'op') / sum(k, 'rev') * 100 : sum(k, f), p = k >= 4 ? (f === 'mg' ? sum(k - 4, 'op') / sum(k - 4, 'rev') * 100 : sum(k - 4, f)) : null;
+    return `<td style="font-weight:700;color:${p == null ? 'var(--text)' : v >= p ? 'var(--green)' : 'var(--red)'};">${f === 'mg' ? v.toFixed(0) + '%' : erB(v)}</td>`;
+  }).join('')}</tr>`;
+  document.getElementById('er-table').innerHTML = `<div style="overflow-x:auto;max-width:100%;"><table class="screener-table" style="min-width:1200px;font-size:10px;"><thead>${head}</thead><tbody>${rows}${tot}</tbody></table></div>`;
+  const L = erState.live, fresh = ER_CO.reduce((a, c) => a + Object.values(D[c.sym]).filter(r => r.fresh).length, 0);
+  erStatus(L ? `Comprobado ${new Date(L.ts).toLocaleString('es-ES')} · SEC en vivo: ${L.secOk ? 'sí' : 'no (el worker no lo permite; se usa Yahoo)'} · ${fresh ? fresh + ' trimestres nuevos desde la versión' : 'sin trimestres nuevos desde la versión'}` : 'Histórico embebido (SEC) hasta T2 2026');
+}
+function erInit() { erMerge(); erLoadLive(); }
+
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
 initTheme();
 loadManualFromStorage();
 initMomentum(); // render Pilar 5 from cache if fresh (<24h); otherwise waits for manual button
+try { erInit(); } catch (e) { console.warn('resultados', e); } // v35: resultados de las 10 mayores del S&P 500
 loadCards().then(() => {
   loadIndChart();
   loadAssetChart();
