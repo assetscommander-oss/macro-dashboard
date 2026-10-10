@@ -554,10 +554,17 @@
           <button class="range-btn" style="margin-left:6px;" onclick="erLoadLive(true)" title="Vuelve a buscar resultados nuevos (SEC y Yahoo)">↻</button>
         </div>
       </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:-4px 0 10px;">
+        <span class="ctrl-label" style="font-size:9px;">Color:</span>
+        <button class="range-btn active" data-er-color="yoy" onclick="setErColor('yoy')" title="Verde si el trimestre supera al mismo trimestre del año anterior; rojo si no. Quita el efecto de la Navidad">Verde/rojo vs año anterior</button>
+        <button class="range-btn" data-er-color="qoq" onclick="setErColor('qoq')" title="Verde si supera al trimestre inmediatamente anterior; rojo si no. Ojo: casi todos los primeros trimestres salen rojos por la Navidad">Verde/rojo vs trimestre anterior</button>
+        <button class="range-btn" data-er-color="co" onclick="setErColor('co')" title="Barras apiladas con un color por empresa">Por empresa</button>
+      </div>
       <div class="liq-cards-compact" id="er-cards" style="margin-bottom:12px;"></div>
+      <div class="chart-note" id="er-caption" style="margin:0 0 6px;"></div>
       <div class="val-chart-wrap" style="height:330px;"><canvas id="er-canvas"></canvas></div>
       <div id="er-table" style="margin-top:12px;"></div>
-      <div class="chart-note" style="margin-top:8px;"><span id="er-status">Cargando…</span>. Cada celda: verde = mejor que el mismo trimestre del año anterior, rojo = peor; <span style="color:var(--accent);">●</span> = trimestre nuevo publicado después de esta versión. Pasa el ratón por una celda para ver ventas, márgenes y fuente. Trimestres naturales (los fiscales desplazados se asignan al más cercano). Detalle: <b>📚 Información → Pilar 2</b>.</div>
+      <div class="chart-note" style="margin-top:8px;"><span id="er-status">Cargando…</span>. Cada celda: verde = mejor, rojo = peor (frente al mismo trimestre del año anterior, o frente al trimestre anterior si eliges ese color); <span style="color:var(--accent);">●</span> = trimestre nuevo publicado después de esta versión. Pasa el ratón por una celda para ver ventas, márgenes y fuente. Trimestres naturales (los fiscales desplazados se asignan al más cercano). Detalle: <b>📚 Información → Pilar 2</b>.</div>
     </div>
   </div>
 
@@ -1671,8 +1678,9 @@
       <ul class="rg-list">
         <li><b>Cuatro vistas:</b> beneficio neto (lo declarado, incluye ganancias y pérdidas de inversiones), beneficio operativo (el del negocio; en JPMorgan y Eli Lilly, antes de impuestos), ventas y márgenes</li>
         <li><b>Las tarjetas:</b> el último trimestre en el que han publicado las 10, comparado con el mismo trimestre del año anterior, y la <b>temporada en curso</b>: cuántas han publicado ya y cuáles faltan</li>
-        <li><b>La gráfica:</b> barras apiladas por empresa (quién aporta el beneficio) y la línea del margen conjunto. Solo trimestres completos</li>
-        <li><b>La tabla:</b> todos los trimestres, el más reciente a la izquierda. Verde = mejor que el mismo trimestre del año anterior; rojo = peor. Al pasar el ratón: ventas, márgenes, crecimiento y fuente. <span style="color:var(--accent);">●</span> = trimestre publicado después de esta versión</li>
+        <li><b>La gráfica:</b> por defecto, una barra por trimestre con el total de las 10, en <span style="color:var(--green);">verde</span> si supera al mismo trimestre del año anterior y en <span style="color:var(--red);">rojo</span> si no; así la tendencia se ve de un vistazo. Con «vs trimestre anterior» compara con el trimestre inmediatamente anterior, y con «Por empresa» apila lo que aporta cada una. La línea es el margen conjunto. Solo trimestres completos</li>
+        <li><b>Por qué la comparación por defecto es con el año anterior:</b> la Navidad dispara el cuarto trimestre de Apple y Amazon. Comparando con el trimestre anterior, 10 de los 11 primeros trimestres desde 2016 salen en rojo en el beneficio operativo aunque el año fuera bueno. Comparando con el año anterior, los rojos se concentran donde hubo problemas de verdad: inicio de 2016, inicio de 2019, la COVID en 2020 y todo 2022</li>
+        <li><b>La tabla:</b> todos los trimestres, el más reciente a la izquierda. Verde = mejor, rojo = peor, con la misma comparación que hayas elegido para la gráfica. Al pasar el ratón: ventas, márgenes, crecimiento y fuente. <span style="color:var(--accent);">●</span> = trimestre publicado después de esta versión</li>
       </ul>
       <div class="sg-text"><b>El canario de los márgenes</b> es la tarjeta «Margen operativo conjunto»: si las grandes no pueden trasladar costes, se estrecha y la marca se pone roja (más de 1 punto de caída en un año). En el T2 de 2026 estaba en el 34,4%, frente al 30,9% de un año antes: se amplía. El beneficio neto de ese trimestre (+114% interanual) está inflado por ganancias de inversiones de Alphabet y Amazon; por eso conviene mirar el operativo (+45%).</div>
       <div class="sg-text"><b>De dónde salen los datos:</b></div>
@@ -6905,7 +6913,8 @@ const ER_HIST = {
   LLY: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [530,601,800,478,440,748,778,772,-111,1008,556,-1657,1217,-260,1150,1125,4242,1327,1254,1496,1457,1412,1208,2117,1355,1390,1110,1726,1903,953,1452,1938,1345,1763,-57,2189,2243,2967,970,4410,2759,5661,5583,6638,7396,7095], [4645,4979,4960,5376,4865,5405,5192,5761,4515,5092,4961,5406,4964,5585,5307,5638,5092,5637,5477,6114,5860,5499,5741,7440,6806,6740,6773,8000,7810,6488,6942,7302,6960,8312,9499,9353,8768,11303,11439,13533,12729,15558,17601,19292,19799,22974], [618,680,1048,445,567,945,971,794,61,1261,592,392,1366,42,1341,932,731,1466,1406,1663,1680,1644,1437,2469,1476,1594,1245,1840,2054,1091,1566,2096,1530,2089,427,2508,2536,3517,1588,5038,3456,6777,7232,8266,8850,9247]],
 };
 const ER_LIVE_KEY = 'er_live_v1';
-const erState = { view: 'ni', data: null, live: null, loading: false, chart: null };
+const erState = { view: 'ni', color: 'yoy', data: null, live: null, loading: false, chart: null };
+try { const c = localStorage.getItem('er_color'); if (['yoy', 'qoq', 'co'].includes(c)) erState.color = c; } catch (e) {}
 
 // Trimestre natural (índice desde T1 2015) de un periodo que acaba en `end`
 const erIdx = end => { const d = new Date(new Date(end).getTime() - 45 * 864e5); return (d.getUTCFullYear() - 2015) * 4 + Math.floor(d.getUTCMonth() / 3); };
@@ -7009,6 +7018,10 @@ function setErView(v) {
   document.querySelectorAll('[data-er-view]').forEach(b => b.classList.toggle('active', b.dataset.erView === v));
   renderEarnings();
 }
+function setErColor(c) {
+  erState.color = c; try { localStorage.setItem('er_color', c); } catch (e) {}
+  renderEarnings();
+}
 function erStatus(t) { const el = document.getElementById('er-status'); if (el) el.textContent = t; }
 
 function renderEarnings() {
@@ -7039,6 +7052,8 @@ function renderEarnings() {
   // Gráfica
   const V = erState.view, ks = []; for (let k = 0; k <= qc; k++) ks.push(k);
   const labels = ks.map(k => erLabel(k, true));
+  const C = erState.color, lagT = C === 'qoq' ? 1 : 4;
+  document.querySelectorAll('[data-er-color]').forEach(b => b.classList.toggle('active', b.dataset.erColor === C));
   const ctx = document.getElementById('er-canvas');
   if (erState.chart) erState.chart.destroy();
   const axisFont = { family: 'Space Mono', size: 9 };
@@ -7051,7 +7066,12 @@ function renderEarnings() {
     scales = { x: { ticks: { color: '#7e93ab', font: axisFont, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false } }, y: { ticks: { color: '#7e93ab', font: axisFont, callback: v => v + '%' }, grid: { color: 'rgba(126,147,171,0.18)' }, title: { display: true, text: 'Margen (%)', color: '#6b83a3', font: axisFont } } };
   } else {
     const f = V === 'ni' ? 'ni' : V === 'op' ? 'op' : 'rev';
-    ds = ER_CO.map((c, i) => ({ type: 'bar', label: c.name, data: ks.map(k => (get(c.sym, k)?.[f] ?? 0) / 1000), backgroundColor: ER_COLORS[i], stack: 's', yAxisID: 'y', order: 2 }));
+    if (C === 'co') ds = ER_CO.map((c, i) => ({ type: 'bar', label: c.name, data: ks.map(k => (get(c.sym, k)?.[f] ?? 0) / 1000), backgroundColor: ER_COLORS[i], stack: 's', yAxisID: 'y', order: 2 }));
+    else {
+      const css = getComputedStyle(document.documentElement), G = css.getPropertyValue('--green').trim() || '#00e676', R = css.getPropertyValue('--red').trim() || '#ff5252', N = css.getPropertyValue('--text3').trim() || '#6b83a3';
+      const lag = C === 'qoq' ? 1 : 4;
+      ds = [{ type: 'bar', label: 'Las 10', _trend: true, data: ks.map(k => sum(k, f) / 1000), backgroundColor: ks.map(k => k < lag ? N : sum(k, f) >= sum(k - lag, f) ? G : R), stack: 's', yAxisID: 'y', order: 2 }];
+    }
     if (f !== 'rev') ds.push({ type: 'line', label: f === 'ni' ? 'Margen neto conjunto' : 'Margen operativo conjunto', data: ks.map(k => sum(k, f) / sum(k, 'rev') * 100), borderColor: '#ffffff', backgroundColor: '#ffffff', borderWidth: 1.6, pointRadius: 0, tension: 0.25, yAxisID: 'y2', order: 1 });
     scales = {
       x: { stacked: true, ticks: { color: '#7e93ab', font: axisFont, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false } },
@@ -7061,9 +7081,18 @@ function renderEarnings() {
   }
   erState.chart = new Chart(ctx.getContext('2d'), { type: 'bar', data: { labels, datasets: ds }, options: {
     responsive: true, maintainAspectRatio: false, animation: { duration: 300 }, interaction: { mode: 'index', intersect: false }, scales,
-    plugins: { legend: { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, boxWidth: 10 } },
+    plugins: { legend: { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, boxWidth: 10, filter: it => !(ds[it.datasetIndex] && ds[it.datasetIndex]._trend) } },
       tooltip: { backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1, titleFont: { family: 'Space Mono', size: 10 }, bodyFont: { family: 'Space Mono', size: 10 },
-        callbacks: { label: c => c.dataset.type === 'line' || V === 'mg' ? `${c.dataset.label}: ${c.parsed.y.toFixed(1).replace('.', ',')}%` : `${c.dataset.label}: $${c.parsed.y.toFixed(1).replace('.', ',')}B` } } } } });
+        callbacks: { label: c => {
+          if (c.dataset.type === 'line' || V === 'mg') return `${c.dataset.label}: ${c.parsed.y.toFixed(1).replace('.', ',')}%`;
+          const base = `${c.dataset.label}: $${c.parsed.y.toFixed(1).replace('.', ',')}B`;
+          if (!c.dataset._trend) return base;
+          const k = ks[c.dataIndex], prev = k >= lagT ? c.dataset.data[c.dataIndex - lagT] : null;
+          return prev ? `${base} (${c.parsed.y >= prev ? '+' : ''}${((c.parsed.y / prev - 1) * 100).toFixed(1).replace('.', ',')}% vs ${erLabel(k - lagT)})` : base;
+        } } } } } });
+  const capEl = document.getElementById('er-caption');
+  if (capEl) capEl.innerHTML = V === 'mg' ? 'Márgenes conjuntos de las 10 por trimestre.' : C === 'co' ? 'Barras apiladas: lo que aporta cada empresa. La línea blanca es el margen conjunto (eje derecho).'
+    : `Barra = las 10 juntas. <span style="color:var(--green);">Verde</span> = más que ${C === 'qoq' ? 'el trimestre anterior' : 'el mismo trimestre del año anterior'}; <span style="color:var(--red);">rojo</span> = menos.${C === 'qoq' ? ' Ojo: la Navidad dispara el cuarto trimestre de Apple y Amazon, así que casi todos los primeros trimestres salen rojos aunque la tendencia sea buena.' : ''} La línea blanca es el margen conjunto (eje derecho).`;
   // Tabla: todos los trimestres, el más reciente primero
   const cols = []; for (let k = maxIdx; k >= 0; k--) cols.push(k);
   const metric = (r, f) => !r ? null : f === 'mg' ? (r.rev ? r.op / r.rev * 100 : null) : r[f];
@@ -7073,14 +7102,14 @@ function renderEarnings() {
     const v = metric(r, f), p = metric(prev, f);
     const up = v != null && p != null ? v > p : null;
     const col = v != null && v < 0 ? 'var(--red)' : up === true ? 'var(--green)' : up === false ? 'var(--red)' : 'var(--text2)';
-    const tip = `${c.name} · ${erLabel(k)} (trimestre fiscal hasta ${r.end}) · Ventas $${erB(r.rev)}B · Beneficio neto $${erB(r.ni)}B (margen ${erP(r.ni / r.rev * 100)})${prev && prev.ni ? ' · ' + sgn(yoy(r.ni, prev.ni)) + erP(yoy(r.ni, prev.ni)) + ' interanual' : ''} · Operativo $${erB(r.op)}B (${erP(r.op / r.rev * 100)}) · Fuente: ${r.src}${r.src === 'Yahoo' ? ' (provisional)' : ''}`;
+    const tip = `${c.name} · ${erLabel(k)} (trimestre fiscal hasta ${r.end}) · Ventas $${erB(r.rev)}B · Beneficio neto $${erB(r.ni)}B (margen ${erP(r.ni / r.rev * 100)})${prev && prev.ni ? ' · ' + sgn(yoy(r.ni, prev.ni)) + erP(yoy(r.ni, prev.ni)) + (lagT === 1 ? ' vs trimestre anterior' : ' interanual') : ''} · Operativo $${erB(r.op)}B (${erP(r.op / r.rev * 100)}) · Fuente: ${r.src}${r.src === 'Yahoo' ? ' (provisional)' : ''}`;
     return `<td title="${tip}" style="color:${col};${r.fresh ? 'font-weight:700;background:rgba(0,229,255,0.08);' : ''}">${f === 'mg' ? (v == null ? '—' : v.toFixed(0) + '%') : erB(v)}${r.fresh ? '<span style="color:var(--accent);"> ●</span>' : ''}</td>`;
   };
   const head = `<tr><th style="position:sticky;left:0;background:var(--bg2);z-index:1;text-align:left;">${f === 'mg' ? 'Margen operativo' : '$ miles de millones'}</th>${cols.map(k => `<th style="white-space:nowrap;">${erLabel(k, true)}${k > qc ? '<br><span style="color:var(--accent);font-weight:400;">en curso</span>' : ''}</th>`).join('')}</tr>`;
-  const rows = ER_CO.map(c => `<tr><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);white-space:nowrap;">${c.name}</td>${cols.map(k => cell(get(c.sym, k), get(c.sym, k - 4), k, c)).join('')}</tr>`).join('');
+  const rows = ER_CO.map(c => `<tr><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);white-space:nowrap;">${c.name}</td>${cols.map(k => cell(get(c.sym, k), get(c.sym, k - lagT), k, c)).join('')}</tr>`).join('');
   const tot = `<tr style="border-top:2px solid var(--border2);"><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);font-weight:700;">Las 10</td>${cols.map(k => {
     if (!complete(k)) return '<td style="color:var(--text3);">—</td>';
-    const v = f === 'mg' ? sum(k, 'op') / sum(k, 'rev') * 100 : sum(k, f), p = k >= 4 ? (f === 'mg' ? sum(k - 4, 'op') / sum(k - 4, 'rev') * 100 : sum(k - 4, f)) : null;
+    const v = f === 'mg' ? sum(k, 'op') / sum(k, 'rev') * 100 : sum(k, f), p = k >= lagT ? (f === 'mg' ? sum(k - lagT, 'op') / sum(k - lagT, 'rev') * 100 : sum(k - lagT, f)) : null;
     return `<td style="font-weight:700;color:${p == null ? 'var(--text)' : v >= p ? 'var(--green)' : 'var(--red)'};">${f === 'mg' ? v.toFixed(0) + '%' : erB(v)}</td>`;
   }).join('')}</tr>`;
   document.getElementById('er-table').innerHTML = `<div style="overflow-x:auto;max-width:100%;"><table class="screener-table" style="min-width:1200px;font-size:10px;"><thead>${head}</thead><tbody>${rows}${tot}</tbody></table></div>`;
