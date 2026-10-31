@@ -1695,6 +1695,22 @@
     </div>
 
     <div class="sg-block">
+      <div class="sg-title">🔭 PER forward y revisiones (v39): ¿qué esperan los analistas?</div>
+      <div class="sg-text"><b>La idea:</b> la bolsa cotiza el futuro, así que el PER de los últimos 12 meses mira por el retrovisor. El PER forward usa el beneficio que esperan los analistas. Pero esa previsión no es un dato: suele pecar de optimista y falla justo en los giros. En 2007 el PER forward del S&amp;P rondaba 15 y parecía barato; en 2008-09 los beneficios cayeron más de la mitad. En el techo del ciclo el beneficio previsto está inflado y el forward hace parecer razonable un mercado caro. Por eso el panel enseña las cuatro piezas juntas:</div>
+      <table class="sg-table">
+        <tr><th>Medida</th><th>Qué te dice</th><th>Dónde está</th></tr>
+        <tr><td><b>CAPE</b></td><td>Precio / beneficio medio de 10 años (ajustado por inflación). La mejor guía histórica para la rentabilidad de los 10 años siguientes; no sirve para el corto plazo</td><td>Pilar 2: tarjeta «Shiller CAPE» y gráficas «Histórico CAPE» y «Divergencia CAPE vs PER»</td></tr>
+        <tr><td><b>PER (12 meses)</b></td><td>Cuánto pagas por el beneficio ya ganado</td><td>Pilar 2: tarjeta «PER S&amp;P 500» (el índice entero). Las 10: tarjeta «Valor en bolsa vs beneficio» y columna PER</td></tr>
+        <tr><td><b>PER forward</b></td><td>Cuánto pagas por el beneficio que esperan los analistas. La diferencia con el PER es el crecimiento que ya se da por hecho</td><td>Resultados de las 10: tarjeta «PER forward» y columnas «PER fwd» y «Crec. previsto»</td></tr>
+        <tr><td><b>Revisiones</b></td><td>Si los analistas suben o recortan esas previsiones. Es lo que de verdad se adelanta: mientras suben, los mercados alcistas rara vez se acaban</td><td>Tarjeta «PER forward» y columna «Revisión 3 meses»</td></tr>
+      </table>
+      <div class="sg-text"><b>Semáforo de la revisión:</b> 🟢 más del +3% en 3 meses · 🟡 entre 0 y +3% · 🔴 negativa: los analistas recortan. Plano ya es flojo, porque el beneficio previsto sube solo con el calendario (cada trimestre la previsión mira 3 meses más adelante). <b>La alarma es la combinación de 2007:</b> un PER forward que parece barato, un PER y un CAPE altos, y previsiones que empiezan a bajar.</div>
+      <div class="sg-text"><b>Crecimiento previsto negativo</b> (Alphabet y Amazon en octubre de 2026): los analistas esperan menos beneficio que el de los últimos 12 meses porque este incluye la revalorización de participaciones en otras empresas, que no cuentan como repetible. Es la misma señal que el «No operativo» del monitor de circularidad.</div>
+      <div class="sg-text"><b>Lo que marcaba el 31 de octubre de 2026:</b> las 10, PER 25,7 con el beneficio de 12 meses y PER forward 21,4; los analistas esperan un 20% más de beneficio. Previsiones +5% en 3 meses y +31% en 12 meses (parte es solo el paso del calendario): siguen subiendo, sin rastro de recortes. Nvidia PER forward 13,5 (Yahoo ya usa su ejercicio que acaba en enero de 2028) y Broadcom 18,4 frente a un PER de 43: el mercado da por hechos crecimientos enormes. Como referencia, el S&amp;P 500 entero según FactSet (9 de octubre): PER forward 19,1 (su media de 10 años), PER de 12 meses 26,0, y crecimiento esperado del +33% en 2026 y del +16% en 2027. El índice parece «normal» solo si se cumple ese crecimiento.</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b> de Yahoo a través del worker: el PER forward de hoy y el del cierre de los últimos 5 trimestres. Beneficio previsto = valor en bolsa / PER forward. Yahoo usa el ejercicio fiscal en curso o el siguiente según la fecha, así que no coincide exactamente con los «próximos 12 meses» de FactSet. Cuando Yahoo pasa al ejercicio siguiente, el beneficio previsto da un salto (marcado con ⇡) que no es una revisión: los cambios de más del +35% o de menos del −30% entre dos datos seguidos no cuentan. Cada visita guarda un dato en este navegador; con un mes de visitas aparece también la revisión a 30 días.</div>
+    </div>
+
+    <div class="sg-block">
       <div class="sg-title">🧪 ¿Avisan los márgenes? (probado en el backtest, v34)</div>
       <div class="sg-text">Se probó como regla dentro del motor: cuando los márgenes (beneficios / PIB) caen varios trimestres seguidos, con el dato que ya estaba publicado, el P1 pasa a «solo centro» (oro, bonos y liquidez). Rentabilidad al año con 100% invertido, sin cripto, desde 2007 / 2013 / 2019:</div>
       <table class="sg-table">
@@ -6948,7 +6964,7 @@ const ER_HIST = {
   JPM: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [5914,6290,6804,5434,5520,6200,6286,6727,6448,7029,6732,4232,8712,8316,8380,7066,9179,9652,9080,8520,2865,4687,9443,12136,14300,11948,11687,10365,8282,8649,9737,11032,12622,14472,13151,9355,13419,18149,12898,14034,14643,14987,14393,12977,16494,21155], [24066,23812,22780,22885,23239,24380,24673,24277,24939,25731,25578,24457,27907,27753,27260,25863,29123,28747,29291,28606,28286,33075,29255,29335,32266,30479,29647,29257,30717,30715,32716,34547,38349,41307,39874,38574,41934,50200,42654,42768,45310,44912,46427,45798,49836,57347], [8224,8377,6730,7371,7578,9340,8939,8679,8341,9749,9556,8254,10662,10572,10689,8841,11233,11342,11405,10886,3210,5660,11769,15176,17697,15097,14111,12657,10063,10865,12001,13237,15967,17586,16733,11326,17293,23435,16978,17375,18408,18284,18743,17160,20479,27516]],
   LLY: ['150331,150630,150930,151231,160331,160630,160930,161231,170331,170630,170930,171231,180331,180630,180930,181231,190331,190630,190930,191231,200331,200630,200930,201231,210331,210630,210930,211231,220331,220630,220930,221231,230331,230630,230930,231231,240331,240630,240930,241231,250331,250630,250930,251231,260331,260630', [530,601,800,478,440,748,778,772,-111,1008,556,-1657,1217,-260,1150,1125,4242,1327,1254,1496,1457,1412,1208,2117,1355,1390,1110,1726,1903,953,1452,1938,1345,1763,-57,2189,2243,2967,970,4410,2759,5661,5583,6638,7396,7095], [4645,4979,4960,5376,4865,5405,5192,5761,4515,5092,4961,5406,4964,5585,5307,5638,5092,5637,5477,6114,5860,5499,5741,7440,6806,6740,6773,8000,7810,6488,6942,7302,6960,8312,9499,9353,8768,11303,11439,13533,12729,15558,17601,19292,19799,22974], [618,680,1048,445,567,945,971,794,61,1261,592,392,1366,42,1341,932,731,1466,1406,1663,1680,1644,1437,2469,1476,1594,1245,1840,2054,1091,1566,2096,1530,2089,427,2508,2536,3517,1588,5038,3456,6777,7232,8266,8850,9247]],
 };
-const ER_LIVE_KEY = 'er_live_v2'; // v37: + valor en bolsa
+const ER_LIVE_KEY = 'er_live_v3'; // v37: + valor en bolsa · v39: + PER forward
 const erState = { view: 'ni', color: 'yoy', data: null, live: null, loading: false, chart: null };
 try { const c = localStorage.getItem('er_color'); if (['yoy', 'qoq', 'co'].includes(c)) erState.color = c; } catch (e) {}
 
@@ -6995,10 +7011,10 @@ async function erLoadLive(force) {
     try { const c = JSON.parse(localStorage.getItem(ER_LIVE_KEY) || 'null'); if (c && Date.now() - c.ts < 6 * 3600e3) { erState.live = c; erMerge(); if (c.secOk) ercLoad(); else renderCirc(); return; } } catch (e) {}
   }
   erState.loading = true; erStatus('Buscando resultados nuevos…');
-  const live = { ts: Date.now(), yahoo: {}, sec: {}, secOk: null, mcap: {}, qmcap: {} };
+  const live = { ts: Date.now(), yahoo: {}, sec: {}, secOk: null, mcap: {}, qmcap: {}, fpe: {}, qfpe: {} };
   const now = Math.floor(Date.now() / 1000), p1 = now - 2 * 365 * 86400;
   await Promise.all(ER_CO.map(async c => {
-    const types = ['quarterlyNetIncome', 'quarterlyTotalRevenue', 'quarterly' + c.yop, 'trailingMarketCap', 'quarterlyMarketCap'];
+    const types = ['quarterlyNetIncome', 'quarterlyTotalRevenue', 'quarterly' + c.yop, 'trailingMarketCap', 'quarterlyMarketCap', 'trailingForwardPeRatio', 'quarterlyForwardPeRatio'];
     try {
       const j = await proxyFetch(`https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/${c.sym}?type=${types.join(',')}&period1=${p1}&period2=${now + 86400}`);
       const m = {};
@@ -7007,6 +7023,8 @@ async function erLoadLive(force) {
         const arr = (r[t] || []).filter(o => o && o.reportedValue && o.asOfDate);
         if (t === 'trailingMarketCap') { const o = arr.sort((a, b) => a.asOfDate < b.asOfDate ? -1 : 1).pop(); if (o) live.mcap[c.sym] = { v: o.reportedValue.raw / 1e6, date: o.asOfDate }; return; }
         if (t === 'quarterlyMarketCap') { arr.forEach(o => { (live.qmcap[c.sym] = live.qmcap[c.sym] || {})[erIdx(o.asOfDate)] = o.reportedValue.raw / 1e6; }); return; }
+        if (t === 'trailingForwardPeRatio') { const o = arr.sort((a, b) => a.asOfDate < b.asOfDate ? -1 : 1).pop(); if (o) live.fpe[c.sym] = { v: o.reportedValue.raw, date: o.asOfDate }; return; }
+        if (t === 'quarterlyForwardPeRatio') { arr.forEach(o => { (live.qfpe[c.sym] = live.qfpe[c.sym] || {})[erIdx(o.asOfDate)] = { v: o.reportedValue.raw, date: o.asOfDate }; }); return; }
         const f = t === 'quarterlyNetIncome' ? 'ni' : t === 'quarterlyTotalRevenue' ? 'rev' : 'op';
         (r[t] || []).forEach(o => { if (!o || !o.reportedValue || o.periodType !== '3M') return; const k = erIdx(o.asOfDate); (m[k] = m[k] || { end: o.asOfDate })[f] = o.reportedValue.raw / 1e6; });
       });
@@ -7068,6 +7086,70 @@ function setErColor(c) {
 }
 function erStatus(t) { const el = document.getElementById('er-status'); if (el) el.textContent = t; }
 
+// ─── PER FORWARD Y REVISIONES (v39) ──────────────────────────────────────────
+// PER forward = valor en bolsa / beneficio que esperan los analistas (dato de Yahoo, que usa el
+// ejercicio fiscal en curso o el siguiente según la fecha). El beneficio previsto se saca como
+// bolsa / PER forward: al cierre de los últimos 5 trimestres, en cada visita (registro propio) y hoy.
+// Revisión = cuánto ha cambiado ese beneficio previsto. Cuando Yahoo pasa al ejercicio siguiente el
+// beneficio previsto da un salto que no es una revisión: los saltos de más del 35% (o caídas de más
+// del 30%) entre dos datos seguidos no cuentan.
+const ER_FWD_LOG = 'er_fwd_log';
+const ER_FWD_JUMP = [0.7, 1.35];
+function erFwd(pers) {
+  const L = erState.live || {}, MC = L.mcap || {}, QM = L.qmcap || {}, FP = L.fpe || {}, QF = L.qfpe || {};
+  const day = s => new Date(s.slice(0, 10) + 'T00:00:00Z').getTime(), now = Date.now();
+  let log = []; try { log = JSON.parse(localStorage.getItem(ER_FWD_LOG) || '[]'); } catch (e) {}
+  const co = {};
+  ER_CO.forEach(c => {
+    const s = c.sym, m = MC[s]?.v, fy = FP[s];
+    const fE = m != null && fy && fy.v > 0 ? m / fy.v : null;
+    // Serie del beneficio previsto: cierres trimestrales (Yahoo) + registro propio + hoy
+    const pts = [];
+    Object.entries(QF[s] || {}).forEach(([k, o]) => { if (QM[s]?.[k] != null && o.v > 0) pts.push({ date: o.date, fE: QM[s][k] / o.v, q: true }); });
+    log.forEach(x => { if (x.e?.[s] > 0) pts.push({ date: x.d, fE: x.e[s] }); });
+    if (fE != null) pts.push({ date: fy.date, fE, now: true });
+    pts.sort((a, b) => day(a.date) - day(b.date) || (a.now ? 1 : 0) - (b.now ? 1 : 0));
+    const ser = pts.filter((p, i) => i === pts.length - 1 || day(pts[i + 1].date) !== day(p.date));
+    // Cambio encadenado desde hace `days` días (sin contar los saltos de cambio de ejercicio)
+    const chain = (days, tol) => {
+      if (fE == null || ser.length < 2) return null;
+      let i0 = -1, best = 1e9;
+      ser.forEach((p, i) => { const age = (now - day(p.date)) / 864e5, d = Math.abs(age - days); if (age >= days * 0.6 && d <= tol && d < best) { best = d; i0 = i; } });
+      if (i0 < 0 || i0 === ser.length - 1) return null;
+      let r = 1, jumps = 0;
+      for (let i = i0 + 1; i < ser.length; i++) { const x = ser[i].fE / ser[i - 1].fE; if (x > ER_FWD_JUMP[1] || x < ER_FWD_JUMP[0]) jumps++; else r *= x; }
+      if (jumps === ser.length - 1 - i0) return null; // en el periodo solo hay el salto de cambio de ejercicio: no se puede medir
+      return { r, from: ser[i0].date, base: ser[i0].fE, jumps };
+    };
+    const c30 = chain(30, 12), c3 = chain(91, 45), c12 = chain(365, 75);
+    const ttmE = pers[s]?.e;
+    const lastStep = ser.length >= 2 && ser[ser.length - 1].now ? ser[ser.length - 1].fE / ser[ser.length - 2].fE : null;
+    co[s] = { m, fE, fpe: fE > 0 ? fy.v : null, fdate: fy?.date ?? null, ser, c30, c3, c12,
+      jumpNow: lastStep != null && (lastStep > ER_FWD_JUMP[1] || lastStep < ER_FWD_JUMP[0]),
+      d30: c30 ? (c30.r - 1) * 100 : null, d3: c3 ? (c3.r - 1) * 100 : null, d12: c12 ? (c12.r - 1) * 100 : null,
+      g: fE != null && ttmE > 0 ? (fE / ttmE - 1) * 100 : null };
+  });
+  const ok = ER_CO.filter(c => co[c.sym].fE > 0 && co[c.sym].m != null);
+  const mS = ok.reduce((a, c) => a + co[c.sym].m, 0), fS = ok.reduce((a, c) => a + co[c.sym].fE, 0);
+  const eS = ok.reduce((a, c) => a + (pers[c.sym]?.e ?? 0), 0);
+  const agg = { n: ok.length, m: mS, fpe: ok.length && fS > 0 ? mS / fS : null, fE: fS, ttmE: eS, g: eS > 0 ? (fS / eS - 1) * 100 : null };
+  // Conjunto: media de los cambios de cada empresa ponderada por su beneficio previsto al inicio
+  const aggChg = key => { const w = ok.filter(c => co[c.sym][key]); agg['n_' + key] = w.length; if (w.length < 7) return null; const b = w.reduce((a, c) => a + co[c.sym][key].base, 0); return (w.reduce((a, c) => a + co[c.sym][key].base * co[c.sym][key].r, 0) / b - 1) * 100; };
+  agg.d30 = aggChg('c30'); agg.d3 = aggChg('c3'); agg.d12 = aggChg('c12');
+  agg.jumps = ER_CO.filter(c => co[c.sym].jumpNow).map(c => c.name);
+  // Registro propio: un dato por día (sirve para medir las revisiones a 30 días)
+  if (ok.length === ER_CO.length && L.ts) {
+    const today = new Date(L.ts).toISOString().slice(0, 10);
+    log = log.filter(x => x.d !== today); log.push({ d: today, e: Object.fromEntries(ok.map(c => [c.sym, Math.round(co[c.sym].fE)])) }); log = log.slice(-400);
+    try { localStorage.setItem(ER_FWD_LOG, JSON.stringify(log)); } catch (er) {}
+  }
+  agg.logDays = log.length ? Math.round((now - day(log[0].d)) / 864e5) : 0;
+  return { co, agg };
+}
+// Semáforo de las revisiones: el beneficio previsto sube solo con el calendario (cada trimestre mira
+// 3 meses más adelante), así que plano ya es flojo y bajar es recorte
+const erRevCol = v => v == null ? null : v < 0 ? 'var(--red)' : v < 3 ? 'var(--yellow)' : 'var(--green)';
+
 function renderEarnings() {
   const D = erState.data, cardsEl = document.getElementById('er-cards');
   if (!D || !cardsEl) return;
@@ -7095,6 +7177,7 @@ function renderEarnings() {
   const k1 = qc - 4, ok1 = ER_CO.filter(c => QM[c.sym]?.[k1] != null && ttm(c.sym, k1) != null);
   const per1 = ok1.length === ER_CO.length ? ok1.reduce((a, c) => a + QM[c.sym][k1], 0) / ok1.reduce((a, c) => a + ttm(c.sym, k1), 0) : null;
   const perColor = v => v == null ? null : v > 30 ? 'var(--red)' : v > 25 ? 'var(--orange)' : v > 18 ? 'var(--yellow)' : 'var(--green)';
+  const F = erFwd(pers), FA = F.agg, nf = v => v.toFixed(1).replace('.', ','), pc = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1).replace('.', ',') + '%', pr = v => (v >= 0 ? '+' : '−') + Math.abs(Math.round(v)) + '%';
   const bill = v => (v / 1e6).toFixed(Math.abs(v) < 1e7 ? 2 : 1).replace('.', ',');
   const spPer = typeof valuation !== 'undefined' && valuation.per ? valuation.per.value : null;
   const card = (name, value, sub, read, color) => `<div class="liq-cc"><div class="liq-cc-top"><span class="liq-cc-name">${name}</span>${color ? infoMarker(color) : ''}</div><div class="liq-cc-value">${value}</div><div class="liq-cc-sub">${sub}</div>${read ? `<div class="liq-cc-read">${read}</div>` : ''}</div>`;
@@ -7110,6 +7193,11 @@ function renderEarnings() {
       ? card('Valor en bolsa vs beneficio · las 10', 'PER ' + perAll.toFixed(1).replace('.', ','), `$${bill(mSum)} billones en bolsa / $${bill(eSum)} billones de beneficio en 12 meses`,
           `Rentabilidad por beneficios ${erP(100 / perAll)}${per1 != null ? ` · hace un año (${erLabel(k1)}): PER ${per1.toFixed(1).replace('.', ',')}` : ''}${spPer ? ` · S&P 500 entero: PER ${spPer.toFixed(1).replace('.', ',')}` : ''}`, perColor(perAll))
       : card('Valor en bolsa vs beneficio · las 10', '—', erState.loading ? 'Cargando el valor en bolsa…' : 'Valor en bolsa no disponible ahora (Yahoo)', ''),
+    FA.fpe != null && FA.n >= ER_CO.length - 1
+      ? card('PER forward · las 10', 'PER fwd ' + nf(FA.fpe), `Beneficio que esperan los analistas: $${bill(FA.fE)} bill. frente a $${bill(FA.ttmE)} bill. en los últimos 12 meses (${pr(FA.g)})`,
+          (FA.d3 != null ? `Previsiones: ${pc(FA.d3)} en 3 meses${FA.n_c3 < ER_CO.length ? ` (${FA.n_c3} de ${ER_CO.length})` : ''}` : 'Previsiones: sin dato a 3 meses') + (FA.d12 != null ? ` · ${pc(FA.d12)} en 12 meses` : '') + (FA.d30 != null ? ` · ${pc(FA.d30)} en 30 días` : '')
+          + (FA.d3 == null ? '' : FA.d3 < 0 ? '. ⚠ Los analistas recortan: la señal que se adelanta' : FA.d3 < 3 ? '. Las mejoras se frenan' : '. Los analistas siguen subiendo sus previsiones'), erRevCol(FA.d3))
+      : card('PER forward · las 10', '—', erState.loading ? 'Cargando previsiones…' : 'Previsiones no disponibles ahora (Yahoo)', ''),
   ].join('');
   // Gráfica
   const V = erState.view, ks = []; for (let k = 0; k <= qc; k++) ks.push(k);
@@ -7167,15 +7255,26 @@ function renderEarnings() {
     const tip = `${c.name} · ${erLabel(k)} (trimestre fiscal hasta ${r.end}) · Ventas $${erB(r.rev)}B · Beneficio neto $${erB(r.ni)}B (margen ${erP(r.ni / r.rev * 100)})${prev && prev.ni ? ' · ' + sgn(yoy(r.ni, prev.ni)) + erP(yoy(r.ni, prev.ni)) + (lagT === 1 ? ' vs trimestre anterior' : ' interanual') : ''} · Operativo $${erB(r.op)}B (${erP(r.op / r.rev * 100)}) · Fuente: ${r.src}${r.src === 'Yahoo' ? ' (provisional)' : ''}`;
     return `<td title="${tip}" style="color:${col};${r.fresh ? 'font-weight:700;background:rgba(0,229,255,0.08);' : ''}">${f === 'mg' ? (v == null ? '—' : v.toFixed(0) + '%') : erB(v)}${r.fresh ? '<span style="color:var(--accent);"> ●</span>' : ''}</td>`;
   };
-  const head = `<tr><th style="position:sticky;left:0;background:var(--bg2);z-index:1;text-align:left;">${f === 'mg' ? 'Margen operativo' : '$ miles de millones'}</th><th title="Valor en bolsa (billones de dólares, dato más reciente de Yahoo)">Bolsa<br><span style="font-weight:400;">bill. $</span></th><th title="Valor en bolsa / beneficio neto de los últimos 4 trimestres publicados" style="border-right:2px solid var(--border2);">PER</th>${cols.map(k => `<th style="white-space:nowrap;">${erLabel(k, true)}${k > qc ? '<br><span style="color:var(--accent);font-weight:400;">en curso</span>' : ''}</th>`).join('')}</tr>`;
-  const perCells = c => { const P = pers[c.sym]; const tip = P.m != null ? `Valor en bolsa $${bill(P.m)} billones (${MC[c.sym].date}) / beneficio neto de 12 meses hasta ${erLabel(P.k)}: $${erB(P.e)}B` : 'Sin valor en bolsa ahora'; return `<td title="${tip}" style="color:var(--text2);">${P.m != null ? bill(P.m) : '—'}</td><td title="${tip}" style="border-right:2px solid var(--border2);font-weight:700;color:${perColor(P.per) || 'var(--text3)'};">${P.per != null ? P.per.toFixed(1).replace('.', ',') : P.m != null ? 'n/s' : '—'}</td>`; };
+  const head = `<tr><th style="position:sticky;left:0;background:var(--bg2);z-index:1;text-align:left;">${f === 'mg' ? 'Margen operativo' : '$ miles de millones'}</th><th title="Valor en bolsa (billones de dólares, dato más reciente de Yahoo)">Bolsa<br><span style="font-weight:400;">bill. $</span></th><th title="Valor en bolsa / beneficio neto de los últimos 4 trimestres publicados">PER</th><th title="PER forward: valor en bolsa / beneficio que esperan los analistas para el ejercicio (Yahoo)">PER<br><span style="font-weight:400;">fwd</span></th><th title="Cuánto más (o menos) beneficio esperan los analistas que el de los últimos 12 meses">Crec.<br><span style="font-weight:400;">previsto</span></th><th title="Cambio del beneficio previsto en unos 3 meses: verde = los analistas lo suben; amarillo = casi plano; rojo = lo recortan" style="border-right:2px solid var(--border2);">Revisión<br><span style="font-weight:400;">3 meses</span></th>${cols.map(k => `<th style="white-space:nowrap;">${erLabel(k, true)}${k > qc ? '<br><span style="color:var(--accent);font-weight:400;">en curso</span>' : ''}</th>`).join('')}</tr>`;
+  const perCells = c => { const P = pers[c.sym]; const tip = P.m != null ? `Valor en bolsa $${bill(P.m)} billones (${MC[c.sym].date}) / beneficio neto de 12 meses hasta ${erLabel(P.k)}: $${erB(P.e)}B` : 'Sin valor en bolsa ahora'; return `<td title="${tip}" style="color:var(--text2);">${P.m != null ? bill(P.m) : '—'}</td><td title="${tip}" style="font-weight:700;color:${perColor(P.per) || 'var(--text3)'};">${P.per != null ? P.per.toFixed(1).replace('.', ',') : P.m != null ? 'n/s' : '—'}</td>${fwdCells(c)}`; };
+  const fwdCells = c => {
+    const X = F.co[c.sym], P = pers[c.sym];
+    if (X.fpe == null) return `<td style="color:var(--text3);">${X.m != null && X.fE != null ? 'n/s' : '—'}</td><td style="color:var(--text3);">—</td><td style="border-right:2px solid var(--border2);color:var(--text3);">—</td>`;
+    const jump = X.jumpNow ? ' ⇡' : '';
+    const tipF = `PER forward ${nf(X.fpe)} (Yahoo, ${X.fdate}): beneficio previsto $${erB(X.fE)}B${P.e != null ? ` frente a $${erB(P.e)}B en los últimos 12 meses` : ''}.${X.jumpNow ? ' ⇡ Yahoo acaba de pasar al ejercicio siguiente: el salto del beneficio previsto no cuenta como revisión.' : ''}`;
+    const tipG = X.g == null ? '' : X.g < 0 ? 'Los analistas esperan MENOS beneficio que el de los últimos 12 meses: normalmente porque este incluye ganancias de inversiones (revalorización de participaciones) que no se repiten' : 'Crecimiento que el PER forward ya da por hecho';
+    const tipR = !X.c3 && X.jumpNow ? 'En los últimos 3 meses solo está el salto por cambio de ejercicio de Yahoo: la revisión no se puede medir hasta el próximo dato' : X.c3 ? `Beneficio previsto: ${pc(X.d3)} desde ${X.c3.from}${X.d12 != null ? ` · ${pc(X.d12)} desde ${X.c12.from}` : ''}${X.d30 != null ? ` · ${pc(X.d30)} desde ${X.c30.from}` : ''}${X.c3.jumps ? ' · sin contar el salto por cambio de ejercicio' : ''}` : 'Sin dato de hace unos 3 meses';
+    return `<td title="${tipF}" style="font-weight:700;color:${perColor(X.fpe) || 'var(--text3)'};">${nf(X.fpe)}${jump}</td>`
+      + `<td title="${tipG}" style="color:${X.g == null ? 'var(--text3)' : X.g < 0 ? 'var(--yellow)' : 'var(--text2)'};">${X.g == null ? '—' : pr(X.g)}</td>`
+      + `<td title="${tipR}" style="border-right:2px solid var(--border2);font-weight:700;color:${erRevCol(X.d3) || 'var(--text3)'};">${X.d3 == null ? '—' : pc(X.d3)}</td>`;
+  };
   const rows = ER_CO.map(c => `<tr><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);white-space:nowrap;">${c.name}</td>${perCells(c)}${cols.map(k => cell(get(c.sym, k), get(c.sym, k - lagT), k, c)).join('')}</tr>`).join('');
-  const tot = `<tr style="border-top:2px solid var(--border2);"><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);font-weight:700;">Las 10</td><td style="color:var(--text2);font-weight:700;">${perAll != null ? bill(mSum) : '—'}</td><td style="border-right:2px solid var(--border2);font-weight:700;color:${perColor(perAll) || 'var(--text3)'};">${perAll != null ? perAll.toFixed(1).replace('.', ',') : '—'}</td>${cols.map(k => {
+  const tot = `<tr style="border-top:2px solid var(--border2);"><td style="position:sticky;left:0;background:var(--bg2);text-align:left;color:var(--text);font-weight:700;">Las 10</td><td style="color:var(--text2);font-weight:700;">${perAll != null ? bill(mSum) : '—'}</td><td style="font-weight:700;color:${perColor(perAll) || 'var(--text3)'};">${perAll != null ? perAll.toFixed(1).replace('.', ',') : '—'}</td><td style="font-weight:700;color:${perColor(FA.fpe) || 'var(--text3)'};">${FA.fpe != null ? nf(FA.fpe) : '—'}</td><td style="font-weight:700;color:var(--text2);">${FA.g != null ? pr(FA.g) : '—'}</td><td style="border-right:2px solid var(--border2);font-weight:700;color:${erRevCol(FA.d3) || 'var(--text3)'};">${FA.d3 != null ? pc(FA.d3) : '—'}</td>${cols.map(k => {
     if (!complete(k)) return '<td style="color:var(--text3);">—</td>';
     const v = f === 'mg' ? sum(k, 'op') / sum(k, 'rev') * 100 : sum(k, f), p = k >= lagT ? (f === 'mg' ? sum(k - lagT, 'op') / sum(k - lagT, 'rev') * 100 : sum(k - lagT, f)) : null;
     return `<td style="font-weight:700;color:${p == null ? 'var(--text)' : v >= p ? 'var(--green)' : 'var(--red)'};">${f === 'mg' ? v.toFixed(0) + '%' : erB(v)}</td>`;
   }).join('')}</tr>`;
-  document.getElementById('er-table').innerHTML = `<div style="overflow-x:auto;max-width:100%;"><table class="screener-table" style="min-width:1200px;font-size:10px;"><thead>${head}</thead><tbody>${rows}${tot}</tbody></table></div>`;
+  document.getElementById('er-table').innerHTML = `<div style="overflow-x:auto;max-width:100%;"><table class="screener-table" style="min-width:1380px;font-size:10px;"><thead>${head}</thead><tbody>${rows}${tot}</tbody></table></div>`;
   const L = erState.live, fresh = ER_CO.reduce((a, c) => a + Object.values(D[c.sym]).filter(r => r.fresh).length, 0);
   erStatus(L ? `Comprobado ${new Date(L.ts).toLocaleString('es-ES')} · SEC en vivo: ${L.secOk ? 'sí' : 'no (el worker no lo permite; se usa Yahoo)'} · ${fresh ? fresh + ' trimestres nuevos desde la versión' : 'sin trimestres nuevos desde la versión'}` : 'Histórico embebido (SEC) hasta T2 2026');
 }
