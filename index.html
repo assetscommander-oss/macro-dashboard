@@ -565,6 +565,24 @@
       <div class="val-chart-wrap" style="height:330px;"><canvas id="er-canvas"></canvas></div>
       <div id="er-table" style="margin-top:12px;"></div>
       <div class="chart-note" style="margin-top:8px;"><span id="er-status">Cargando…</span>. Cada celda: verde = mejor, rojo = peor (frente al mismo trimestre del año anterior, o frente al trimestre anterior si eliges ese color); <span style="color:var(--accent);">●</span> = trimestre nuevo publicado después de esta versión. Pasa el ratón por una celda para ver ventas, márgenes y fuente. «Bolsa» y «PER»: valor en bolsa de hoy y valor en bolsa / beneficio de los últimos 12 meses (n/s = beneficio negativo). Trimestres naturales (los fiscales desplazados se asignan al más cercano). Detalle: <b>📚 Información → Pilar 2</b>.</div>
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+        <div class="val-chart-head">
+          <span class="ctrl-label" style="font-size:10px;"><b>Monitor de circularidad</b> — ¿el beneficio de las grandes es caja de verdad? Las 9 no bancarias, últimos 12 meses (SEC)</span>
+          <div>
+            <button class="range-btn active" data-erc-m="cash" onclick="setErcMetric('cash')">Caja / beneficio</button>
+            <button class="range-btn" data-erc-m="capex" onclick="setErcMetric('capex')">Inversión / caja</button>
+            <button class="range-btn" data-erc-m="dso" onclick="setErcMetric('dso')">Días de cobro</button>
+            <button class="range-btn" data-erc-m="nonop" onclick="setErcMetric('nonop')">No operativo</button>
+            <button class="range-btn" data-erc-m="debt" onclick="setErcMetric('debt')">Deuda</button>
+            <button class="range-btn" style="margin-left:6px;" onclick="ercLoad(true)" title="Vuelve a descargar de la SEC (tarda alrededor de un minuto)">↻</button>
+          </div>
+        </div>
+        <div class="liq-cards-compact" id="erc-cards" style="margin-bottom:10px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));"></div>
+        <div class="chart-note" id="erc-caption" style="margin:0 0 6px;"></div>
+        <div class="val-chart-wrap" style="height:300px;"><canvas id="erc-canvas"></canvas></div>
+        <div id="erc-table" style="margin-top:12px;"></div>
+        <div class="chart-note" id="erc-status" style="margin-top:8px;">Esperando a la SEC…</div>
+      </div>
     </div>
   </div>
 
@@ -1657,6 +1675,23 @@
         <li><b>Cuándo tendría sentido:</b> si lo que más te importa es no ver caídas grandes y aceptas quedarte muy por detrás en los años buenos. O si vives otra década como 2000-2010 (mercado caro que corrige), que es para lo que está diseñado</li>
         <li><b>Sirve siempre para expectativas a 10 años:</b> con CAPE alto, lo normal es que la próxima década rinda menos que la media. Útil para decidir cuánto de tu patrimonio total pones en bolsa</li>
       </ul>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔍 Monitor de circularidad (v38): ¿el beneficio es caja de verdad?</div>
+      <div class="sg-text"><b>Para qué sirve:</b> parte de las ventas de IA circulan entre las propias empresas (el proveedor invierte en su cliente y el cliente le compra). En 2000, Lucent, Nortel y Cisco financiaban a sus clientes para que les compraran; cuando esos clientes cayeron, las ventas desaparecieron. Lo que las delató fueron cuatro señales en sus cuentas, y el monitor las sigue en las 9 grandes no bancarias (en JPMorgan la caja y la deuda son el propio negocio).</div>
+      <table class="sg-table">
+        <tr><th>Indicador</th><th>Qué mide</th><th>Semáforo</th></tr>
+        <tr><td><b>Caja / beneficio</b></td><td>Caja que entra del negocio por cada dólar de beneficio neto, últimos 12 meses. Lo normal es que pase de 1 (la amortización resta beneficio pero no sale de caja)</td><td>🟢 ≥ 1 · 🟡 0,8–1 · 🔴 &lt; 0,8: parte del beneficio no se cobra</td></tr>
+        <tr><td><b>Inversión / caja</b></td><td>Inversión en activos (centros de datos, chips, fábricas) sobre la caja del negocio, 12 meses. La diferencia es la caja libre</td><td>🟢 &lt; 70% · 🟡 70–100% · 🔴 &gt; 100%: invierten más de lo que generan</td></tr>
+        <tr><td><b>Días de cobro</b></td><td>Cuentas por cobrar sobre las ventas del trimestre, en días. Se compara con hace un año porque algunas empresas cobran por temporadas</td><td>🟢 ≤ +3 días · 🟡 +3 a +10 · 🔴 más de +10 en un año: los clientes pagan más tarde</td></tr>
+        <tr><td><b>No operativo</b></td><td>Parte del beneficio antes de impuestos que no sale del negocio: revalorización de participaciones, intereses, ventas de activos (12 meses)</td><td>🟢 &lt; 10% · 🟡 10–20% · 🔴 &gt; 20%</td></tr>
+        <tr><td><b>Deuda</b></td><td>Deuda financiera (bonos y préstamos), sin arrendamientos ni vehículos fuera de balance</td><td>🟢 &lt; +10% en un año · 🟡 +10 a +30% · 🔴 más de +30%</td></tr>
+      </table>
+      <div class="sg-text"><b>Cómo leerlo:</b> las tarjetas dan el dato de las 9 juntas en el último trimestre en que han publicado todas, frente a hace un año (pulsa una para verla en la gráfica). La gráfica muestra el conjunto en blanco y cada empresa en fino desde 2016 (pulsa un nombre de la leyenda para ocultarla). La tabla da la última lectura de cada empresa y su caja libre de 12 meses. Una señal aislada no dice mucho; lo que delató a Lucent fue verlas juntas: beneficio que no se cobra, cobros que se alargan e inversión pagada con deuda.</div>
+      <div class="sg-text"><b>Lo que marcaba en octubre de 2026</b> (T2 2026, las 9 juntas, frente al T2 2025): caja / beneficio en 1,06 (1,25 un año antes y 1,8 en 2017), el mínimo de la serie. Inversión / caja en el 54% (45%; 26% en 2017). Días de cobro en 47 (44; 32 en 2017). Beneficio no operativo en el 23% (3%). Deuda de unos $594.000 millones (360.000 un año antes, +65%). En el conjunto, caja e inversión siguen en verde pero empeorando, los días de cobro en amarillo, y el beneficio no operativo y la deuda en rojo. Por empresa, en rojo: la caja de Nvidia (0,70) y Alphabet (0,76), la inversión de Amazon (128% de su caja), los días de cobro de Amazon (+13), el beneficio no operativo de Alphabet (45%) y Amazon (40%), y la deuda de Amazon, Alphabet, Meta y Nvidia, que se ha multiplicado en un año. Es el patrón de 2000: beneficio que se cobra menos, inversión que se paga con deuda y beneficio que depende de revalorizar participaciones.</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b> de la SEC a través del worker (hace falta el worker v2), una vez al día; la primera descarga del día tarda alrededor de un minuto. Las cuentas de caja se publican acumuladas en el año, así que cada trimestre se obtiene restando el acumulado anterior. Cuando una empresa no etiqueta un dato (la inversión de Nvidia en sus cuartos trimestres antes de 2021 y a principios de 2022), ese trimestre se estima con el acumulado del año o con la media de sus vecinos. Si una empresa solo da su deuda a fin de año, se arrastra el último saldo conocido.</div>
+      <div class="sg-text"><b>Limitaciones:</b> no ve la financiación fuera de balance (vehículos como el que usó Meta para su centro de datos de Luisiana), ni los arrendamientos, ni los compromisos de compra firmados pero no pagados, que es donde suele esconderse la circularidad. Tampoco distingue qué parte de las ventas viene de clientes financiados por la propia empresa: eso solo se ve leyendo los informes. Es un termómetro, no una prueba.</div>
     </div>
 
     <div class="sg-block">
@@ -6941,19 +6976,23 @@ function erQuarters(facts) {
 // SEC solo a través del worker propio (exige identificarse; los proxies públicos no sirven)
 async function erSec(url) {
   if (!CUSTOM_PROXY_URL) return 'blocked';
-  try {
-    const res = await fetchWithTimeout(`${CUSTOM_PROXY_URL}?url=${encodeURIComponent(url)}`, 15000);
-    if (res.status === 403) return 'blocked';
-    if (!res.ok) return null;
-    const t = await res.text(); if (t.trimStart()[0] !== '{') return null;
-    return JSON.parse(t);
-  } catch (e) { return null; }
+  for (let a = 0; a < 3; a++) {
+    try {
+      const res = await fetchWithTimeout(`${CUSTOM_PROXY_URL}?url=${encodeURIComponent(url)}`, 15000);
+      if (res.status === 403) { const t = await res.text(); if (t.startsWith('Host not allowed')) return 'blocked'; await delay(2000 * (a + 1)); continue; } // la SEC frena si se le pide muy deprisa
+      if (res.status === 404) return {};   // la empresa no usa esa etiqueta
+      if (!res.ok) { await delay(1000); continue; }
+      const t = await res.text(); if (t.trimStart()[0] !== '{') return null;
+      return JSON.parse(t);
+    } catch (e) { await delay(1000); }
+  }
+  return null;
 }
 
 async function erLoadLive(force) {
   if (erState.loading) return;
   if (!force) {
-    try { const c = JSON.parse(localStorage.getItem(ER_LIVE_KEY) || 'null'); if (c && Date.now() - c.ts < 6 * 3600e3) { erState.live = c; erMerge(); return; } } catch (e) {}
+    try { const c = JSON.parse(localStorage.getItem(ER_LIVE_KEY) || 'null'); if (c && Date.now() - c.ts < 6 * 3600e3) { erState.live = c; erMerge(); if (c.secOk) ercLoad(); else renderCirc(); return; } } catch (e) {}
   }
   erState.loading = true; erStatus('Buscando resultados nuevos…');
   const live = { ts: Date.now(), yahoo: {}, sec: {}, secOk: null, mcap: {}, qmcap: {} };
@@ -6991,6 +7030,7 @@ async function erLoadLive(force) {
   }
   try { localStorage.setItem(ER_LIVE_KEY, JSON.stringify(live)); } catch (e) {}
   erState.live = live; erState.loading = false; erMerge();
+  if (live.secOk) ercLoad(); else renderCirc();
 }
 
 // Histórico embebido + trimestres nuevos (SEC si está; si no, Yahoo ajustado)
@@ -7139,7 +7179,221 @@ function renderEarnings() {
   const L = erState.live, fresh = ER_CO.reduce((a, c) => a + Object.values(D[c.sym]).filter(r => r.fresh).length, 0);
   erStatus(L ? `Comprobado ${new Date(L.ts).toLocaleString('es-ES')} · SEC en vivo: ${L.secOk ? 'sí' : 'no (el worker no lo permite; se usa Yahoo)'} · ${fresh ? fresh + ' trimestres nuevos desde la versión' : 'sin trimestres nuevos desde la versión'}` : 'Histórico embebido (SEC) hasta T2 2026');
 }
+// ─── MONITOR DE CIRCULARIDAD (v38) ───────────────────────────────────────────
+// ¿El beneficio de las grandes es caja de verdad? Las señales que delataron a Lucent y Nortel en
+// 2000 (vendían a clientes que ellas mismas financiaban): beneficio que no se cobra, cuentas por
+// cobrar que crecen más que las ventas, inversión que se come la caja y se paga con deuda, y
+// beneficio que viene de revalorizar participaciones. Datos de la SEC a través del worker (24 h
+// en caché). Las 9 no bancarias: en JPMorgan la caja y la deuda son el propio negocio.
+const ERC_KEY = 'er_circ_v1';
+const ERC_OCF = ['NetCashProvidedByUsedInOperatingActivities', 'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations'];
+const ERC_PTX = ['IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments'];
+const ERC_PPE = 'PaymentsToAcquirePropertyPlantAndEquipment', ERC_PA = 'PaymentsToAcquireProductiveAssets';
+// Etiquetas XBRL de cada empresa (en cada lista manda la primera). Deuda: LTD = deuda a largo total;
+// NC + CUR = parte no corriente + corriente; CLO = deuda + arrendamientos financieros (solo si no hay otra)
+const ERC_CFG = {
+  NVDA:  { capex: [ERC_PA, ERC_PPE], ptx: ERC_PTX, debt: { LTD: 'LongTermDebt' } },
+  MSFT:  { capex: [ERC_PPE], ptx: ERC_PTX, debt: { LTD: 'LongTermDebt' } },
+  AAPL:  { capex: [ERC_PPE, ERC_PA], ptx: ERC_PTX, debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'LongTermDebtCurrent' } },
+  AMZN:  { capex: [ERC_PA, ERC_PPE, 'PaymentsForProceedsFromProductiveAssets'], ptx: [ERC_PTX[1]], debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'LongTermDebtCurrent' } },
+  GOOGL: { capex: [ERC_PPE], ptx: ERC_PTX, debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'LongTermDebtCurrent', CLO: 'LongTermDebtAndCapitalLeaseObligationsIncludingCurrentMaturities' } },
+  META:  { capex: [ERC_PPE], ptx: [ERC_PTX[0]], debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'LongTermDebtCurrent' }, debtZeroBefore: true },
+  AVGO:  { ciks: ['1649338', '1730168'], capex: [ERC_PPE], ptx: ERC_PTX, debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'LongTermDebtCurrent', CLO: 'LongTermDebtAndCapitalLeaseObligations', CLOC: 'LongTermDebtAndCapitalLeaseObligationsCurrent' } },
+  TSLA:  { capex: [ERC_PPE], ptx: [ERC_PTX[0]], debt: { LTD: 'LongTermDebt', CLO: 'LongTermDebtAndCapitalLeaseObligations' } },
+  LLY:   { capex: ['PaymentsToAcquireOtherPropertyPlantAndEquipment', ERC_PA, ERC_PPE, 'PaymentsForProceedsFromProductiveAssets'], nonop: ['NonoperatingIncomeExpense'], debt: { LTD: 'LongTermDebt', NC: 'LongTermDebtNoncurrent', CUR: 'DebtCurrent' } },
+};
+const ERC_SYMS = Object.keys(ERC_CFG);
+
+// Hechos XBRL de un concepto: varias etiquetas y CIK fusionados (_p = prioridad de la etiqueta)
+async function ercFacts(sym, tags) {
+  const cfg = ERC_CFG[sym], ciks = cfg.ciks || [ER_CO.find(x => x.sym === sym).cik], all = [];
+  for (let p = 0; p < tags.length; p++) for (const cik of ciks) {
+    const j = await erSec(`https://data.sec.gov/api/xbrl/companyconcept/CIK${cik.padStart(10, '0')}/us-gaap/${tags[p]}.json`);
+    if (j === 'blocked') throw new Error('blocked');
+    if (j === null) erState.circMiss = (erState.circMiss || 0) + 1;
+    (j?.units?.USD || []).forEach(f => all.push({ ...f, _p: p }));
+    await delay(160);
+  }
+  return all;
+}
+const ercBetter = (f, ex) => !ex || f._p < ex._p || (f._p === ex._p && f.filed > ex.filed);
+// Trimestres de un flujo (resultados o caja): directos de 3 meses o diferencia de acumulados del año
+// fiscal. Si un acumulado no tiene desglose (algunas empresas no etiquetan todos sus informes), el
+// resto se reparte entre los trimestres que faltan; un hueco suelto toma la media de sus vecinos.
+// Los trimestres estimados se anotan en `est`.
+function erFlowQ(facts, est) {
+  const days = (a, b) => (new Date(b) - new Date(a)) / 864e5;
+  const byKey = {}; facts.forEach(f => { if (!f.start) return; const k = f.start + '|' + f.end; if (ercBetter(f, byKey[k])) byKey[k] = f; });
+  const all = Object.values(byKey), q = {};
+  all.forEach(f => { const d = days(f.start, f.end); if (d >= 80 && d <= 100) q[erIdx(f.end)] = f.val; });
+  const ytd = all.filter(f => { const d = days(f.start, f.end); return d > 100 && d <= 380; }).sort((a, b) => a.end < b.end ? -1 : 1);
+  ytd.forEach(f => { const k = erIdx(f.end); if (q[k] != null) return; const prev = all.find(g => g.start === f.start && g.end < f.end && days(g.end, f.end) >= 80 && days(g.end, f.end) <= 100); if (prev) q[k] = f.val - prev.val; });
+  ytd.slice().sort((a, b) => days(a.start, a.end) - days(b.start, b.end)).forEach(f => {
+    const n = Math.round(days(f.start, f.end) / 91.3); if (n < 2 || n > 4) return;
+    const kE = erIdx(f.end), ks = []; for (let i = n - 1; i >= 0; i--) ks.push(kE - i);
+    const miss = ks.filter(k => q[k] == null); if (!miss.length) return;
+    const known = ks.filter(k => q[k] != null).reduce((a, k) => a + q[k], 0), each = (f.val - known) / miss.length;
+    miss.forEach(k => { q[k] = each; if (est) est.push(k); });
+  });
+  const ks = Object.keys(q).map(Number).sort((a, b) => a - b);
+  for (let k = ks[0]; k <= ks[ks.length - 1]; k++) if (q[k] == null && q[k - 1] != null && q[k + 1] != null) { q[k] = (q[k - 1] + q[k + 1]) / 2; if (est) est.push(k); }
+  return q;
+}
+// Saldos del balance por trimestre (el de la fecha de cierre)
+function erInstQ(facts) {
+  const q = {}, at = {};
+  facts.forEach(f => { if (f.start) return; const k = erIdx(f.end); const ex = at[k]; if (!ex || f.end > ex.end || (f.end === ex.end && ercBetter(f, ex))) { at[k] = f; q[k] = f.val; } });
+  return q;
+}
+function ercStatus(t) { const el = document.getElementById('erc-status'); if (el) el.innerHTML = t; }
+
+async function ercLoad(force) {
+  if (erState.circLoading) return;
+  if (!force) {
+    try { const c = JSON.parse(localStorage.getItem(ERC_KEY) || 'null'); if (c && Date.now() - c.ts < (c.miss ? 3 : 24) * 3600e3) { erState.circ = c; if (typeof renderCirc === 'function') renderCirc(); return; } } catch (e) {}
+  }
+  erState.circLoading = true; erState.circErr = null; erState.circMiss = 0; if (typeof renderCirc === 'function') renderCirc();
+  const out = { ts: Date.now(), data: {} };
+  try {
+    for (const [sym, cfg] of Object.entries(ERC_CFG)) {
+      ercStatus(`Descargando de la SEC caja, inversión, cobros y deuda… ${Object.keys(out.data).length} de ${ERC_SYMS.length} empresas (solo una vez al día; tarda alrededor de un minuto)`);
+      const est = [];
+      const d = { ocf: erFlowQ(await ercFacts(sym, ERC_OCF), est), capex: erFlowQ(await ercFacts(sym, cfg.capex), est), ar: erInstQ(await ercFacts(sym, ['AccountsReceivableNetCurrent'])),
+        ptx: cfg.ptx ? erFlowQ(await ercFacts(sym, cfg.ptx), est) : {}, nonop: cfg.nonop ? erFlowQ(await ercFacts(sym, cfg.nonop), est) : {}, debt: {} };
+      const dq = {}; for (const [role, tag] of Object.entries(cfg.debt)) dq[role] = erInstQ(await ercFacts(sym, [tag]));
+      const dk = [...new Set(Object.values(dq).flatMap(o => Object.keys(o).map(Number)))].sort((a, b) => a - b);
+      dk.forEach(k => {
+        const g = r => dq[r]?.[k];
+        const v = g('LTD') ?? (g('NC') != null ? g('NC') + (g('CUR') ?? 0) : null) ?? (g('CLO') != null ? g('CLO') + (g('CLOC') ?? 0) : null);
+        if (v != null) d.debt[k] = v;
+      });
+      // Huecos del saldo de deuda (empresas que solo lo dan a fin de año): se arrastra el último conocido
+      const known = Object.keys(d.debt).map(Number).sort((a, b) => a - b);
+      if (known.length) { let last = d.debt[known[0]]; for (let k = known[0]; k <= known[known.length - 1]; k++) { if (d.debt[k] == null) d.debt[k] = last; else last = d.debt[k]; } if (cfg.debtZeroBefore) for (let k = -4; k < known[0]; k++) d.debt[k] = 0; }
+      for (const f of Object.keys(d)) d[f] = Object.fromEntries(Object.entries(d[f]).filter(([k]) => +k >= -4).map(([k, v]) => [k, Math.round(v / 1e6)]));
+      out.data[sym] = d; out.est = (out.est || 0) + est.filter(k => k >= 0).length;
+    }
+    out.miss = erState.circMiss || 0;
+    try { localStorage.setItem(ERC_KEY, JSON.stringify(out)); } catch (e) {}
+    erState.circ = out;
+  } catch (e) { erState.circErr = e.message === 'blocked' ? 'el worker no permite la SEC (hace falta el worker v2)' : 'no se pudo descargar de la SEC ahora'; }
+  erState.circLoading = false; if (typeof renderCirc === 'function') renderCirc();
+}
+
+const ERC_M = {
+  cash:  { btn: 'Caja / beneficio', title: 'Caja del negocio por cada dólar de beneficio (12 meses)', fmt: v => v.toFixed(2).replace('.', ',') + '×', min: 0, max: 3 },
+  capex: { btn: 'Inversión / caja', title: 'Inversión en activos (centros de datos, fábricas) sobre la caja del negocio (12 meses)', fmt: v => v.toFixed(0) + '%', min: 0, max: 200 },
+  dso:   { btn: 'Días de cobro', title: 'Días que tardan en cobrar sus ventas (cuentas por cobrar / ventas del trimestre × 91)', fmt: v => v.toFixed(0) + ' d', min: 0, max: 120 },
+  nonop: { btn: 'No operativo', title: 'Parte del beneficio antes de impuestos que no viene del negocio (inversiones, intereses), 12 meses', fmt: v => v.toFixed(0) + '%', min: -40, max: 100 },
+  debt:  { btn: 'Deuda', title: 'Deuda financiera (bonos y préstamos; sin arrendamientos), miles de millones $', fmt: v => '$' + (v / 1000).toFixed(0) + 'B', min: 0, max: null },
+};
+
+// Valor de un indicador para una empresa en el trimestre k (partes para sumar el conjunto)
+function ercParts(sym, m, k) {
+  const C = erState.circ?.data?.[sym], D = erState.data?.[sym]; if (!C || !D) return null;
+  const ttm = fn => { let s = 0; for (let j = 0; j < 4; j++) { const v = fn(k - j); if (v == null) return null; s += v; } return s; };
+  const nonopQ = q => sym === 'LLY' ? C.nonop[q] ?? null : (C.ptx[q] != null && D[q]?.op != null ? C.ptx[q] - D[q].op : null);
+  const ptxQ = q => sym === 'LLY' ? D[q]?.op ?? null : C.ptx[q] ?? null;
+  if (m === 'cash') { const a = ttm(q => C.ocf[q]), b = ttm(q => D[q]?.ni); return a != null && b != null ? { a, b } : null; }
+  if (m === 'capex') { const a = ttm(q => C.capex[q]), b = ttm(q => C.ocf[q]); return a != null && b != null ? { a, b } : null; }
+  if (m === 'dso') { const a = C.ar[k], b = D[k]?.rev; return a != null && b ? { a: a * 91.25, b } : null; }
+  if (m === 'nonop') { const a = ttm(nonopQ), b = ttm(ptxQ); return a != null && b != null ? { a, b } : null; }
+  if (m === 'debt') { const a = C.debt[k]; return a != null ? { a, b: 1 } : null; }
+  return null;
+}
+const ercRatio = (m, p) => !p ? null : m === 'debt' ? p.a : p.b > 0 ? (m === 'cash' ? p.a / p.b : m === 'dso' ? p.a / p.b : p.a / p.b * 100) : null;
+const ercOne = (sym, m, k) => ercRatio(m, ercParts(sym, m, k));
+function ercAgg(m, k) {
+  let a = 0, b = 0;
+  for (const s of ERC_SYMS) { const p = ercParts(s, m, k); if (!p) return null; a += p.a; b += p.b; }
+  return m === 'debt' ? a : ercRatio(m, { a, b });
+}
+function ercLastAgg(m) { for (let k = 60; k >= 4; k--) if (ercAgg(m, k) != null) return k; return null; }
+function ercLastOne(sym, m) { for (let k = 60; k >= 4; k--) if (ercOne(sym, m, k) != null) return k; return null; }
+// Semáforo de cada indicador (frente a hace un año cuando es una tendencia)
+function ercLevel(m, v, v1) {
+  if (v == null) return null;
+  if (m === 'cash') return v >= 1 ? 'g' : v >= 0.8 ? 'y' : 'r';
+  if (m === 'capex') return v < 70 ? 'g' : v <= 100 ? 'y' : 'r';
+  if (m === 'nonop') return Math.abs(v) < 10 ? 'g' : Math.abs(v) <= 20 ? 'y' : 'r';
+  if (v1 == null) return null;
+  if (m === 'dso') { const d = v - v1; return d <= 3 ? 'g' : d <= 10 ? 'y' : 'r'; }
+  if (m === 'debt') { const d = v1 > 0 ? (v / v1 - 1) * 100 : 0; return d < 10 ? 'g' : d <= 30 ? 'y' : 'r'; }
+  return null;
+}
+const ERC_COL = { g: 'var(--green)', y: 'var(--yellow)', r: 'var(--red)' };
+
+function setErcMetric(m) { erState.circM = m; renderCirc(); }
+
+function renderCirc() {
+  const cardsEl = document.getElementById('erc-cards'); if (!cardsEl) return;
+  const M = erState.circM || 'cash';
+  document.querySelectorAll('[data-erc-m]').forEach(b => b.classList.toggle('active', b.dataset.ercM === M));
+  if (!erState.circ) {
+    cardsEl.innerHTML = '';
+    ercStatus(erState.circLoading ? 'Descargando de la SEC…' : erState.circErr ? `Sin datos: ${erState.circErr}.` : (erState.live && erState.live.secOk === false) ? 'Necesita la SEC en vivo (worker v2).' : 'Esperando a la SEC…');
+    return;
+  }
+  const sgn = v => (v >= 0 ? '+' : '');
+  const card = (m) => {
+    const k = ercLastAgg(m); if (k == null) return `<div class="liq-cc"><div class="liq-cc-name">${ERC_M[m].btn}</div><div class="liq-cc-value">—</div></div>`;
+    const v = ercAgg(m, k), v1 = ercAgg(m, k - 4), lv = ercLevel(m, v, v1), f = ERC_M[m].fmt;
+    let read = '';
+    if (m === 'cash') read = `Por cada $1 de beneficio entran $${v.toFixed(2).replace('.', ',')} de caja` + (v < 1 ? ': parte del beneficio no se cobra' : '');
+    if (m === 'capex') { let o = 0, c = 0; for (const s of ERC_SYMS) { const p = ercParts(s, 'capex', k); o += p.b; c += p.a; } read = `Caja libre en 12 meses: ${o - c < 0 ? '−' : ''}$${(Math.abs(o - c) / 1000).toFixed(0)}B` + (v > 100 ? ': invierten más de lo que generan' : ''); }
+    if (m === 'dso') read = v1 != null ? `Hace un año ${f(v1)} (${sgn(v - v1)}${(v - v1).toFixed(0)} días)` : '';
+    if (m === 'nonop') read = v > 10 ? 'Una parte relevante del beneficio no sale del negocio' : 'El beneficio sale del negocio';
+    if (m === 'debt') read = v1 != null ? `${sgn(v - v1)}$${((v - v1) / 1000).toFixed(0)}B en un año (${sgn(v - v1)}${((v / v1 - 1) * 100).toFixed(0)}%)` : '';
+    return `<div class="liq-cc" style="cursor:pointer;${m === M ? 'box-shadow:inset 0 0 0 1px var(--accent);' : ''}" onclick="setErcMetric('${m}')"><div class="liq-cc-top"><span class="liq-cc-name">${ERC_M[m].btn} · ${erLabel(k)}</span>${lv ? infoMarker(ERC_COL[lv]) : ''}</div><div class="liq-cc-value">${f(v)}</div><div class="liq-cc-sub">${m !== 'dso' && m !== 'debt' && v1 != null ? `Hace un año ${f(v1)}` : ERC_M[m].title}</div>${read ? `<div class="liq-cc-read">${read}</div>` : ''}</div>`;
+  };
+  cardsEl.innerHTML = Object.keys(ERC_M).map(card).join('');
+  // Gráfica: el conjunto (blanco) y cada empresa (finas; pulsa la leyenda para ocultarlas)
+  const kEnd = Math.max(ercLastAgg(M) ?? 0, ...ERC_SYMS.map(s => ercLastOne(s, M) ?? 0)), ks = []; for (let k = 4; k <= kEnd; k++) ks.push(k);
+  const ctx = document.getElementById('erc-canvas');
+  if (erState.circChart) erState.circChart.destroy();
+  const scaleK = M === 'debt' ? 1000 : 1, axisFont = { family: 'Space Mono', size: 9 };
+  const ds = [{ label: 'Las 9 juntas', data: ks.map(k => { const v = ercAgg(M, k); return v == null ? null : v / scaleK; }), borderColor: '#ffffff', backgroundColor: '#ffffff', borderWidth: 2.6, pointRadius: 0, tension: 0.2, spanGaps: false, order: 0 }];
+  ERC_SYMS.forEach(s => { const i = ER_CO.findIndex(c => c.sym === s); ds.push({ label: ER_CO[i].name, data: ks.map(k => { const v = ercOne(s, M, k); return v == null ? null : v / scaleK; }), borderColor: ER_COLORS[i], backgroundColor: ER_COLORS[i], borderWidth: 1.1, pointRadius: 0, tension: 0.2, order: 1 }); });
+  const yAxis = { ticks: { color: '#7e93ab', font: axisFont, callback: v => M === 'cash' ? v + '×' : M === 'debt' ? '$' + v + 'B' : M === 'dso' ? v + ' d' : v + '%' }, grid: { color: 'rgba(126,147,171,0.18)' }, title: { display: true, text: ERC_M[M].title, color: '#6b83a3', font: axisFont } };
+  if (ERC_M[M].min != null) yAxis.min = ERC_M[M].min; if (ERC_M[M].max != null) yAxis.max = ERC_M[M].max;
+  erState.circChart = new Chart(ctx.getContext('2d'), { type: 'line', data: { labels: ks.map(k => erLabel(k, true)), datasets: ds }, options: {
+    responsive: true, maintainAspectRatio: false, animation: { duration: 300 }, interaction: { mode: 'index', intersect: false },
+    scales: { x: { ticks: { color: '#7e93ab', font: axisFont, maxRotation: 0, autoSkipPadding: 12 }, grid: { display: false } }, y: yAxis },
+    plugins: { legend: { display: true, labels: { color: '#aebfd4', font: { family: 'Space Mono', size: 9 }, boxWidth: 10 } },
+      tooltip: { backgroundColor: '#0d1420', borderColor: '#1e2d42', borderWidth: 1, titleFont: { family: 'Space Mono', size: 10 }, bodyFont: { family: 'Space Mono', size: 10 },
+        callbacks: { label: c => c.parsed.y == null ? null : `${c.dataset.label}: ${ERC_M[M].fmt(c.parsed.y * scaleK)}` } } } } });
+  const cap = document.getElementById('erc-caption');
+  if (cap) cap.innerHTML = {
+    cash: 'Por cada dólar de beneficio, cuánta caja entra del negocio. Por encima de 1 es sano (la amortización no sale de caja); si cae por debajo de 1 de forma continuada, parte del beneficio no se está cobrando (en Lucent y Nortel cayó en 1999-2000).',
+    capex: 'Qué parte de la caja del negocio se va en inversión (centros de datos, chips, fábricas). Por encima del 100% invierten más de lo que generan y lo pagan con caja ahorrada o con deuda.',
+    dso: 'Días que tardan en cobrar. Si suben mucho más rápido que las ventas, los clientes pagan tarde o con dinero prestado: fue la señal más clara de la financiación a clientes en 2000.',
+    nonop: 'Qué parte del beneficio antes de impuestos no viene del negocio: revalorización de participaciones, intereses, venta de activos. Si es alta, el beneficio depende de que suba el valor de otras empresas.',
+    debt: 'Deuda financiera (bonos y préstamos). Si crece a la vez que la inversión supera la caja, la inversión se está pagando con deuda. No incluye arrendamientos ni la deuda de vehículos fuera de balance.',
+  }[M];
+  // Tabla: última lectura de cada empresa
+  const cell = (s, m) => {
+    const k = ercLastOne(s, m); if (k == null) return '<td style="color:var(--text3);">—</td>';
+    const v = ercOne(s, m, k), v1 = ercOne(s, m, k - 4), lv = ercLevel(m, v, v1), p = ercParts(s, m, k);
+    let extra = '';
+    if (m === 'dso' && v1 != null) extra = ` <span style="color:var(--text3);font-weight:400;">(${sgn(v - v1)}${(v - v1).toFixed(0)})</span>`;
+    if (m === 'debt' && v1 != null && v1 > 0) extra = ` <span style="color:var(--text3);font-weight:400;">(${sgn(v - v1)}${((v / v1 - 1) * 100).toFixed(0)}%)</span>`;
+    const tip = `${erLabel(k)} · ${ERC_M[m].title}${v1 != null ? ' · hace un año: ' + ERC_M[m].fmt(v1) : ''}${m === 'capex' && p ? ` · inversión $${(p.a / 1000).toFixed(1)}B / caja $${(p.b / 1000).toFixed(1)}B` : ''}${m === 'cash' && p ? ` · caja $${(p.a / 1000).toFixed(1)}B / beneficio $${(p.b / 1000).toFixed(1)}B` : ''}`;
+    return `<td title="${tip}" style="font-weight:700;color:${lv ? ERC_COL[lv] : 'var(--text2)'};">${v == null ? (p ? 'n/s' : '—') : ERC_M[m].fmt(v)}${extra}</td>`;
+  };
+  const money = x => (x < 0 ? '−' : '') + '$' + (Math.abs(x) / 1000).toFixed(1).replace('.', ',') + 'B';
+  const fcfCell = p => p ? `<td style="color:${p.b - p.a >= 0 ? 'var(--green)' : 'var(--red)'};">${money(p.b - p.a)}</td>` : '<td>—</td>';
+  const fcf = s => { const k = ercLastOne(s, 'capex'); return fcfCell(k != null ? ercParts(s, 'capex', k) : null); };
+  const fcfAll = (() => { const k = ercLastAgg('capex'); if (k == null) return null; let a = 0, b = 0; for (const s of ERC_SYMS) { const p = ercParts(s, 'capex', k); a += p.a; b += p.b; } return { a, b }; })();
+  const head = `<tr><th style="text-align:left;">Empresa</th>${Object.keys(ERC_M).map(m => `<th title="${ERC_M[m].title}">${ERC_M[m].btn}</th>`).join('')}<th title="Caja del negocio menos inversión, 12 meses">Caja libre 12m</th></tr>`;
+  const rows = ERC_SYMS.map(s => { const c = ER_CO.find(x => x.sym === s); return `<tr><td style="text-align:left;color:var(--text);white-space:nowrap;">${c.name}</td>${Object.keys(ERC_M).map(m => cell(s, m)).join('')}${fcf(s)}</tr>`; }).join('');
+  const aggRow = `<tr style="border-top:2px solid var(--border2);"><td style="text-align:left;color:var(--text);font-weight:700;">Las 9</td>${Object.keys(ERC_M).map(m => { const k = ercLastAgg(m); const v = k != null ? ercAgg(m, k) : null, v1 = k != null ? ercAgg(m, k - 4) : null, lv = ercLevel(m, v, v1); return `<td style="font-weight:700;color:${lv ? ERC_COL[lv] : 'var(--text2)'};">${v == null ? '—' : ERC_M[m].fmt(v)}</td>`; }).join('')}${fcfCell(fcfAll).replace('<td style="', '<td style="font-weight:700;')}</tr>`;
+  document.getElementById('erc-table').innerHTML = `<div style="overflow-x:auto;"><table class="screener-table" style="min-width:820px;font-size:10px;"><thead>${head}</thead><tbody>${rows}${aggRow}<tr><td style="text-align:left;color:var(--text3);">JPMorgan</td><td colspan="6" style="text-align:left;color:var(--text3);">Banco: no aplica (su caja, sus préstamos y su deuda son el propio negocio)</td></tr></tbody></table></div>`;
+  ercStatus(`Datos de la SEC del ${new Date(erState.circ.ts).toLocaleString('es-ES')} (se actualizan una vez al día${erState.circ.miss ? `; ${erState.circ.miss} consultas fallaron y se reintentará en unas horas` : ''}).${erState.circ.est ? ` ${erState.circ.est} trimestres sin desglose en la SEC se han estimado (sobre todo la inversión de Nvidia antes de 2023).` : ''} Cada empresa muestra su último trimestre publicado; «Las 9» usa el último trimestre en el que han publicado todas. Colores: verde = sano · amarillo = vigilar · rojo = señal de alerta (umbrales en Información → Pilar 2).`);
+}
+
 function erInit() { erMerge(); erLoadLive(); }
+const _renderEarningsBase = renderEarnings;
+renderEarnings = function () { _renderEarningsBase(); try { renderCirc(); } catch (e) {} };
 
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
