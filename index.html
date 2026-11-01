@@ -1232,6 +1232,9 @@
       </div>
     </div>
 
+    <div class="section-title">Fase del ciclo · tu escenario: inflación → caída → impresión <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">· informativo, no decide</span></div>
+    <div class="liq-panel" id="cyc-panel" style="margin-bottom:24px;"><div class="chart-note" style="padding:14px;">Calculando…</div></div>
+
     <div class="section-title">Recomendación por régimen (referencia rápida)</div>
     <div class="pen-reco">
       <div class="pen-reco-title">📍 Asignación orientativa por clima macro</div>
@@ -1316,6 +1319,7 @@
         <tr><td><b>Qué hacer con tu pensión</b></td><td>El titular (Mantén / Cambia a), la explicación con la fecha de los datos, el desplegable de tu fondo, el interruptor de protección y el fondo del sistema al 100%</td><td><b style="color:var(--accent);">Sí</b>: es lo único que hay que seguir</td></tr>
         <tr><td><b>Cómo se ha llegado a esta decisión</b></td><td>La tabla con los 8 candidatos ordenados por momentum (6 y 12 meses). El punto ● es tu fondo de partida; la última columna dice cuántos puntos le saca cada uno: en verde si supera los 3 y toca cambiar. Debajo, los 4 pasos de la regla con el dato de hoy</td><td>Es la justificación de la decisión</td></tr>
         <tr><td><b>Backtest</b></td><td>Qué habría pasado siguiendo la regla, frente a quedarse en Airbus Growth y frente al Cash Fund. Botones «Desde» para elegir la fecha de inicio, tarjetas con rentabilidad y peor caída, la estadística de todos los periodos (¿es suerte de la fecha?) y la tabla de movimientos</td><td>No: es la prueba de que la regla tiene sentido</td></tr>
+        <tr><td><b>Fase del ciclo</b> (v40)</td><td>Tu escenario en tres fases (inflación y subida de tipos → desaceleración y bajada de tipos → impresión y subida): en qué fase estamos según las señales, qué fondos del plan encajan en cada una y si encaja el tuyo</td><td>No: es tu escenario, no el sistema probado</td></tr>
         <tr><td><b>Recomendación por régimen</b></td><td>Una vista simplificada que solo mira el clima macro (Pilar 3) y sugiere fondos por su encaje</td><td>No: referencia. Si no coincide con la de arriba, manda la de arriba</td></tr>
         <tr><td><b>Tu universo de fondos</b></td><td>Los 17 fondos del plan con su comisión (FMC), rentabilidades del factsheet y un Score orientativo (explicado más abajo). Pulsa una fila para ver el detalle</td><td>No: consulta</td></tr>
         <tr><td><b>Rentabilidades anuales reales</b></td><td>Los datos oficiales de cada factsheet, año a año o acumulados</td><td>No: consulta</td></tr>
@@ -1370,6 +1374,20 @@
       <div class="sg-title">🛡️ ¿Protección sí o no?</div>
       <div class="sg-text">La protección no busca ganar más, sino caer menos. Desde 2013 deja una rentabilidad parecida a la de Airbus (gana en el 53% de los periodos de 3 años) con la peor caída en −11% en vez de −26%. Su valor aparece en décadas malas, que en este histórico apenas hay: en el S&amp;P 500, el mismo filtro dio 7.1% anual frente a 2.0% entre 2000 y 2012 (caída máxima −17% frente a −51%), pero 9.4% frente a 14.7% entre 2013 y 2026.</div>
       <div class="sg-text">Por defecto está en <b>No</b>: a 30 años y con aportaciones mensuales, las caídas también son compras baratas. Actívala si una caída del 30% te haría abandonar el plan, o si te acercas a la jubilación y ya no te da tiempo a recuperar.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔄 Fase del ciclo (v40): tu escenario en tres fases</div>
+      <div class="sg-text"><b>El escenario:</b> primero inflación y subida de tipos; después desaceleración, bajada de tipos y quizá deflación; y al final los bancos centrales imprimen dinero y la bolsa vuelve a subir. Tiene un precedente casi exacto en 2008: el petróleo llegó a 147 $ y el BCE subía tipos en julio; tras Lehman llegaron el desplome y el miedo a la deflación; en marzo de 2009, tipos al 0,5% e impresión de dinero, y la bolsa mundial subió más de un 60% en el año siguiente. El panel no adivina fechas: mira las señales que ya descarga el dashboard y dice en qué fase estamos.</div>
+      <table class="sg-table">
+        <tr><th>Fase</th><th>Señales (se confirma con…)</th><th>Fondos que encajan · peor</th></tr>
+        <tr><td><b>1 · Inflación y subida de tipos</b></td><td>2 de 3: la inflación sube frente a hace 3 meses (IPC +0,1 o PCE subyacente +0,05 puntos) · la inflación está alta (IPC ≥ 3,5% o PCE ≥ 3%) · los tipos suben (Fed +0,1 en 3 meses o bono a 2 años +0,25 en 6 meses)</td><td>UK Equity Index, Cash Fund · peor: gilts largos, bonos corporativos largos, gilts ligados a la inflación (cayeron un 29% en los 12 meses a marzo de 2023: les sube el tipo real) y el inmobiliario</td></tr>
+        <tr><td><b>2 · Desaceleración, bajada de tipos, deflación</b></td><td>2 de 4: el IPC baja 3 meses seguidos · los tipos bajan (Fed −0,2 en 3 meses o 2 años −0,5 en 6 meses) · estrés de crédito (diferencial high yield &gt; 5% o +1 punto en 3 meses) · crecimiento débil (ISM &lt; 49 o régimen de recesión)</td><td>Cash Fund, Over 15 Year Gilts, AAA-AA-A Corp Bond Over 15Y (suben cuando bajan los tipos) · peor: UK Equity (en 2008 el petróleo cayó un 75% y la bolsa inglesa un 30%), emergentes, inmobiliario</td></tr>
+        <tr><td><b>3 · Impresión y subida</b></td><td>Las 2 primeras: la Fed imprime (balance +3% o más en 3 meses) · el crédito sana (high yield 1 punto por debajo de su máximo de 12 meses, si ese máximo pasó del 4,5%). La tercera, la bolsa sobre su media de 10 meses, se muestra como apoyo</td><td>World ex UK, Airbus Growth, Emergentes, HSBC Islamic (lo «barato» de la tecnología) · peor: Cash Fund y gilts largos</td></tr>
+      </table>
+      <div class="sg-text"><b>Orden:</b> si se cumple la fase 3, manda la 3; si no, la 2; si no, la 1. Si ninguna reúne sus señales sale «Sin fase clara» y manda el sistema de momentum. Si indicas en «¿Dónde tienes hoy la pensión?» tu fondo, el panel te dice si encaja con la fase actual.</div>
+      <div class="sg-text"><b>Cómo usarlo:</b> en la fase 1, vigila la columna de la fase 2; cuando se cumplan 2 de sus 4 señales, es el momento de pasar a liquidez y bonos largos. En la fase 2, vigila la 3. Así el cambio lo deciden señales fijadas de antemano y no el miedo del momento: el suelo de 2009 llegó con todas las noticias en contra.</div>
+      <div class="sg-text"><b>Limitaciones:</b> es un escenario, no una regla probada en el backtest; el sistema de momentum de arriba sí lo está. Puede que no haya deflación: en los años 70 la inflación vino en dos olas (1973-74 y 1977-80) y los activos reales siguieron siendo el sitio durante años; en ese caso el panel se quedaría en la fase 1, que es lo correcto. Los umbrales son razonables pero no óptimos, y el ISM es manual (si no lo introduces, usa el último del histórico). Los datos de inflación y tipos son de EE.UU. (FRED), que es lo que mueve los mercados mundiales; la inflación británica puede ir algo desfasada.</div>
     </div>
 
     <div class="sg-block">
@@ -1518,7 +1536,7 @@
     <div class="sg-block">
       <div class="sg-title">🗂️ Los pilares, uno a uno (resumen; el detalle está en la sección de cada pilar)</div>
       <div class="sg-text"><b>Pilar 1 · Liquidez &amp; tuberías</b> — Mide si la financiación circula o se atasca en el origen del sistema (mercado repo, reservas, marea de liquidez neta). Es el pilar más <b>anticipatorio</b>: sus señales se mueven antes que los precios. Horizonte: semanas a meses. <b>En la cartera:</b> compuerta (qué escalones de riesgo pueden entrar) y pesos por escalón.</div>
-      <div class="sg-text"><b>Pilar 2 · Valoración</b> — Mide cuánto pagas por cada dólar de beneficios comparado con 150 años de historia. No dice cuándo corregirá el mercado (los mercados caros duran años); dice cuánto retorno queda a 10 años vista. Horizonte: años. <b>En la cartera:</b> cuánto invertir (100% → 37,5%), solo si eliges «Con sizing»; con «100% invertido» queda como referencia.</div>
+      <div class="sg-text"><b>Pilar 2 · Valoración</b> — Mide cuánto pagas por cada dólar de beneficios comparado con 150 años de historia. No dice cuándo corregirá el mercado (los mercados caros duran años); dice cuánto retorno queda a 10 años vista. Horizonte: años. <b>En la cartera:</b> cuánto invertir (100% → 37,5%), solo si eliges «Con sizing»; con «100% invertido» queda como referencia. Al final del pilar está el panel de las 10 mayores del S&amp;P 500 (informativo): resultados trimestrales desde 2015, monitor de circularidad y PER forward con las revisiones de los analistas.</div>
       <div class="sg-text"><b>Pilar 3 · Régimen macro</b> — Sitúa la economía en uno de 4 climas según dos ejes: crecimiento (¿acelera o frena?) × inflación (¿sube o baja?). Cada clima favorece históricamente a activos distintos (expansión → bolsa · sobrecalentamiento → materias primas · estanflación → oro · recesión deflacionaria → bonos y cash). Horizonte: meses a trimestres. <b>En la cartera:</b> favorecidos ×1,3 y penalizados ×0,75.</div>
       <div class="sg-text"><b>Pilar 4 · Sentimiento del mercado</b> — Mide las emociones del mercado (miedo/codicia) con VIX, spreads de crédito, Fear &amp; Greed y Put/Call. Se usa de forma <b>contrarian</b> y solo en extremos. Horizonte: días a semanas. <b>En la cartera:</b> en pánico la cola ×1,15; en euforia ×0,85.</div>
       <div class="sg-text"><b>Pilar 5 · Momentum &amp; rotación</b> — El radar del flujo de dinero: 25 activos comprables desde la UE (regiones, sectores de EE.UU., temáticas, oro, materias primas, bonos, bitcoin y ethereum) ordenados por su score 1-3-6-12 meses. Es el único pilar que no mira la macro: solo el comportamiento real del capital. Horizonte: meses. <b>En la cartera:</b> pone los candidatos (Top-5 en tendencia).</div>
@@ -1616,6 +1634,7 @@
     <div class="sg-block">
       <div class="sg-title">🔀 Cambios respecto a versiones anteriores del panel</div>
       <div class="sg-text">Para que cada dato puntúe en un solo pilar: <b>los spreads HY salieron del score de tuberías</b> (son señal downstream; viven en el Pilar 4 de Sentimiento). <b>DXY y WALCL salieron de los modificadores del pilar de régimen</b> (DXY puntúa aquí como estrés offshore; WALCL vive dentro de la Liquidez neta). Las tarjetas de DXY y WALCL del semáforo de indicadores siguen visibles como referencia informativa hasta que reorganicemos ese pilar.</div>
+      <div class="sg-text"><b>v33:</b> la gráfica de liquidez neta admite también 10A y 20A (con escala logarítmica para BTC y el S&amp;P en esos rangos).</div>
     </div>
   </div>
 
@@ -1678,74 +1697,6 @@
     </div>
 
     <div class="sg-block">
-      <div class="sg-title">🔍 Monitor de circularidad (v38): ¿el beneficio es caja de verdad?</div>
-      <div class="sg-text"><b>Para qué sirve:</b> parte de las ventas de IA circulan entre las propias empresas (el proveedor invierte en su cliente y el cliente le compra). En 2000, Lucent, Nortel y Cisco financiaban a sus clientes para que les compraran; cuando esos clientes cayeron, las ventas desaparecieron. Lo que las delató fueron cuatro señales en sus cuentas, y el monitor las sigue en las 9 grandes no bancarias (en JPMorgan la caja y la deuda son el propio negocio).</div>
-      <table class="sg-table">
-        <tr><th>Indicador</th><th>Qué mide</th><th>Semáforo</th></tr>
-        <tr><td><b>Caja / beneficio</b></td><td>Caja que entra del negocio por cada dólar de beneficio neto, últimos 12 meses. Lo normal es que pase de 1 (la amortización resta beneficio pero no sale de caja)</td><td>🟢 ≥ 1 · 🟡 0,8–1 · 🔴 &lt; 0,8: parte del beneficio no se cobra</td></tr>
-        <tr><td><b>Inversión / caja</b></td><td>Inversión en activos (centros de datos, chips, fábricas) sobre la caja del negocio, 12 meses. La diferencia es la caja libre</td><td>🟢 &lt; 70% · 🟡 70–100% · 🔴 &gt; 100%: invierten más de lo que generan</td></tr>
-        <tr><td><b>Días de cobro</b></td><td>Cuentas por cobrar sobre las ventas del trimestre, en días. Se compara con hace un año porque algunas empresas cobran por temporadas</td><td>🟢 ≤ +3 días · 🟡 +3 a +10 · 🔴 más de +10 en un año: los clientes pagan más tarde</td></tr>
-        <tr><td><b>No operativo</b></td><td>Parte del beneficio antes de impuestos que no sale del negocio: revalorización de participaciones, intereses, ventas de activos (12 meses)</td><td>🟢 &lt; 10% · 🟡 10–20% · 🔴 &gt; 20%</td></tr>
-        <tr><td><b>Deuda</b></td><td>Deuda financiera (bonos y préstamos), sin arrendamientos ni vehículos fuera de balance</td><td>🟢 &lt; +10% en un año · 🟡 +10 a +30% · 🔴 más de +30%</td></tr>
-      </table>
-      <div class="sg-text"><b>Cómo leerlo:</b> las tarjetas dan el dato de las 9 juntas en el último trimestre en que han publicado todas, frente a hace un año (pulsa una para verla en la gráfica). La gráfica muestra el conjunto en blanco y cada empresa en fino desde 2016 (pulsa un nombre de la leyenda para ocultarla). La tabla da la última lectura de cada empresa y su caja libre de 12 meses. Una señal aislada no dice mucho; lo que delató a Lucent fue verlas juntas: beneficio que no se cobra, cobros que se alargan e inversión pagada con deuda.</div>
-      <div class="sg-text"><b>Lo que marcaba en octubre de 2026</b> (T2 2026, las 9 juntas, frente al T2 2025): caja / beneficio en 1,06 (1,25 un año antes y 1,8 en 2017), el mínimo de la serie. Inversión / caja en el 54% (45%; 26% en 2017). Días de cobro en 47 (44; 32 en 2017). Beneficio no operativo en el 23% (3%). Deuda de unos $594.000 millones (360.000 un año antes, +65%). En el conjunto, caja e inversión siguen en verde pero empeorando, los días de cobro en amarillo, y el beneficio no operativo y la deuda en rojo. Por empresa, en rojo: la caja de Nvidia (0,70) y Alphabet (0,76), la inversión de Amazon (128% de su caja), los días de cobro de Amazon (+13), el beneficio no operativo de Alphabet (45%) y Amazon (40%), y la deuda de Amazon, Alphabet, Meta y Nvidia, que se ha multiplicado en un año. Es el patrón de 2000: beneficio que se cobra menos, inversión que se paga con deuda y beneficio que depende de revalorizar participaciones.</div>
-      <div class="sg-text"><b>De dónde salen los datos:</b> de la SEC a través del worker (hace falta el worker v2), una vez al día; la primera descarga del día tarda alrededor de un minuto. Las cuentas de caja se publican acumuladas en el año, así que cada trimestre se obtiene restando el acumulado anterior. Cuando una empresa no etiqueta un dato (la inversión de Nvidia en sus cuartos trimestres antes de 2021 y a principios de 2022), ese trimestre se estima con el acumulado del año o con la media de sus vecinos. Si una empresa solo da su deuda a fin de año, se arrastra el último saldo conocido.</div>
-      <div class="sg-text"><b>Limitaciones:</b> no ve la financiación fuera de balance (vehículos como el que usó Meta para su centro de datos de Luisiana), ni los arrendamientos, ni los compromisos de compra firmados pero no pagados, que es donde suele esconderse la circularidad. Tampoco distingue qué parte de las ventas viene de clientes financiados por la propia empresa: eso solo se ve leyendo los informes. Es un termómetro, no una prueba.</div>
-    </div>
-
-    <div class="sg-block">
-      <div class="sg-title">🔭 PER forward y revisiones (v39): ¿qué esperan los analistas?</div>
-      <div class="sg-text"><b>La idea:</b> la bolsa cotiza el futuro, así que el PER de los últimos 12 meses mira por el retrovisor. El PER forward usa el beneficio que esperan los analistas. Pero esa previsión no es un dato: suele pecar de optimista y falla justo en los giros. En 2007 el PER forward del S&amp;P rondaba 15 y parecía barato; en 2008-09 los beneficios cayeron más de la mitad. En el techo del ciclo el beneficio previsto está inflado y el forward hace parecer razonable un mercado caro. Por eso el panel enseña las cuatro piezas juntas:</div>
-      <table class="sg-table">
-        <tr><th>Medida</th><th>Qué te dice</th><th>Dónde está</th></tr>
-        <tr><td><b>CAPE</b></td><td>Precio / beneficio medio de 10 años (ajustado por inflación). La mejor guía histórica para la rentabilidad de los 10 años siguientes; no sirve para el corto plazo</td><td>Pilar 2: tarjeta «Shiller CAPE» y gráficas «Histórico CAPE» y «Divergencia CAPE vs PER»</td></tr>
-        <tr><td><b>PER (12 meses)</b></td><td>Cuánto pagas por el beneficio ya ganado</td><td>Pilar 2: tarjeta «PER S&amp;P 500» (el índice entero). Las 10: tarjeta «Valor en bolsa vs beneficio» y columna PER</td></tr>
-        <tr><td><b>PER forward</b></td><td>Cuánto pagas por el beneficio que esperan los analistas. La diferencia con el PER es el crecimiento que ya se da por hecho</td><td>Resultados de las 10: tarjeta «PER forward» y columnas «PER fwd» y «Crec. previsto»</td></tr>
-        <tr><td><b>Revisiones</b></td><td>Si los analistas suben o recortan esas previsiones. Es lo que de verdad se adelanta: mientras suben, los mercados alcistas rara vez se acaban</td><td>Tarjeta «PER forward» y columna «Revisión 3 meses»</td></tr>
-      </table>
-      <div class="sg-text"><b>Semáforo de la revisión:</b> 🟢 más del +3% en 3 meses · 🟡 entre 0 y +3% · 🔴 negativa: los analistas recortan. Plano ya es flojo, porque el beneficio previsto sube solo con el calendario (cada trimestre la previsión mira 3 meses más adelante). <b>La alarma es la combinación de 2007:</b> un PER forward que parece barato, un PER y un CAPE altos, y previsiones que empiezan a bajar.</div>
-      <div class="sg-text"><b>Crecimiento previsto negativo</b> (Alphabet y Amazon en octubre de 2026): los analistas esperan menos beneficio que el de los últimos 12 meses porque este incluye la revalorización de participaciones en otras empresas, que no cuentan como repetible. Es la misma señal que el «No operativo» del monitor de circularidad.</div>
-      <div class="sg-text"><b>Lo que marcaba el 31 de octubre de 2026:</b> las 10, PER 25,7 con el beneficio de 12 meses y PER forward 21,4; los analistas esperan un 20% más de beneficio. Previsiones +5% en 3 meses y +31% en 12 meses (parte es solo el paso del calendario): siguen subiendo, sin rastro de recortes. Nvidia PER forward 13,5 (Yahoo ya usa su ejercicio que acaba en enero de 2028) y Broadcom 18,4 frente a un PER de 43: el mercado da por hechos crecimientos enormes. Como referencia, el S&amp;P 500 entero según FactSet (9 de octubre): PER forward 19,1 (su media de 10 años), PER de 12 meses 26,0, y crecimiento esperado del +33% en 2026 y del +16% en 2027. El índice parece «normal» solo si se cumple ese crecimiento.</div>
-      <div class="sg-text"><b>De dónde salen los datos:</b> de Yahoo a través del worker: el PER forward de hoy y el del cierre de los últimos 5 trimestres. Beneficio previsto = valor en bolsa / PER forward. Yahoo usa el ejercicio fiscal en curso o el siguiente según la fecha, así que no coincide exactamente con los «próximos 12 meses» de FactSet. Cuando Yahoo pasa al ejercicio siguiente, el beneficio previsto da un salto (marcado con ⇡) que no es una revisión: los cambios de más del +35% o de menos del −30% entre dos datos seguidos no cuentan. Cada visita guarda un dato en este navegador; con un mes de visitas aparece también la revisión a 30 días.</div>
-    </div>
-
-    <div class="sg-block">
-      <div class="sg-title">🧪 ¿Avisan los márgenes? (probado en el backtest, v34)</div>
-      <div class="sg-text">Se probó como regla dentro del motor: cuando los márgenes (beneficios / PIB) caen varios trimestres seguidos, con el dato que ya estaba publicado, el P1 pasa a «solo centro» (oro, bonos y liquidez). Rentabilidad al año con 100% invertido, sin cripto, desde 2007 / 2013 / 2019:</div>
-      <table class="sg-table">
-        <tr><th>Regla</th><th>Dato disponible 1 mes tras el trimestre</th><th>2 meses (lo realista)</th><th>3 meses</th><th>4 meses</th></tr>
-        <tr><td>Sin regla</td><td colspan="4">12,1% / 16,3% / 17,9%</td></tr>
-        <tr><td>2 trimestres bajando</td><td>12,3 / 15,2 / 16,8</td><td><b>13,8 / 16,4 / 20,8</b></td><td>12,7 / 16,5 / 19,9</td><td>10,4 / 13,4 / 16,1</td></tr>
-        <tr><td>1 trimestre bajando</td><td>9,5 / 11,3 / 14,1</td><td>9,4 / 10,7 / 13,7</td><td>8,0 / 10,0 / 12,5</td><td>8,6 / 10,4 / 12,2</td></tr>
-        <tr><td>3 trimestres bajando</td><td>11,2 / 15,0 / 17,7</td><td>11,2 / 15,0 / 18,2</td><td>11,4 / 15,4 / 17,8</td><td>12,0 / 16,2 / 18,0</td></tr>
-      </table>
-      <div class="sg-text"><b>Lectura:</b> solo mejora con una combinación concreta (2 trimestres y 2-3 meses de retraso); moviendo un mes el retraso o un trimestre la condición, empeora. La caída máxima no mejora (−21% desde 2007 en todos los casos). Además el backtest usa los datos ya revisados, no los que se publicaron en su momento. Es un ajuste a medida del pasado, no una regla fiable: <b>se queda como tarjeta informativa</b>. Episodios con 2 trimestres bajando: mediados de 2007, 2009, 2011, 2013, 2015-16, 2019, inicio de 2020, 2022, 2023 y finales de 2025.</div>
-    </div>
-
-    <div class="sg-block">
-      <div class="sg-title">🏢 Resultados de las 10 mayores del S&amp;P 500 (v35)</div>
-      <div class="sg-text"><b>Qué muestra:</b> los beneficios que declaran cada trimestre, desde 2015, Nvidia, Microsoft, Apple, Amazon, Alphabet, Meta, Broadcom, Tesla, JPMorgan y Eli Lilly (alrededor del 40% del índice). Berkshire Hathaway queda fuera aunque esté entre las mayores: su beneficio incluye las subidas y bajadas de su cartera de acciones y deformaría el conjunto. Es informativo: no mueve la cartera.</div>
-      <ul class="rg-list">
-        <li><b>Cuatro vistas:</b> beneficio neto (lo declarado, incluye ganancias y pérdidas de inversiones), beneficio operativo (el del negocio; en JPMorgan y Eli Lilly, antes de impuestos), ventas y márgenes</li>
-        <li><b>Las tarjetas:</b> el último trimestre en el que han publicado las 10, comparado con el mismo trimestre del año anterior, y la <b>temporada en curso</b>: cuántas han publicado ya y cuáles faltan</li>
-        <li><b>La gráfica:</b> por defecto, una barra por trimestre con el total de las 10, en <span style="color:var(--green);">verde</span> si supera al mismo trimestre del año anterior y en <span style="color:var(--red);">rojo</span> si no; así la tendencia se ve de un vistazo. Con «vs trimestre anterior» compara con el trimestre inmediatamente anterior, y con «Por empresa» apila lo que aporta cada una. La línea es el margen conjunto. Solo trimestres completos</li>
-        <li><b>Por qué la comparación por defecto es con el año anterior:</b> la Navidad dispara el cuarto trimestre de Apple y Amazon. Comparando con el trimestre anterior, 10 de los 11 primeros trimestres desde 2016 salen en rojo en el beneficio operativo aunque el año fuera bueno. Comparando con el año anterior, los rojos se concentran donde hubo problemas de verdad: inicio de 2016, inicio de 2019, la COVID en 2020 y todo 2022</li>
-        <li><b>La tabla:</b> todos los trimestres, el más reciente a la izquierda. Verde = mejor, rojo = peor, con la misma comparación que hayas elegido para la gráfica. Al pasar el ratón: ventas, márgenes, crecimiento y fuente. <span style="color:var(--accent);">●</span> = trimestre publicado después de esta versión</li>
-      </ul>
-      <div class="sg-text"><b>Valor en bolsa vs beneficio (PER de las 10):</b> la tarjeta y las columnas «Bolsa» y «PER» dicen cuánto pagas por cada dólar de beneficio anual: el valor en bolsa de hoy (Yahoo) entre el beneficio neto de los últimos 4 trimestres publicados. Un PER de 27 significa que con el beneficio actual tardarías 27 años en recuperar el precio (una rentabilidad por beneficios del 3,7%). La tarjeta lo compara con el de hace un año y con el PER de todo el S&amp;P 500. Ojo: si una empresa tiene ganancias de inversiones puntuales (Alphabet y Amazon en 2026), su PER sale más bajo de lo que corresponde a su negocio. Yahoo solo da el valor en bolsa del último año, así que no hay histórico largo de esta cifra.</div>
-      <div class="sg-text"><b>El canario de los márgenes</b> es la tarjeta «Margen operativo conjunto»: si las grandes no pueden trasladar costes, se estrecha y la marca se pone roja (más de 1 punto de caída en un año). En el T2 de 2026 estaba en el 34,4%, frente al 30,9% de un año antes: se amplía. El beneficio neto de ese trimestre (+114% interanual) está inflado por ganancias de inversiones de Alphabet y Amazon; por eso conviene mirar el operativo (+45%).</div>
-      <div class="sg-text"><b>De dónde salen los datos:</b></div>
-      <ul class="rg-list">
-        <li><b>Histórico (T1 2015 a T2 2026):</b> de la SEC (EDGAR), con las cifras de los 10-Q y 10-K que presentan las propias empresas. El cuarto trimestre no se presenta por separado: se calcula como el año completo menos los 9 primeros meses. Va dentro del dashboard, así que se ve aunque las fuentes en vivo fallen</li>
-        <li><b>Trimestres nuevos:</b> se buscan solos al abrir la página (como mucho cada 6 horas; el botón ↻ fuerza la búsqueda). Primero en la SEC, que es el dato oficial, si el worker lo permite (ver abajo); si no, en Yahoo Finance, marcados como provisionales y ajustados con la relación media Yahoo/SEC de los trimestres anteriores</li>
-        <li><b>La SEC necesita el worker v2:</b> la SEC solo atiende peticiones que se identifican con un email, y el proxy actual no la tiene permitida. Con el worker antiguo todo funciona igual, pero solo con Yahoo, que a veces tarda semanas en cargar un trimestre (el T2 de 2026 de Amazon aún no estaba en octubre)</li>
-        <li><b>Trimestres naturales:</b> Nvidia (año fiscal hasta finales de enero), Microsoft (junio), Apple (septiembre) y Broadcom (principios de noviembre) tienen el año desplazado. Cada trimestre fiscal se asigna al trimestre natural más cercano (el de su fecha de cierre menos 45 días); la fecha real de cierre sale al pasar el ratón</li>
-      </ul>
-      <div class="sg-text"><b>Limitaciones:</b> son las 10 mayores de hoy, y en 2015 varias eran mucho más pequeñas (Nvidia, Broadcom, Tesla, Eli Lilly), así que el crecimiento del conjunto exagera el del índice. No hay previsiones de analistas (si baten o no lo esperado): no existe una fuente gratuita fiable. Las cifras de Yahoo son provisionales hasta que llega el 10-Q a la SEC.</div>
-    </div>
-
-    <div class="sg-block">
       <div class="sg-title">📈 CAPE en momentos históricos clave</div>
       <table class="sg-table">
         <tr><th>Momento</th><th>CAPE</th><th>Retorno S&P 10 años después</th></tr>
@@ -1790,8 +1741,77 @@
     </div>
 
     <div class="sg-block">
+      <div class="sg-title">🧪 ¿Avisan los márgenes? (probado en el backtest, v34)</div>
+      <div class="sg-text">Se probó como regla dentro del motor: cuando los márgenes (beneficios / PIB) caen varios trimestres seguidos, con el dato que ya estaba publicado, el P1 pasa a «solo centro» (oro, bonos y liquidez). Rentabilidad al año con 100% invertido, sin cripto, desde 2007 / 2013 / 2019:</div>
+      <table class="sg-table">
+        <tr><th>Regla</th><th>Dato disponible 1 mes tras el trimestre</th><th>2 meses (lo realista)</th><th>3 meses</th><th>4 meses</th></tr>
+        <tr><td>Sin regla</td><td colspan="4">12,1% / 16,3% / 17,9%</td></tr>
+        <tr><td>2 trimestres bajando</td><td>12,3 / 15,2 / 16,8</td><td><b>13,8 / 16,4 / 20,8</b></td><td>12,7 / 16,5 / 19,9</td><td>10,4 / 13,4 / 16,1</td></tr>
+        <tr><td>1 trimestre bajando</td><td>9,5 / 11,3 / 14,1</td><td>9,4 / 10,7 / 13,7</td><td>8,0 / 10,0 / 12,5</td><td>8,6 / 10,4 / 12,2</td></tr>
+        <tr><td>3 trimestres bajando</td><td>11,2 / 15,0 / 17,7</td><td>11,2 / 15,0 / 18,2</td><td>11,4 / 15,4 / 17,8</td><td>12,0 / 16,2 / 18,0</td></tr>
+      </table>
+      <div class="sg-text"><b>Lectura:</b> solo mejora con una combinación concreta (2 trimestres y 2-3 meses de retraso); moviendo un mes el retraso o un trimestre la condición, empeora. La caída máxima no mejora (−21% desde 2007 en todos los casos). Además el backtest usa los datos ya revisados, no los que se publicaron en su momento. Es un ajuste a medida del pasado, no una regla fiable: <b>se queda como tarjeta informativa</b>. Episodios con 2 trimestres bajando: mediados de 2007, 2009, 2011, 2013, 2015-16, 2019, inicio de 2020, 2022, 2023 y finales de 2025.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🏢 Resultados de las 10 mayores del S&amp;P 500 (v35)</div>
+      <div class="sg-text"><b>Qué muestra:</b> los beneficios que declaran cada trimestre, desde 2015, Nvidia, Microsoft, Apple, Amazon, Alphabet, Meta, Broadcom, Tesla, JPMorgan y Eli Lilly (alrededor del 40% del índice). Berkshire Hathaway queda fuera aunque esté entre las mayores: su beneficio incluye las subidas y bajadas de su cartera de acciones y deformaría el conjunto. Es informativo: no mueve la cartera.</div>
+      <ul class="rg-list">
+        <li><b>Cuatro vistas:</b> beneficio neto (lo declarado, incluye ganancias y pérdidas de inversiones), beneficio operativo (el del negocio; en JPMorgan y Eli Lilly, antes de impuestos), ventas y márgenes</li>
+        <li><b>Las tarjetas:</b> el último trimestre en el que han publicado las 10, comparado con el mismo trimestre del año anterior, y la <b>temporada en curso</b>: cuántas han publicado ya y cuáles faltan</li>
+        <li><b>La gráfica:</b> por defecto, una barra por trimestre con el total de las 10, en <span style="color:var(--green);">verde</span> si supera al mismo trimestre del año anterior y en <span style="color:var(--red);">rojo</span> si no; así la tendencia se ve de un vistazo. Con «vs trimestre anterior» compara con el trimestre inmediatamente anterior, y con «Por empresa» apila lo que aporta cada una. La línea es el margen conjunto. Solo trimestres completos</li>
+        <li><b>Por qué la comparación por defecto es con el año anterior:</b> la Navidad dispara el cuarto trimestre de Apple y Amazon. Comparando con el trimestre anterior, 10 de los 11 primeros trimestres desde 2016 salen en rojo en el beneficio operativo aunque el año fuera bueno. Comparando con el año anterior, los rojos se concentran donde hubo problemas de verdad: inicio de 2016, inicio de 2019, la COVID en 2020 y todo 2022</li>
+        <li><b>La tabla:</b> todos los trimestres, el más reciente a la izquierda. Verde = mejor, rojo = peor, con la misma comparación que hayas elegido para la gráfica. Al pasar el ratón: ventas, márgenes, crecimiento y fuente. <span style="color:var(--accent);">●</span> = trimestre publicado después de esta versión</li>
+      </ul>
+      <div class="sg-text"><b>Valor en bolsa vs beneficio (PER de las 10):</b> la tarjeta y las columnas «Bolsa» y «PER» dicen cuánto pagas por cada dólar de beneficio anual: el valor en bolsa de hoy (Yahoo) entre el beneficio neto de los últimos 4 trimestres publicados. Un PER de 27 significa que con el beneficio actual tardarías 27 años en recuperar el precio (una rentabilidad por beneficios del 3,7%). La tarjeta lo compara con el de hace un año y con el PER de todo el S&amp;P 500. Ojo: si una empresa tiene ganancias de inversiones puntuales (Alphabet y Amazon en 2026), su PER sale más bajo de lo que corresponde a su negocio. Yahoo solo da el valor en bolsa del último año, así que no hay histórico largo de esta cifra.</div>
+      <div class="sg-text"><b>El canario de los márgenes</b> es la tarjeta «Margen operativo conjunto»: si las grandes no pueden trasladar costes, se estrecha y la marca se pone roja (más de 1 punto de caída en un año). En el T2 de 2026 estaba en el 34,4%, frente al 30,9% de un año antes: se amplía. El beneficio neto de ese trimestre (+114% interanual) está inflado por ganancias de inversiones de Alphabet y Amazon; por eso conviene mirar el operativo (+45%).</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b></div>
+      <ul class="rg-list">
+        <li><b>Histórico (T1 2015 a T2 2026):</b> de la SEC (EDGAR), con las cifras de los 10-Q y 10-K que presentan las propias empresas. El cuarto trimestre no se presenta por separado: se calcula como el año completo menos los 9 primeros meses. Va dentro del dashboard, así que se ve aunque las fuentes en vivo fallen</li>
+        <li><b>Trimestres nuevos:</b> se buscan solos al abrir la página (como mucho cada 6 horas; el botón ↻ fuerza la búsqueda). Primero en la SEC, que es el dato oficial, si el worker lo permite (ver abajo); si no, en Yahoo Finance, marcados como provisionales y ajustados con la relación media Yahoo/SEC de los trimestres anteriores</li>
+        <li><b>La SEC necesita el worker v2</b> (el que está instalado desde octubre de 2026): la SEC solo atiende peticiones que se identifican con un email. Con un worker antiguo todo funciona igual, pero solo con Yahoo, que a veces tarda semanas en cargar un trimestre, y el monitor de circularidad queda vacío. La línea de estado lo dice: «SEC en vivo: sí»</li>
+        <li><b>Trimestres naturales:</b> Nvidia (año fiscal hasta finales de enero), Microsoft (junio), Apple (septiembre) y Broadcom (principios de noviembre) tienen el año desplazado. Cada trimestre fiscal se asigna al trimestre natural más cercano (el de su fecha de cierre menos 45 días); la fecha real de cierre sale al pasar el ratón</li>
+      </ul>
+      <div class="sg-text"><b>Limitaciones:</b> son las 10 mayores de hoy, y en 2015 varias eran mucho más pequeñas (Nvidia, Broadcom, Tesla, Eli Lilly), así que el crecimiento del conjunto exagera el del índice. No dice si cada trimestre bate o no lo esperado (no hay fuente gratuita fiable); las previsiones a un año sí están: ver «PER forward y revisiones» más abajo. Las cifras de Yahoo son provisionales hasta que llega el 10-Q a la SEC.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔍 Monitor de circularidad (v38): ¿el beneficio es caja de verdad?</div>
+      <div class="sg-text"><b>Para qué sirve:</b> parte de las ventas de IA circulan entre las propias empresas (el proveedor invierte en su cliente y el cliente le compra). En 2000, Lucent, Nortel y Cisco financiaban a sus clientes para que les compraran; cuando esos clientes cayeron, las ventas desaparecieron. Lo que las delató fueron cuatro señales en sus cuentas, y el monitor las sigue en las 9 grandes no bancarias (en JPMorgan la caja y la deuda son el propio negocio).</div>
+      <table class="sg-table">
+        <tr><th>Indicador</th><th>Qué mide</th><th>Semáforo</th></tr>
+        <tr><td><b>Caja / beneficio</b></td><td>Caja que entra del negocio por cada dólar de beneficio neto, últimos 12 meses. Lo normal es que pase de 1 (la amortización resta beneficio pero no sale de caja)</td><td>🟢 ≥ 1 · 🟡 0,8–1 · 🔴 &lt; 0,8: parte del beneficio no se cobra</td></tr>
+        <tr><td><b>Inversión / caja</b></td><td>Inversión en activos (centros de datos, chips, fábricas) sobre la caja del negocio, 12 meses. La diferencia es la caja libre</td><td>🟢 &lt; 70% · 🟡 70–100% · 🔴 &gt; 100%: invierten más de lo que generan</td></tr>
+        <tr><td><b>Días de cobro</b></td><td>Cuentas por cobrar sobre las ventas del trimestre, en días. Se compara con hace un año porque algunas empresas cobran por temporadas</td><td>🟢 ≤ +3 días · 🟡 +3 a +10 · 🔴 más de +10 en un año: los clientes pagan más tarde</td></tr>
+        <tr><td><b>No operativo</b></td><td>Parte del beneficio antes de impuestos que no sale del negocio: revalorización de participaciones, intereses, ventas de activos (12 meses)</td><td>🟢 &lt; 10% · 🟡 10–20% · 🔴 &gt; 20%</td></tr>
+        <tr><td><b>Deuda</b></td><td>Deuda financiera (bonos y préstamos), sin arrendamientos ni vehículos fuera de balance</td><td>🟢 &lt; +10% en un año · 🟡 +10 a +30% · 🔴 más de +30%</td></tr>
+      </table>
+      <div class="sg-text"><b>Cómo leerlo:</b> las tarjetas dan el dato de las 9 juntas en el último trimestre en que han publicado todas, frente a hace un año (pulsa una para verla en la gráfica). La gráfica muestra el conjunto en blanco y cada empresa en fino desde 2016 (pulsa un nombre de la leyenda para ocultarla). La tabla da la última lectura de cada empresa y su caja libre de 12 meses. Una señal aislada no dice mucho; lo que delató a Lucent fue verlas juntas: beneficio que no se cobra, cobros que se alargan e inversión pagada con deuda.</div>
+      <div class="sg-text"><b>Lo que marcaba en octubre de 2026</b> (T2 2026, las 9 juntas, frente al T2 2025): caja / beneficio en 1,06 (1,25 un año antes y 1,8 en 2017), el mínimo de la serie. Inversión / caja en el 54% (45%; 26% en 2017). Días de cobro en 47 (44; 32 en 2017). Beneficio no operativo en el 23% (3%). Deuda de unos $594.000 millones (360.000 un año antes, +65%). En el conjunto, caja e inversión siguen en verde pero empeorando, los días de cobro en amarillo, y el beneficio no operativo y la deuda en rojo. Por empresa, en rojo: la caja de Nvidia (0,70) y Alphabet (0,76), la inversión de Amazon (128% de su caja), los días de cobro de Amazon (+13), el beneficio no operativo de Alphabet (45%) y Amazon (40%), y la deuda de Amazon, Alphabet, Meta y Nvidia, que se ha multiplicado en un año. Es el patrón de 2000: beneficio que se cobra menos, inversión que se paga con deuda y beneficio que depende de revalorizar participaciones.</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b> de la SEC a través del worker (hace falta el worker v2), una vez al día; la primera descarga del día tarda alrededor de un minuto. Las cuentas de caja se publican acumuladas en el año, así que cada trimestre se obtiene restando el acumulado anterior. Cuando una empresa no etiqueta un dato (la inversión de Nvidia en sus cuartos trimestres antes de 2021 y a principios de 2022), ese trimestre se estima con el acumulado del año o con la media de sus vecinos. Si una empresa solo da su deuda a fin de año, se arrastra el último saldo conocido.</div>
+      <div class="sg-text"><b>Limitaciones:</b> no ve la financiación fuera de balance (vehículos como el que usó Meta para su centro de datos de Luisiana), ni los arrendamientos, ni los compromisos de compra firmados pero no pagados, que es donde suele esconderse la circularidad. Tampoco distingue qué parte de las ventas viene de clientes financiados por la propia empresa: eso solo se ve leyendo los informes. Es un termómetro, no una prueba.</div>
+    </div>
+
+    <div class="sg-block">
+      <div class="sg-title">🔭 PER forward y revisiones (v39): ¿qué esperan los analistas?</div>
+      <div class="sg-text"><b>La idea:</b> la bolsa cotiza el futuro, así que el PER de los últimos 12 meses mira por el retrovisor. El PER forward usa el beneficio que esperan los analistas. Pero esa previsión no es un dato: suele pecar de optimista y falla justo en los giros. En 2007 el PER forward del S&amp;P rondaba 15 y parecía barato; en 2008-09 los beneficios cayeron más de la mitad. En el techo del ciclo el beneficio previsto está inflado y el forward hace parecer razonable un mercado caro. Por eso el panel enseña las cuatro piezas juntas:</div>
+      <table class="sg-table">
+        <tr><th>Medida</th><th>Qué te dice</th><th>Dónde está</th></tr>
+        <tr><td><b>CAPE</b></td><td>Precio / beneficio medio de 10 años (ajustado por inflación). La mejor guía histórica para la rentabilidad de los 10 años siguientes; no sirve para el corto plazo</td><td>Pilar 2: tarjeta «Shiller CAPE» y gráficas «Histórico CAPE» y «Divergencia CAPE vs PER»</td></tr>
+        <tr><td><b>PER (12 meses)</b></td><td>Cuánto pagas por el beneficio ya ganado</td><td>Pilar 2: tarjeta «PER S&amp;P 500» (el índice entero). Las 10: tarjeta «Valor en bolsa vs beneficio» y columna PER</td></tr>
+        <tr><td><b>PER forward</b></td><td>Cuánto pagas por el beneficio que esperan los analistas. La diferencia con el PER es el crecimiento que ya se da por hecho</td><td>Resultados de las 10: tarjeta «PER forward» y columnas «PER fwd» y «Crec. previsto»</td></tr>
+        <tr><td><b>Revisiones</b></td><td>Si los analistas suben o recortan esas previsiones. Es lo que de verdad se adelanta: mientras suben, los mercados alcistas rara vez se acaban</td><td>Tarjeta «PER forward» y columna «Revisión 3 meses»</td></tr>
+      </table>
+      <div class="sg-text"><b>Semáforo de la revisión:</b> 🟢 más del +3% en 3 meses · 🟡 entre 0 y +3% · 🔴 negativa: los analistas recortan. Plano ya es flojo, porque el beneficio previsto sube solo con el calendario (cada trimestre la previsión mira 3 meses más adelante). <b>La alarma es la combinación de 2007:</b> un PER forward que parece barato, un PER y un CAPE altos, y previsiones que empiezan a bajar.</div>
+      <div class="sg-text"><b>Crecimiento previsto negativo</b> (Alphabet y Amazon en octubre de 2026): los analistas esperan menos beneficio que el de los últimos 12 meses porque este incluye la revalorización de participaciones en otras empresas, que no cuentan como repetible. Es la misma señal que el «No operativo» del monitor de circularidad.</div>
+      <div class="sg-text"><b>Lo que marcaba el 31 de octubre de 2026:</b> las 10, PER 25,7 con el beneficio de 12 meses y PER forward 21,4; los analistas esperan un 20% más de beneficio. Previsiones +5% en 3 meses y +31% en 12 meses (parte es solo el paso del calendario): siguen subiendo, sin rastro de recortes. Nvidia PER forward 13,5 (Yahoo ya usa su ejercicio que acaba en enero de 2028) y Broadcom 18,4 frente a un PER de 43: el mercado da por hechos crecimientos enormes. Como referencia, el S&amp;P 500 entero según FactSet (9 de octubre): PER forward 19,1 (su media de 10 años), PER de 12 meses 26,0, y crecimiento esperado del +33% en 2026 y del +16% en 2027. El índice parece «normal» solo si se cumple ese crecimiento.</div>
+      <div class="sg-text"><b>De dónde salen los datos:</b> de Yahoo a través del worker: el PER forward de hoy y el del cierre de los últimos 5 trimestres. Beneficio previsto = valor en bolsa / PER forward. Yahoo usa el ejercicio fiscal en curso o el siguiente según la fecha, así que no coincide exactamente con los «próximos 12 meses» de FactSet. Cuando Yahoo pasa al ejercicio siguiente, el beneficio previsto da un salto (marcado con ⇡) que no es una revisión: los cambios de más del +35% o de menos del −30% entre dos datos seguidos no cuentan. Cada visita guarda un dato en este navegador; con un mes de visitas aparece también la revisión a 30 días.</div>
+    </div>
+
+    <div class="sg-block">
       <div class="sg-title">🔀 Cambios respecto a versiones anteriores del panel</div>
       <div class="sg-text">La antigua sección "La capa de Valoración del mercado" de esta pestaña se ha fusionado aquí (sin perder contenido: la tabla histórica, el bloque de 1999 y la integración con el sistema están arriba). El PER pasó a tarjeta informativa con marcador "I" coloreado por su valor (no puntúa en el score: el CAPE ya captura la valoración estructural y el PER aporta la señal de divergencia). El mismo marcador "I" se aplicó al SRF del Pilar 1. Se añadió la gráfica de divergencia CAPE vs PER.</div>
+      <div class="sg-text"><b>v34:</b> tarjeta informativa «Beneficios / PIB» (el canario de los márgenes), probada en el backtest sin mejora, así que no puntúa. <b>v35:</b> panel de resultados de las 10 mayores del S&amp;P 500 con histórico de la SEC desde 2015 y los trimestres nuevos en vivo. <b>v36:</b> barras en verde o rojo según la tendencia (frente al año anterior por defecto, o frente al trimestre anterior, o por empresa). <b>v37:</b> valor en bolsa y PER de las 10. <b>v38:</b> monitor de circularidad (caja, inversión, cobros, beneficio no operativo y deuda). <b>v39:</b> PER forward, crecimiento previsto y revisiones de los analistas.</div>
     </div>
   </div>
 
@@ -1878,6 +1898,7 @@
     <div class="sg-block">
       <div class="sg-title">🔀 Cambios respecto a versiones anteriores del panel</div>
       <div class="sg-text">La antigua sección "Indicadores por eje" (el semáforo por capas) se absorbió dentro del panel del Pilar 3 (mismas tarjetas, reagrupadas bajo la barra de régimen). Las tarjetas de DXY y WALCL se retiraron (puntúan en el Pilar 1). Los modificadores pasaron a marcador "I" (no votan). El cuadrante del clima se colocó justo debajo de las dos barras de eje (son las que originan esa conclusión). La capa de Sentimiento se separó a su propio pilar (Pilar 4): no puntuaba en los ejes y merecía entidad propia. La tira compacta de modificadores (mod-strip) desapareció (duplicaba las tarjetas). La gráfica combinada de indicadores pasó a ser la gráfica de cierre del pilar. Las secciones siguientes (guía de indicadores, cómo leer los ejes) son el detalle de este pilar.</div>
+      <div class="sg-text"><b>v34:</b> tarjeta informativa «Curva · velocidad y tipo de movimiento» (cuánto se ha empinado la curva 10A−2A en 6 meses tras una inversión), explicada en su bloque de arriba. Probada en el backtest sin mejora, así que no vota.</div>
     </div>
   </div>
 
@@ -3341,6 +3362,7 @@ async function loadCards() {
     const chg = s => s.length > 6 ? s[s.length-1].y - s[s.length-7].y : null;
     const d10 = chg(t10), d2 = chg(t2);
     const kind = d10 != null && d2 != null ? ((d10 + d2) > 0 ? 'bear' : 'bull') : null;
+    cycleIn.curve = { d2, d10, dy, kind }; // v40: fase del ciclo (pestaña de pensión)
     let color = 'green', state = 'Sin señal';
     if (wasInv && dy >= 0.5) { color = 'red'; state = '⚠ Desinversión brusca'; }
     else if (wasInv && dy >= 0.25) { color = 'yellow'; state = 'Desinvirtiéndose'; }
@@ -3571,6 +3593,7 @@ async function loadSentiment() {
     const data = await fredRange('BAMLH0A0HYM2', 1, 'm', 'd');
     const hy = data[data.length-1].y;
     sentiment.hy = hy;
+    sentiment.hySeries = data; // v40: tendencia del crédito para la fase del ciclo
     const color = hy > 5 ? 'red' : hy >= 3.5 ? 'yellow' : 'green';
     setCard('hyspread', hy.toFixed(2), '%', color);
   } catch(e) { setCardError('hyspread'); }
@@ -4449,6 +4472,7 @@ function setPenMine(v) {
   pbtState.mine = v;
   try { localStorage.setItem('pen_mine', v); } catch(e) {}
   renderPensionSystem();
+  try { renderCycle(); } catch(e) {}
 }
 function clearPbtCache() {
   try { localStorage.removeItem(PBT_CACHE); } catch(e) {}
@@ -5244,6 +5268,7 @@ async function loadLiquidity() {
       if (w3 != null) {
         const netAgo = w3 - (t3 ?? 0) - (r3 ?? 0);
         liquidity.netLiqDir = liquidity.netLiq - netAgo; // $B change over ~3 months
+        liquidity.walclChg = w3 > 0 ? (w / w3 - 1) * 100 : null; // v40: ¿imprime la Fed? (% en 3 meses)
       }
     }
   } catch(e) {}
@@ -7495,6 +7520,99 @@ const _renderEarningsBase = renderEarnings;
 renderEarnings = function () { _renderEarningsBase(); try { renderCirc(); } catch (e) {} };
 
 
+// ─── FASE DEL CICLO (v40) ────────────────────────────────────────────────────
+// El escenario de Rubén en tres fases: 1) inflación y subida de tipos → 2) desaceleración,
+// bajada de tipos y deflación → 3) impresión de dinero y subida. Cada fase tiene sus señales
+// (datos que ya descarga el dashboard) y los fondos del plan que históricamente encajan.
+// Informativo: no cambia el sistema de momentum, que sigue siendo la referencia probada.
+const cycleIn = { curve: null, trend: null };
+const CYC_FUNDS = {
+  1: { good: ['L&G UK Equity Index', 'L&G PMC Cash Fund'], avoid: ['L&G Over 15 Year Gilts Index', 'L&G AAA-AA-A Corp Bond Over 15Y', 'L&G Over 5 Year Index Linked Gilts', 'L&G Sustainable Property Fund'] },
+  2: { good: ['L&G PMC Cash Fund', 'L&G Over 15 Year Gilts Index', 'L&G AAA-AA-A Corp Bond Over 15Y'], avoid: ['L&G UK Equity Index', 'L&G World Emerging Markets', 'L&G Sustainable Property Fund'] },
+  3: { good: ['L&G World (ex UK) Equity Index', 'Airbus Growth Fund', 'L&G World Emerging Markets', 'L&G HSBC Islamic Global Equity'], avoid: ['L&G PMC Cash Fund', 'L&G Over 15 Year Gilts Index'] },
+};
+const CYC_NAME = { 0: 'Sin fase clara (transición)', 1: 'Fase 1 · Inflación y subida de tipos', 2: 'Fase 2 · Desaceleración, bajada de tipos, deflación', 3: 'Fase 3 · Impresión de dinero y subida' };
+const CYC_COL = { 0: 'var(--text3)', 1: 'var(--orange)', 2: 'var(--accent)', 3: 'var(--green)' };
+const cycShort = n => ({ 'L&G Over 15 Year Gilts Index': 'Over 15Y Gilts', 'L&G AAA-AA-A Corp Bond Over 15Y': 'Corp Bond Over 15Y', 'L&G Over 5 Year Index Linked Gilts': 'Index-Linked Gilts', 'L&G Sustainable Property Fund': 'Property' }[n] || (typeof penShort === 'function' ? penShort(n) : n.replace('L&G ', '')));
+
+async function cycleLoad() {
+  try {
+    const r = typeof momState !== 'undefined' && momState.results ? momState.results.find(x => x.sym === 'SPY') : null;
+    if (r) cycleIn.trend = { up: r.trend, src: 'Pilar 5' };
+    else {
+      const s = await yahooRange('SPY', 2, 'm', true);
+      if (s && s.length >= 10) { const ma = s.slice(-10).reduce((a, p) => a + p.y, 0) / 10, l = s[s.length - 1].y; cycleIn.trend = { up: l > ma, gap: (l / ma - 1) * 100 }; }
+    }
+  } catch (e) {}
+  renderCycle();
+}
+
+function cycleSignals() {
+  const last = s => s && s.length ? s[s.length - 1].y : null, back = (s, n) => s && s.length > n ? s[s.length - 1 - n].y : null;
+  const f = (v, d = 1) => v == null ? '—' : v.toFixed(d).replace('.', ','), pp = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2).replace('.', ',');
+  const cpi = cardData.cpi, pce = cardData.pce, ff = cardData.fedfunds, cv = cycleIn.curve;
+  const cpiN = last(cpi), cpi3 = back(cpi, 3), pceN = last(pce), pce3 = back(pce, 3), ffN = last(ff), ff3 = back(ff, 3);
+  const dFF = ffN != null && ff3 != null ? ffN - ff3 : null;
+  const hyS = sentiment.hySeries, hyN = sentiment.hy ?? last(hyS), hy3 = back(hyS, 3), hyMax = hyS && hyS.length ? Math.max(...hyS.map(p => p.y)) : null;
+  const ismHist = Object.keys(ISM_HISTORY).sort().pop(), ism = manualValues.ism != null && manualValues.ism !== '' ? parseFloat(manualValues.ism) : ISM_HISTORY[ismHist];
+  const ismSrc = manualValues.ism != null && manualValues.ism !== '' ? 'manual' : ismHist;
+  const fall3 = cpi && cpi.length >= 4 ? [1, 2, 3].every(i => cpi[cpi.length - i].y < cpi[cpi.length - i - 1].y) : null;
+  const wc = liquidity.walclChg, nl = liquidity.netLiqDir, tr = cycleIn.trend;
+  const S = (ok, label, val) => ({ ok, label, val });
+  return {
+    1: [
+      S(cpiN == null ? null : cpiN > cpi3 + 0.1 || (pceN != null && pce3 != null && pceN > pce3 + 0.05), 'La inflación sube (frente a hace 3 meses)', `IPC ${f(cpiN, 2)}% (${f(cpi3, 2)}%) · PCE subyacente ${f(pceN, 2)}% (${f(pce3, 2)}%)`),
+      S(cpiN == null ? null : cpiN >= 3.5 || (pceN != null && pceN >= 3), 'La inflación está alta (IPC ≥ 3,5% o PCE ≥ 3%)', `IPC ${f(cpiN, 2)}% · PCE ${f(pceN, 2)}%`),
+      S(dFF == null && !cv ? null : (dFF != null && dFF >= 0.1) || (cv && cv.d2 >= 0.25), 'Los tipos suben (Fed +0,1 en 3 meses o 2 años +0,25 en 6)', `Fed ${f(ffN, 2)}% (${pp(dFF)}) · 2 años ${cv ? pp(cv.d2) : '—'} pp`),
+    ],
+    2: [
+      S(fall3, 'La inflación baja 3 meses seguidos', cpi ? `IPC ${cpi.slice(-4).map(p => f(p.y, 1)).join(' → ')}%` : '—'),
+      S(dFF == null && !cv ? null : (dFF != null && dFF <= -0.2) || (cv && cv.d2 <= -0.5), 'Los tipos bajan (Fed −0,2 en 3 meses o 2 años −0,5 en 6)', `Fed ${pp(dFF)} · 2 años ${cv ? pp(cv.d2) : '—'} pp`),
+      S(hyN == null ? null : hyN > 5 || (hy3 != null && hyN - hy3 >= 1), 'Estrés de crédito (diferencial HY > 5% o +1 punto en 3 meses)', `HY ${f(hyN, 2)}%${hy3 != null ? ` (hace 3 meses ${f(hy3, 2)}%)` : ''}`),
+      S(ism == null ? null : ism < 49 || currentRegimeKey === 'deflation', 'Crecimiento débil (ISM < 49 o régimen de recesión)', `ISM ${f(ism, 1)} (${ismSrc}) · régimen ${REGIME_LABELS[currentRegimeKey] || currentRegimeKey}`),
+    ],
+    3: [
+      S(wc == null ? null : wc >= 3, 'La Fed imprime (balance +3% o más en 3 meses)', `Balance de la Fed ${wc == null ? '—' : pp(wc)}% en 3 meses · liquidez neta ${nl == null ? '—' : (nl >= 0 ? '+' : '') + Math.round(nl)} mil M$`),
+      S(hyMax == null || hyN == null ? null : hyMax >= 4.5 && hyN <= hyMax - 1, 'El crédito sana tras el estrés (HY 1 punto por debajo de su máximo ≥ 4,5%)', `HY ${f(hyN, 2)}% · máximo de 12 meses ${f(hyMax, 2)}%`),
+      S(tr ? tr.up : null, 'La bolsa vuelve a su tendencia (S&P sobre su media de 10 meses)', tr ? (tr.up ? 'Sí' : 'No') + (tr.gap != null ? ` (${pp(tr.gap)}% frente a la media)` : '') : '—'),
+    ],
+  };
+}
+
+function renderCycle() {
+  const el = document.getElementById('cyc-panel'); if (!el) return;
+  if (!cardData.cpi) { el.innerHTML = '<div class="chart-note" style="padding:14px;">Esperando a los datos de inflación y tipos…</div>'; return; }
+  const sig = cycleSignals(), n = (k) => sig[k].filter(s => s.ok === true).length;
+  const phase = sig[3][0].ok && sig[3][1].ok ? 3 : n(2) >= 2 ? 2 : n(1) >= 2 ? 1 : 0;
+  const mine = typeof pbtState !== 'undefined' ? pbtState.mine : 'auto';
+  let mineTxt = '';
+  if (phase && mine && mine !== 'auto' && mine !== 'other') {
+    const F = CYC_FUNDS[phase], fits = F.good.includes(mine), bad = F.avoid.includes(mine);
+    mineTxt = `<div style="margin-top:8px;font-size:11px;">Tu pensión hoy: <b>${cycShort(mine)}</b> → ${fits ? '<span style="color:var(--green);font-weight:700;">encaja con esta fase</span>' : bad ? '<span style="color:var(--red);font-weight:700;">es de los que peor encajan en esta fase</span>' : '<span style="color:var(--yellow);font-weight:700;">no es de los fondos de esta fase</span>'}</div>`;
+  } else if (mine === 'auto') mineTxt = '<div style="margin-top:8px;font-size:11px;color:var(--text3);">Indica arriba («¿Dónde tienes hoy la pensión?») tu fondo y te diré si encaja con la fase.</div>';
+  const mark = ok => ok === true ? '<span style="color:var(--green);font-weight:700;">✓</span>' : ok === false ? '<span style="color:var(--text3);">✗</span>' : '<span style="color:var(--text3);">?</span>';
+  const need = { 1: 'Se confirma con 2 de 3 señales', 2: 'Se confirma con 2 de 4 señales', 3: 'Se confirma con las 2 primeras señales' };
+  const col = k => {
+    const on = k === phase, F = CYC_FUNDS[k];
+    return `<div class="liq-cc" style="${on ? `box-shadow:inset 0 0 0 2px ${CYC_COL[k]};` : 'opacity:0.85;'}">
+      <div class="liq-cc-top"><span class="liq-cc-name" style="${on ? `color:${CYC_COL[k]};` : ''}">${CYC_NAME[k]}${on ? ' · AHORA' : ''}</span></div>
+      <div class="liq-cc-sub" style="margin:4px 0 6px;">${need[k]} · ${n(k)} de ${sig[k].length}</div>
+      ${sig[k].map(s => `<div style="font-size:10.5px;line-height:1.45;margin-bottom:5px;" title="${s.val}">${mark(s.ok)} ${s.label}<br><span style="color:var(--text3);font-size:9.5px;">${s.val}</span></div>`).join('')}
+      <div class="liq-cc-read" style="margin-top:6px;"><b style="color:var(--green);">Encajan:</b> ${F.good.map(cycShort).join(' · ')}<br><b style="color:var(--red);">Peor:</b> ${F.avoid.map(cycShort).join(' · ')}</div>
+    </div>`;
+  };
+  el.innerHTML = `<div style="padding:14px 18px 6px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="liq-master-label">En qué fase estamos</div>
+        <div class="liq-master-state" style="color:${CYC_COL[phase]};font-size:16px;">${CYC_NAME[phase]}</div>
+      </div>
+      <div class="liq-master-desc" style="margin-top:6px;">${phase === 0 ? 'Ninguna fase reúne sus señales: manda el sistema de momentum de arriba.' : phase === 1 ? 'Se cumplen las señales de inflación y tipos al alza. Vigila la columna de la fase 2: cuando se cumplan 2 de sus 4 señales, toca pasar a liquidez y bonos largos.' : phase === 2 ? 'La economía se frena y los tipos bajan: liquidez y bonos largos. Vigila la fase 3: cuando la Fed imprima y el crédito sane, toca volver a la bolsa.' : 'La Fed imprime y el crédito sana: históricamente, el momento de volver a la bolsa mundial y a la tecnología.'}</div>
+      ${mineTxt}
+    </div>
+    <div class="liq-cards-compact" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">${[1, 2, 3].map(col).join('')}</div>
+    <div class="chart-note" style="padding:8px 18px 12px;">Informativo: es tu escenario, no el sistema. El sistema de momentum de arriba es el que está probado en el backtest. Cambia de fase cuando lo confirmen las señales, no por fechas: puede que no haya deflación (en los años 70 la inflación vino en dos olas). Detalle y umbrales: 📗 Info · Pensión L&amp;G.</div>`;
+}
+
 // ─── INIT ────────────────────────────────────────────────────────────────────
 initTheme();
 loadManualFromStorage();
@@ -7503,6 +7621,7 @@ try { erInit(); } catch (e) { console.warn('resultados', e); } // v35: resultado
 loadCards().then(() => {
   loadIndChart();
   loadAssetChart();
+  cycleLoad(); // v40: fase del ciclo (pestaña de pensión)
 });
 </script>
 </body>
